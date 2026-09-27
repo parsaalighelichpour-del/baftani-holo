@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بافتنی هلو 🧶</title>
+<style>
+body{margin:0;font-family:Arial,Tahoma;background:#fff8ef;color:#333}
+header{background:#8eaa68;color:white;padding:20px;text-align:center}
+header h1{margin:0;font-size:30px}
+nav{margin-top:10px}
+nav a{color:white;margin:0 10px;text-decoration:none}
+.hero{text-align:center;padding:35px 15px;background:#edf5df}
+.hero h2{font-size:28px}
+.products{max-width:1000px;margin:auto;padding:20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px}
+.card{background:white;border-radius:18px;padding:15px;text-align:center;box-shadow:0 3px 12px #0002}
+.emoji{font-size:70px}
+.price{font-weight:bold;color:#668743;font-size:18px}
+button{background:#6f9148;color:white;border:0;padding:11px 18px;border-radius:10px;cursor:pointer}
+footer{text-align:center;padding:25px;background:#eee;margin-top:30px}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>🧶 بافتنی هلو 🍑</h1>
+<nav>
+<a href="#home">خانه</a>
+<a href="#products">محصولات</a>
+<a href="#order">سفارش</a>
+</nav>
+</header>
+
+<section class="hero" id="home">
+<h2>به فروشگاه بافتنی هلو خوش اومدی 💚</h2>
+<p>محصولات دست‌ساز بافته‌شده با عشق 🧶</p>
+</section>
+
+<section class="products" id="products">
+<h2>🛍️ محصولات</h2>
+
+<div class="grid">
+
+<div class="card">
+<div class="emoji">🥕</div>
+<h3>جاکلیدی هویجی</h3>
+<p>جاکلیدی بافتنی دست‌ساز</p>
+<p class="price">۶۰٬۰۰۰ تومان</p>
+<button onclick="order('جاکلیدی هویجی')">سفارش</button>
+</div>
+
+<div class="card">
+<div class="emoji">🐰</div>
+<h3>جاکلیدی حیوانات</h3>
+<p>مدل‌های بامزه و دست‌ساز</p>
+<p class="price">۱۲۰٬۰۰۰ تومان</p>
+<button onclick="order('جاکلیدی حیوانات')">سفارش</button>
+</div>
+
+<div class="card">
+<div class="emoji">🧺</div>
+<h3>سبد بافتنی</h3>
+<p>سبد دست‌ساز بافتنی</p>
+<p class="price">سفارشی</p>
+<button onclick="order('سبد بافتنی')">سفارش</button>
+</div>
+
+<div class="card">
+<div class="emoji">🧽</div>
+<h3>لیف بافتنی</h3>
+<p>لیف دست‌ساز</p>
+<p class="price">۳۹٬۰۰۰ تومان</p>
+<button onclick="order('لیف بافتنی')">سفارش</button>
+</div>
+
+</div>
+</section>
+
+<section id="order" style="text-align:center;padding:30px">
+<h2>📦 ثبت سفارش</h2>
+<p id="message">برای سفارش روی دکمه محصول بزن.</p>
+</section>
+
+<footer>
+بافتنی هلو 🧶🍑<br>
+آموزش اختصاصی بافتنی
+</footer>
+
+<script>
+function order(product){
+document.getElementById("message").innerText=
+"درخواست سفارش برای «"+product+"» انتخاب شد 🧶❤️";
