@@ -3,248 +3,367 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>فروشگاه بافتنی هلو 🍑</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+    box-sizing:border-box;
+}
 
 body{
-margin:0;
-font-family:Tahoma,Arial,sans-serif;
-background:#fff7f2;
-color:#333
+    margin:0;
+    font-family:Tahoma,Arial,sans-serif;
+    background:#fff5f8;
+    color:#333;
 }
 
 header{
-background:linear-gradient(135deg,#ff9966,#ff5f8f);
-color:white;
-padding:25px 15px;
-text-align:center;
-box-shadow:0 4px 15px #0002
+    background:linear-gradient(135deg,#ff9fba,#ff7198);
+    color:white;
+    text-align:center;
+    padding:30px 15px;
+    box-shadow:0 3px 10px #0002;
 }
 
 header h1{
-margin:0;
-font-size:30px
+    margin:0 0 10px;
+    font-size:30px;
 }
 
 header p{
-margin:8px 0
+    margin:0 0 20px;
+    font-size:16px;
 }
 
 .menu{
-display:flex;
-justify-content:center;
-gap:10px;
-flex-wrap:wrap;
-margin-top:18px
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
 }
 
 .menu button{
-border:0;
-background:white;
-color:#e85d75;
-padding:12px 20px;
-border-radius:15px;
-font-family:inherit;
-font-size:15px;
-font-weight:bold;
-cursor:pointer
+    border:none;
+    background:white;
+    color:#e94f7d;
+    padding:12px 18px;
+    border-radius:12px;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
 }
 
 .container{
-max-width:1100px;
-margin:auto;
-padding:25px 15px
+    max-width:1100px;
+    margin:auto;
+    padding:25px 15px;
 }
 
 .title{
-text-align:center;
-margin-bottom:25px
+    text-align:center;
+    color:#e94f7d;
+    margin-bottom:25px;
 }
 
 .products{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
-gap:18px
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:18px;
 }
 
 .product{
-background:white;
-border-radius:20px;
-padding:18px;
-text-align:center;
-box-shadow:0 4px 15px #0001;
-transition:.2s
+    background:white;
+    border-radius:18px;
+    padding:18px;
+    text-align:center;
+    box-shadow:0 4px 12px #0001;
+    transition:.2s;
 }
 
 .product:hover{
-transform:translateY(-5px)
+    transform:translateY(-4px);
 }
 
-.emoji{
-font-size:65px
+.product-icon{
+    font-size:65px;
+    margin-bottom:10px;
 }
 
-.product h2{
-font-size:19px;
-margin:10px 0
+.product h3{
+    margin:8px 0;
+    font-size:17px;
 }
 
 .price{
-color:#e85d75;
-font-size:17px;
-font-weight:bold;
-margin:10px 0
+    color:#e94f7d;
+    font-weight:bold;
+    margin:10px 0;
 }
 
-.add{
-border:0;
-background:#ff7191;
-color:white;
-padding:11px 20px;
-border-radius:12px;
-font-family:inherit;
-cursor:pointer
+.product button{
+    width:100%;
+    border:none;
+    background:#ff7198;
+    color:white;
+    padding:11px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:bold;
 }
+
+.product button:hover{
+    background:#e94f7d;
+}
+
+/* Modal */
 
 .modal{
-display:none;
-position:fixed;
-inset:0;
-background:#0008;
-z-index:100;
-padding:20px
+    display:none;
+    position:fixed;
+    z-index:1000;
+    inset:0;
+    background:#0008;
+    padding:20px;
+    overflow:auto;
 }
 
 .modal-box{
-background:white;
-max-width:520px;
-margin:40px auto;
-border-radius:20px;
-padding:22px;
-max-height:85vh;
-overflow:auto
+    background:white;
+    max-width:600px;
+    margin:40px auto;
+    padding:25px;
+    border-radius:20px;
+    position:relative;
 }
 
 .close{
-float:left;
-border:0;
-background:#eee;
-padding:7px 12px;
-border-radius:10px;
-cursor:pointer
+    position:absolute;
+    left:15px;
+    top:12px;
+    border:none;
+    background:#eee;
+    border-radius:50%;
+    width:35px;
+    height:35px;
+    cursor:pointer;
+    font-size:17px;
+}
+
+.modal-box h2{
+    text-align:center;
+    color:#e94f7d;
 }
 
 .cart-item{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:10px;
-border-bottom:1px solid #eee;
-padding:14px 0
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:12px 0;
+    border-bottom:1px solid #eee;
+}
+
+.cart-name{
+    flex:1;
+    font-weight:bold;
 }
 
 .qty{
-display:flex;
-align-items:center;
-gap:8px
+    display:flex;
+    align-items:center;
+    gap:7px;
 }
 
 .qty button{
-border:0;
-background:#ff7191;
-color:white;
-width:30px;
-height:30px;
-border-radius:8px;
-cursor:pointer
+    border:none;
+    background:#ff7198;
+    color:white;
+    width:30px;
+    height:30px;
+    border-radius:8px;
+    cursor:pointer;
 }
 
-.delete{
-border:0;
-background:#ff4d4d;
-color:white;
-padding:7px 10px;
-border-radius:8px;
-cursor:pointer
+.remove{
+    border:none;
+    background:#ffdddd;
+    color:#d33;
+    padding:7px;
+    border-radius:8px;
+    cursor:pointer;
 }
 
 .total{
-font-size:20px;
-font-weight:bold;
-color:#e85d75;
-margin:20px 0
+    margin-top:20px;
+    padding:15px;
+    background:#fff0f4;
+    border-radius:12px;
+    text-align:center;
+    font-weight:bold;
+    color:#d94170;
 }
 
 .invoice{
-width:100%;
-border:0;
-background:#6c63ff;
-color:white;
-padding:14px;
-border-radius:13px;
-font-family:inherit;
-font-size:16px;
-cursor:pointer
+    width:100%;
+    margin-top:15px;
+    border:none;
+    background:#5b8def;
+    color:white;
+    padding:13px;
+    border-radius:12px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.invoice:hover{
+    background:#426fc4;
 }
 
 .phone{
-background:#fff0e8;
-padding:20px;
-border-radius:15px;
-text-align:center;
-margin-top:15px
+    background:#fff0f4;
+    padding:18px;
+    text-align:center;
+    border-radius:15px;
+    margin-top:20px;
 }
 
 .phone a{
-display:inline-block;
-margin-top:10px;
-color:#e85d75;
-font-size:23px;
-font-weight:bold;
-text-decoration:none
+    color:#e94f7d;
+    font-size:22px;
+    font-weight:bold;
+    text-decoration:none;
+}
+
+/* فاکتور */
+
+#invoiceArea{
+    display:none;
+}
+
+.invoice-box{
+    background:white;
+    border:3px solid #ff7198;
+    border-radius:18px;
+    padding:25px;
+    margin-top:20px;
+}
+
+.invoice-title{
+    text-align:center;
+    color:#e94f7d;
+    font-size:25px;
+    font-weight:bold;
+    margin-bottom:20px;
+}
+
+.invoice-row{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    padding:10px 0;
+    border-bottom:1px solid #eee;
+}
+
+.invoice-total{
+    margin-top:20px;
+    background:#fff0f4;
+    padding:15px;
+    border-radius:12px;
+    text-align:center;
+    font-weight:bold;
+    color:#d94170;
+}
+
+.invoice-phone{
+    text-align:center;
+    margin-top:20px;
+    padding:15px;
+    background:#f1f6ff;
+    border-radius:12px;
+}
+
+.invoice-message{
+    margin-top:15px;
+    padding:15px;
+    background:#fff8d9;
+    border-radius:12px;
+    text-align:center;
+    font-weight:bold;
+    line-height:1.8;
+}
+
+.download-btn{
+    width:100%;
+    margin-top:15px;
+    border:none;
+    background:#32a852;
+    color:white;
+    padding:14px;
+    border-radius:12px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.download-btn:hover{
+    background:#27863f;
+}
+
+.screenshot-message{
+    text-align:center;
+    margin-top:12px;
+    color:#555;
+    font-size:14px;
+    line-height:1.8;
 }
 
 footer{
-text-align:center;
-padding:25px;
-margin-top:30px;
-background:#ffe9df
+    margin-top:40px;
+    background:#ff7198;
+    color:white;
+    text-align:center;
+    padding:30px 15px;
 }
 
-@media(max-width:500px){
+/* موبایل */
 
-header h1{
-font-size:24px
-}
+@media(max-width:600px){
 
-.products{
-grid-template-columns:repeat(2,1fr);
-gap:10px
-}
+    header h1{
+        font-size:25px;
+    }
 
-.product{
-padding:12px 8px
-}
+    .products{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
 
-.emoji{
-font-size:48px
-}
+    .product{
+        padding:12px;
+    }
 
-.product h2{
-font-size:15px
-}
+    .product-icon{
+        font-size:50px;
+    }
 
-.price{
-font-size:14px
-}
+    .product h3{
+        font-size:14px;
+    }
 
-.add{
-padding:9px 10px;
-font-size:12px
-}
+    .price{
+        font-size:14px;
+    }
 
+    .cart-item{
+        flex-wrap:wrap;
+    }
+
+    .modal-box{
+        margin:20px auto;
+        padding:18px;
+    }
 }
 </style>
 </head>
@@ -280,99 +399,123 @@ font-size:12px
 <div class="products">
 
 
+<!-- انبه -->
+
 <div class="product">
-<div class="emoji">🥭</div>
-<h2>جاکلیدی انبه</h2>
+<div class="product-icon">🥭</div>
+<h3>جاکلیدی انبه</h3>
 <div class="price">۶۰٬۰۰۰ تومان</div>
-<button class="add" onclick="add('جاکلیدی انبه',60000)">🛒 افزودن</button>
+<button onclick="add('جاکلیدی انبه',60000)">🛒 افزودن به سبد</button>
 </div>
 
 
+<!-- نارنگی -->
+
 <div class="product">
-<div class="emoji">🍊</div>
-<h2>جاکلیدی نارنگی</h2>
+<div class="product-icon">🍊</div>
+<h3>جاکلیدی نارنگی</h3>
 <div class="price">۶۰٬۰۰۰ تومان</div>
-<button class="add" onclick="add('جاکلیدی نارنگی',60000)">🛒 افزودن</button>
+<button onclick="add('جاکلیدی نارنگی',60000)">🛒 افزودن به سبد</button>
 </div>
 
 
+<!-- خرگوش -->
+
 <div class="product">
-<div class="emoji">🐰</div>
-<h2>جاکلیدی خرگوش</h2>
+<div class="product-icon">🐰</div>
+<h3>جاکلیدی خرگوش</h3>
 <div class="price">۱۲۰٬۰۰۰ تومان</div>
-<button class="add" onclick="add('جاکلیدی خرگوش',120000)">🛒 افزودن</button>
+<button onclick="add('جاکلیدی خرگوش',120000)">🛒 افزودن به سبد</button>
 </div>
 
 
+<!-- لاک پشت -->
+
 <div class="product">
-<div class="emoji">🐢</div>
-<h2>جاکلیدی لاک‌پشت</h2>
+<div class="product-icon">🐢</div>
+<h3>جاکلیدی لاک‌پشت</h3>
 <div class="price">۱۲۰٬۰۰۰ تومان</div>
-<button class="add" onclick="add('جاکلیدی لاک‌پشت',120000)">🛒 افزودن</button>
+<button onclick="add('جاکلیدی لاک‌پشت',120000)">🛒 افزودن به سبد</button>
 </div>
 
 
+<!-- قورباغه -->
+
 <div class="product">
-<div class="emoji">🐸</div>
-<h2>جاکلیدی قورباغه</h2>
+<div class="product-icon">🐸</div>
+<h3>جاکلیدی قورباغه</h3>
 <div class="price">۱۲۰٬۰۰۰ تومان</div>
-<button class="add" onclick="add('جاکلیدی قورباغه',120000)">🛒 افزودن</button>
+<button onclick="add('جاکلیدی قورباغه',120000)">🛒 افزودن به سبد</button>
 </div>
 
 
+<!-- دستبند -->
+
 <div class="product">
-<div class="emoji">📿</div>
-<h2>دستبند بافتنی</h2>
+<div class="product-icon">📿</div>
+<h3>دستبند بافتنی</h3>
 <div class="price">۲۹٬۰۰۰ تومان</div>
-<button class="add" onclick="add('دستبند بافتنی',29000)">🛒 افزودن</button>
+<button onclick="add('دستبند بافتنی',29000)">🛒 افزودن به سبد</button>
 </div>
 
 
+<!-- سبد -->
+
 <div class="product">
-<div class="emoji">🧺</div>
-<h2>سبد تریکو</h2>
+<div class="product-icon">🧺</div>
+<h3>سبد تریکو</h3>
 <div class="price">۱۰۰٬۰۰۰ تومان</div>
-<button class="add" onclick="add('سبد تریکو',100000)">🛒 افزودن</button>
+<button onclick="add('سبد تریکو',100000)">🛒 افزودن به سبد</button>
 </div>
 
 
+<!-- گربه -->
+
 <div class="product">
-<div class="emoji">🐱</div>
-<h2>گربه</h2>
+<div class="product-icon">🐱</div>
+<h3>گربه</h3>
 <div class="price">۸۰٬۰۰۰ تومان</div>
-<button class="add" onclick="add('گربه',80000)">🛒 افزودن</button>
+<button onclick="add('گربه',80000)">🛒 افزودن به سبد</button>
 </div>
 
 
+<!-- عروسک -->
+
 <div class="product">
-<div class="emoji">🧸</div>
-<h2>عروسک</h2>
+<div class="product-icon">🧸</div>
+<h3>عروسک</h3>
 <div class="price">۱۰۰٬۰۰۰ تومان</div>
-<button class="add" onclick="add('عروسک',100000)">🛒 افزودن</button>
+<button onclick="add('عروسک',100000)">🛒 افزودن به سبد</button>
 </div>
 
 
+<!-- هندوانه -->
+
 <div class="product">
-<div class="emoji">🍉</div>
-<h2>هندوانه</h2>
+<div class="product-icon">🍉</div>
+<h3>هندوانه</h3>
 <div class="price">۶۰٬۰۰۰ تومان</div>
-<button class="add" onclick="add('هندوانه',60000)">🛒 افزودن</button>
+<button onclick="add('هندوانه',60000)">🛒 افزودن به سبد</button>
 </div>
 
 
+<!-- وال -->
+
 <div class="product">
-<div class="emoji">🐋</div>
-<h2>وال</h2>
+<div class="product-icon">🐳</div>
+<h3>وال</h3>
 <div class="price">۸۰٬۰۰۰ تومان</div>
-<button class="add" onclick="add('وال',80000)">🛒 افزودن</button>
+<button onclick="add('وال',80000)">🛒 افزودن به سبد</button>
 </div>
 
 
+<!-- اسکاج -->
+
 <div class="product">
-<div class="emoji">🧽</div>
-<h2>اسکاج</h2>
+<div class="product-icon">🧽</div>
+<h3>اسکاج</h3>
 <div class="price">۴۰٬۰۰۰ تومان</div>
-<button class="add" onclick="add('اسکاج',40000)">🛒 افزودن</button>
+<button onclick="add('اسکاج',40000)">🛒 افزودن به سبد</button>
 </div>
 
 </div>
@@ -417,20 +560,49 @@ font-size:12px
 
 <h2>📞 پیگیری سفارش</h2>
 
-<p>
-برای پیگیری سفارش و هماهنگی خرید
-با شماره زیر تماس بگیرید:
+<p style="text-align:center;">
+برای پیگیری سفارش و هماهنگی خرید با شماره زیر تماس بگیرید:
 </p>
 
 <div class="phone">
 
 📱 شماره تماس
 
-<br>
+<br><br>
 
 <a href="tel:09915023632">
 ۰۹۹۱۵۰۲۳۶۳۲
 </a>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- فاکتور -->
+
+<div class="modal" id="invoiceModal">
+
+<div class="modal-box">
+
+<button class="close" onclick="closeInvoice()">✖</button>
+
+<h2>🧾 فاکتور سفارش</h2>
+
+<div id="invoiceArea"></div>
+
+<button class="download-btn" onclick="downloadInvoice()">
+📥 دانلود فاکتور
+</button>
+
+<div class="screenshot-message">
+
+📸 <b>حتماً از فاکتور اسکرین‌شات بگیرید یا آن را دانلود کنید.</b>
+
+<br>
+
+تا اطلاعات سفارش شما محفوظ بماند ❤️
 
 </div>
 
@@ -455,243 +627,540 @@ font-size:12px
 
 <script>
 
-let cart=[];
+let cart = [];
 
+let lastInvoiceHTML = "";
+
+
+/* تبدیل عدد به فارسی */
+
+function persianNumber(number){
+
+    return number
+    .toLocaleString('fa-IR');
+
+}
+
+
+/* اضافه کردن محصول */
 
 function add(name,price){
 
-let item=cart.find(x=>x.name===name);
+    let found = cart.find(item => item.name === name);
 
-if(item){
+    if(found){
 
-item.qty++;
+        found.qty++;
 
-}else{
+    }else{
 
-cart.push({
-name:name,
-price:price,
-qty:1
-});
+        cart.push({
+            name:name,
+            price:price,
+            qty:1
+        });
+
+    }
+
+    updateCart();
+
+    alert("✅ محصول به سبد خرید اضافه شد!");
 
 }
 
-updateCart();
 
-alert("✅ "+name+" به سبد خرید اضافه شد!");
-
-}
-
+/* باز کردن سبد */
 
 function openCart(){
 
-document.getElementById("cartModal").style.display="block";
+    document.getElementById("cartModal").style.display="block";
 
-updateCart();
+    updateCart();
 
 }
 
+
+/* بستن سبد */
 
 function closeCart(){
 
-document.getElementById("cartModal").style.display="none";
+    document.getElementById("cartModal").style.display="none";
 
 }
 
 
+/* پیگیری */
+
 function openTracking(){
 
-document.getElementById("trackingModal").style.display="block";
+    document.getElementById("trackingModal").style.display="block";
 
 }
 
 
 function closeTracking(){
 
-document.getElementById("trackingModal").style.display="none";
+    document.getElementById("trackingModal").style.display="none";
 
 }
 
+
+/* بستن فاکتور */
+
+function closeInvoice(){
+
+    document.getElementById("invoiceModal").style.display="none";
+
+}
+
+
+/* تغییر تعداد */
 
 function changeQty(index,value){
 
-cart[index].qty+=value;
+    cart[index].qty += value;
 
-if(cart[index].qty<=0){
+    if(cart[index].qty <= 0){
 
-cart.splice(index,1);
+        cart.splice(index,1);
+
+    }
+
+    updateCart();
 
 }
 
-updateCart();
 
-}
-
+/* حذف */
 
 function removeItem(index){
 
-cart.splice(index,1);
+    cart.splice(index,1);
 
-updateCart();
+    updateCart();
 
 }
 
+
+/* به‌روزرسانی سبد */
 
 function updateCart(){
 
-let box=document.getElementById("cartItems");
+    let cartItems = document.getElementById("cartItems");
 
-let total=0;
+    let cartCount = document.getElementById("cartCount");
 
-let count=0;
+    let totalElement = document.getElementById("total");
 
 
-if(cart.length===0){
+    if(cart.length === 0){
 
-box.innerHTML="سبد خرید خالی است 😄";
+        cartItems.innerHTML = "سبد خرید خالی است 😄";
 
-document.getElementById("total").innerText="۰";
+        cartCount.innerText = "۰";
 
-document.getElementById("cartCount").innerText="۰";
+        totalElement.innerText = "۰";
 
-return;
+        return;
+
+    }
+
+
+    let html = "";
+
+    let total = 0;
+
+    let count = 0;
+
+
+    cart.forEach((item,index)=>{
+
+        let itemTotal = item.price * item.qty;
+
+        total += itemTotal;
+
+        count += item.qty;
+
+
+        html += `
+
+        <div class="cart-item">
+
+            <div class="cart-name">
+
+                ${item.name}
+
+                <br>
+
+                <small>
+                ${persianNumber(item.price)} تومان
+                </small>
+
+            </div>
+
+
+            <div class="qty">
+
+                <button onclick="changeQty(${index},-1)">
+                −
+                </button>
+
+                <b>
+                ${persianNumber(item.qty)}
+                </b>
+
+                <button onclick="changeQty(${index},1)">
+                +
+                </button>
+
+            </div>
+
+
+            <button class="remove"
+            onclick="removeItem(${index})">
+
+            🗑️ حذف
+
+            </button>
+
+        </div>
+
+        `;
+
+    });
+
+
+    cartItems.innerHTML = html;
+
+    cartCount.innerText = persianNumber(count);
+
+    totalElement.innerText = persianNumber(total);
 
 }
 
 
-let html="";
-
-
-cart.forEach((item,index)=>{
-
-let itemTotal=item.price*item.qty;
-
-total+=itemTotal;
-
-count+=item.qty;
-
-
-html+=`
-
-<div class="cart-item">
-
-<div>
-
-<b>${item.name}</b>
-
-<br>
-
-${item.price.toLocaleString("fa-IR")} تومان
-
-</div>
-
-<div class="qty">
-
-<button onclick="changeQty(${index},-1)">−</button>
-
-<span>${item.qty}</span>
-
-<button onclick="changeQty(${index},1)">+</button>
-
-</div>
-
-<button class="delete" onclick="removeItem(${index})">
-🗑️
-</button>
-
-</div>
-
-`;
-
-});
-
-
-box.innerHTML=html;
-
-document.getElementById("total").innerText=
-total.toLocaleString("fa-IR");
-
-document.getElementById("cartCount").innerText=
-count.toLocaleString("fa-IR");
-
-}
-
+/* ساخت فاکتور */
 
 function makeInvoice(){
 
-if(cart.length===0){
+    if(cart.length === 0){
 
-alert("❌ سبد خرید خالی است!");
+        alert("❌ سبد خرید خالی است!");
 
-return;
+        return;
+
+    }
+
+
+    let total = 0;
+
+    let html = `
+
+    <div class="invoice-box" id="downloadInvoiceBox">
+
+        <div class="invoice-title">
+
+        🍑 فروشگاه بافتنی هلو
+
+        <br>
+
+        🧾 فاکتور سفارش
+
+        </div>
+
+    `;
+
+
+    cart.forEach(item=>{
+
+        let itemTotal = item.price * item.qty;
+
+        total += itemTotal;
+
+
+        html += `
+
+        <div class="invoice-row">
+
+            <span>
+
+            ${item.name}
+
+            × ${persianNumber(item.qty)}
+
+            </span>
+
+            <b>
+
+            ${persianNumber(itemTotal)} تومان
+
+            </b>
+
+        </div>
+
+        `;
+
+    });
+
+
+    html += `
+
+        <div class="invoice-total">
+
+            💰 مبلغ نهایی سفارش:
+
+            <br><br>
+
+            ${persianNumber(total)} تومان
+
+        </div>
+
+
+        <div class="invoice-phone">
+
+            📞 شماره تماس برای پیگیری سفارش:
+
+            <br><br>
+
+            <b style="font-size:22px;">
+
+            ۰۹۹۱۵۰۲۳۶۳۲
+
+            </b>
+
+        </div>
+
+
+        <div class="invoice-message">
+
+            📸 حتماً از این فاکتور اسکرین‌شات بگیرید
+
+            <br>
+
+            یا آن را دانلود کنید.
+
+            <br><br>
+
+            ❤️ ممنون از خرید شما
+
+        </div>
+
+    </div>
+
+    `;
+
+
+    document.getElementById("invoiceArea").innerHTML = html;
+
+    lastInvoiceHTML = html;
+
+    document.getElementById("invoiceModal").style.display="block";
 
 }
 
 
-let text="🍑 فروشگاه بافتنی هلو\n\n";
+/* دانلود فاکتور */
 
-text+="🧾 فاکتور سفارش\n";
+function downloadInvoice(){
 
-text+="--------------------\n";
+    if(!lastInvoiceHTML){
 
-let total=0;
+        alert("❌ اول فاکتور را بسازید!");
 
+        return;
 
-cart.forEach((item,index)=>{
-
-let itemTotal=item.price*item.qty;
-
-total+=itemTotal;
-
-text+=
-(index+1)+". "+
-item.name+
-" × "+
-item.qty+
-" = "+
-itemTotal.toLocaleString("fa-IR")+
-" تومان\n";
-
-});
+    }
 
 
-text+="--------------------\n";
+    let fullHTML = `
 
-text+="💰 مبلغ کل: "+
-total.toLocaleString("fa-IR")+
-" تومان\n\n";
+<!DOCTYPE html>
 
-text+="📞 پیگیری سفارش:\n";
+<html lang="fa" dir="rtl">
 
-text+="۰۹۹۱۵۰۲۳۶۳۲";
+<head>
+
+<meta charset="UTF-8">
+
+<title>فاکتور فروشگاه بافتنی هلو</title>
+
+<style>
+
+body{
+
+    font-family:Tahoma,Arial,sans-serif;
+
+    background:#fff5f8;
+
+    padding:20px;
+
+    color:#333;
+
+}
+
+.invoice-box{
+
+    max-width:600px;
+
+    margin:auto;
+
+    background:white;
+
+    border:3px solid #ff7198;
+
+    border-radius:18px;
+
+    padding:25px;
+
+}
+
+.invoice-title{
+
+    text-align:center;
+
+    color:#e94f7d;
+
+    font-size:25px;
+
+    font-weight:bold;
+
+    margin-bottom:20px;
+
+}
+
+.invoice-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    padding:12px 0;
+
+    border-bottom:1px solid #eee;
+
+}
+
+.invoice-total{
+
+    margin-top:20px;
+
+    background:#fff0f4;
+
+    padding:15px;
+
+    border-radius:12px;
+
+    text-align:center;
+
+    font-weight:bold;
+
+    color:#d94170;
+
+}
+
+.invoice-phone{
+
+    text-align:center;
+
+    margin-top:20px;
+
+    padding:15px;
+
+    background:#f1f6ff;
+
+    border-radius:12px;
+
+}
+
+.invoice-message{
+
+    margin-top:15px;
+
+    padding:15px;
+
+    background:#fff8d9;
+
+    border-radius:12px;
+
+    text-align:center;
+
+    font-weight:bold;
+
+    line-height:1.8;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+${lastInvoiceHTML}
+
+</body>
+
+</html>
+
+`;
 
 
-alert(text);
+    let blob = new Blob(
+        [fullHTML],
+        {type:"text/html;charset=utf-8"}
+    );
+
+
+    let url = URL.createObjectURL(blob);
+
+
+    let a = document.createElement("a");
+
+    a.href = url;
+
+    a.download = "فاکتور-فروشگاه-بافتنی-هلو.html";
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    document.body.removeChild(a);
+
+    URL.revokeObjectURL(url);
+
+
+    alert(
+        "✅ فاکتور دانلود شد!\n\n📸 بهتر است یک اسکرین‌شات هم از فاکتور نگه دارید."
+    );
 
 }
 
 
-window.onclick=function(event){
+/* بستن مودال با کلیک بیرون */
 
-let cartModal=document.getElementById("cartModal");
+window.onclick = function(event){
 
-let trackingModal=document.getElementById("trackingModal");
+    if(event.target === document.getElementById("cartModal")){
+
+        closeCart();
+
+    }
 
 
-if(event.target===cartModal){
+    if(event.target === document.getElementById("trackingModal")){
 
-closeCart();
+        closeTracking();
+
+    }
+
+
+    if(event.target === document.getElementById("invoiceModal")){
+
+        closeInvoice();
+
+    }
 
 }
-
-
-if(event.target===trackingModal){
-
-closeTracking();
-
-}
-
-};
 
 </script>
 
