@@ -29,7 +29,7 @@ body{
 /* HEADER */
 
 header{
-  background:linear-gradient(135deg,#ff8fb1,#ff5f91);
+  background:linear-gradient(135deg,#2196f3,#0d47a1);
   color:white;
   text-align:center;
   padding:25px 15px;
@@ -66,15 +66,15 @@ nav{
 }
 
 .nav-btn:nth-child(1){
-  background:#ff4f91;
-}
-
-.nav-btn:nth-child(2){
   background:#2196f3;
 }
 
+.nav-btn:nth-child(2){
+  background:#1565c0;
+}
+
 .nav-btn:nth-child(3){
-  background:#f44336;
+  background:#42a5f5;
 }
 
 /* MAIN */
@@ -110,16 +110,16 @@ nav{
   height:220px;
   object-fit:cover;
   border-radius:15px;
-  background:#fff0f5;
+  background:#e3f2fd;
 }
 
 .card h3{
   margin:12px 0 5px;
-  color:#d52f68;
+  color:#1565c0;
 }
 
 .price{
-  color:#e53935;
+  color:#1976d2;
   font-weight:bold;
   font-size:18px;
   margin:8px 0;
@@ -127,7 +127,7 @@ nav{
 
 .main-btn{
   border:none;
-  background:linear-gradient(135deg,#ff4f91,#d52f68);
+  background:linear-gradient(135deg,#2196f3,#1565c0);
   color:white;
   padding:11px 16px;
   border-radius:12px;
@@ -137,6 +137,27 @@ nav{
 
 .main-btn:hover{
   opacity:.9;
+}
+
+/* DOWNLOAD BUTTON */
+
+.download-btn{
+  width:100%;
+  margin-top:12px;
+  background:linear-gradient(135deg,#00a8ff,#0066cc);
+  border:none;
+  color:white;
+  padding:13px;
+  border-radius:13px;
+  cursor:pointer;
+  font-family:inherit;
+  font-weight:bold;
+  font-size:15px;
+  box-shadow:0 4px 10px rgba(0,0,0,.15);
+}
+
+.download-btn:hover{
+  transform:translateY(-2px);
 }
 
 /* MODAL */
@@ -167,7 +188,7 @@ nav{
   top:10px;
   font-size:30px;
   cursor:pointer;
-  color:#d52f68;
+  color:#1565c0;
 }
 
 /* INPUT */
@@ -188,7 +209,7 @@ nav{
   align-items:center;
   justify-content:space-between;
   gap:10px;
-  background:#fff5f8;
+  background:#eaf5ff;
   padding:12px;
   border-radius:14px;
   margin:8px 0;
@@ -196,7 +217,7 @@ nav{
 
 .qty-btn{
   border:none;
-  background:#ff6f9d;
+  background:#2196f3;
   color:white;
   width:30px;
   height:30px;
@@ -223,7 +244,7 @@ nav{
 
 #invoiceArea{
   background:#fff;
-  border:3px dashed #ff8fb1;
+  border:3px dashed #2196f3;
   border-radius:20px;
   padding:18px;
   position:relative;
@@ -231,7 +252,7 @@ nav{
 
 #invoiceArea h2{
   text-align:center;
-  color:#d52f68;
+  color:#1565c0;
   margin-top:5px;
 }
 
@@ -242,14 +263,14 @@ nav{
   gap:10px;
   padding:13px;
   margin:8px 0;
-  background:linear-gradient(135deg,#fff0f6,#eef8ff);
-  border:1px solid #ffd2e3;
+  background:linear-gradient(135deg,#eaf5ff,#eef8ff);
+  border:1px solid #90caf9;
   border-radius:14px;
   box-shadow:0 3px 8px rgba(0,0,0,.06);
 }
 
 #invoiceTotal{
-  color:#e53935;
+  color:#1565c0;
   font-size:20px;
   font-weight:bold;
 }
@@ -258,17 +279,17 @@ nav{
 
 .comments{
   margin-top:20px;
-  border-top:2px solid #ffd4e3;
+  border-top:2px solid #90caf9;
   padding-top:15px;
 }
 
 .comments h3{
-  color:#d52f68;
+  color:#1565c0;
   margin-bottom:10px;
 }
 
 .comment-box{
-  background:#fff7fa;
+  background:#eef7ff;
   border-radius:13px;
   padding:10px;
   margin:8px 0;
@@ -277,7 +298,7 @@ nav{
 
 .comment-name{
   font-weight:bold;
-  color:#d52f68;
+  color:#1565c0;
 }
 
 /* FOOTER */
@@ -326,7 +347,7 @@ footer{
 
 <h1>🍑 فروشگاه بافتنی هلو</h1>
 
-<p>محصولات بافتنی دست‌ساز و دوست‌داشتنی 💕</p>
+<p>محصولات بافتنی دست‌ساز و دوست‌داشتنی 💙</p>
 
 <nav>
 
@@ -493,7 +514,7 @@ onclick="createInvoice()">
 
 <div class="invoice-line">
 
-<strong>مبلغ کل</strong>
+<span>💰 مبلغ کل</span>
 
 <strong id="invoiceTotal">
 0 تومان
@@ -502,10 +523,20 @@ onclick="createInvoice()">
 </div>
 
 <p style="text-align:center">
-💕 ممنون از خرید شما از فروشگاه بافتنی هلو 💕
+💙 ممنون از خرید شما از فروشگاه بافتنی هلو 💙
 </p>
 
 </div>
+
+<!-- DOWNLOAD INVOICE -->
+
+<button
+class="download-btn"
+onclick="downloadInvoice()">
+
+⬇️ دانلود فاکتور
+
+</button>
 
 </div>
 
@@ -615,7 +646,7 @@ name:"جاکلیدی خرگوش",
 price:120000,
 image:"data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(`
 <svg xmlns="http://www.w3.org/2000/svg" width="500" height="400">
-<rect width="100%" height="100%" fill="#fff0f5"/>
+<rect width="100%" height="100%" fill="#eaf5ff"/>
 <text x="50%" y="55%" text-anchor="middle" font-size="150">🐰</text>
 </svg>`),
 description:"جاکلیدی خرگوش بافتنی، مناسب برای کیف و کلید."
@@ -651,7 +682,7 @@ name:"دستبند بافتنی",
 price:29000,
 image:"data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(`
 <svg xmlns="http://www.w3.org/2000/svg" width="500" height="400">
-<rect width="100%" height="100%" fill="#fff0f8"/>
+<rect width="100%" height="100%" fill="#eaf5ff"/>
 <text x="50%" y="55%" text-anchor="middle" font-size="150">🧶</text>
 </svg>`),
 description:"دستبند بافتنی زیبا و مناسب استفاده روزمره."
@@ -687,7 +718,7 @@ name:"عروسک",
 price:100000,
 image:"data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(`
 <svg xmlns="http://www.w3.org/2000/svg" width="500" height="400">
-<rect width="100%" height="100%" fill="#fff0f5"/>
+<rect width="100%" height="100%" fill="#eaf5ff"/>
 <text x="50%" y="55%" text-anchor="middle" font-size="150">🧸</text>
 </svg>`),
 description:"عروسک بافتنی دست‌ساز و دوست‌داشتنی."
@@ -1076,7 +1107,7 @@ ${user.phone}
 </p>
 
 ${vip?
-`<p style="color:#d52f68;font-weight:bold">
+`<p style="color:#1565c0;font-weight:bold">
 👑 حساب ویژه پارسا
 </p>`:""}
 
@@ -1322,6 +1353,254 @@ document.getElementById("orderForm")
 }
 
 
+/* DOWNLOAD INVOICE */
+
+function downloadInvoice(){
+
+let user=
+JSON.parse(localStorage.getItem("heloUser"));
+
+if(!user){
+
+alert("❌ اطلاعات مشتری پیدا نشد.");
+
+return;
+
+}
+
+let total=0;
+
+let productRows="";
+
+cart.forEach(item=>{
+
+let p=
+products.find(x=>x.id===item.id);
+
+if(!p)return;
+
+let sum=
+p.price*item.qty;
+
+total+=sum;
+
+productRows+=`
+
+<div class="item">
+
+<span>
+${p.name} × ${item.qty}
+</span>
+
+<strong>
+${formatPrice(sum)} تومان
+</strong>
+
+</div>
+
+`;
+
+});
+
+
+const invoiceHTML=`
+
+<!DOCTYPE html>
+
+<html lang="fa" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>فاکتور فروشگاه بافتنی هلو</title>
+
+<style>
+
+body{
+
+font-family:Tahoma,Arial,sans-serif;
+
+background:#eef7ff;
+
+padding:25px;
+
+color:#222;
+
+}
+
+.invoice{
+
+max-width:650px;
+
+margin:auto;
+
+background:white;
+
+padding:25px;
+
+border-radius:22px;
+
+border:3px dashed #2196f3;
+
+box-shadow:0 5px 20px rgba(0,0,0,.15);
+
+}
+
+h1{
+
+text-align:center;
+
+color:#1565c0;
+
+}
+
+.info{
+
+background:#eaf5ff;
+
+padding:12px;
+
+border-radius:12px;
+
+margin:10px 0;
+
+}
+
+.item{
+
+display:flex;
+
+justify-content:space-between;
+
+padding:14px;
+
+margin:8px 0;
+
+background:#eef7ff;
+
+border:1px solid #90caf9;
+
+border-radius:12px;
+
+}
+
+.total{
+
+display:flex;
+
+justify-content:space-between;
+
+font-size:20px;
+
+font-weight:bold;
+
+color:#1565c0;
+
+padding:15px;
+
+border-top:2px solid #2196f3;
+
+margin-top:15px;
+
+}
+
+.thanks{
+
+text-align:center;
+
+margin-top:25px;
+
+color:#1565c0;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="invoice">
+
+<h1>🧾 فاکتور فروشگاه بافتنی هلو</h1>
+
+<div class="info">
+
+👤 مشتری:
+<strong>${user.name}</strong>
+
+<br><br>
+
+📱 شماره:
+<strong>${user.phone}</strong>
+
+</div>
+
+<h3>🛍️ محصولات</h3>
+
+${productRows}
+
+<div class="total">
+
+<span>💰 مبلغ کل</span>
+
+<span>${formatPrice(total)} تومان</span>
+
+</div>
+
+<div class="thanks">
+
+💙 ممنون از خرید شما از فروشگاه بافتنی هلو 💙
+
+<br><br>
+
+🍑 پارسا قلیچ پور
+
+</div>
+
+</div>
+
+</body>
+
+</html>
+
+`;
+
+
+const blob=
+new Blob(
+[invoiceHTML],
+{type:"text/html;charset=utf-8"}
+);
+
+
+const url=
+URL.createObjectURL(blob);
+
+
+const link=
+document.createElement("a");
+
+link.href=url;
+
+link.download=
+"فاکتور-فروشگاه-بافتنی-هلو.html";
+
+document.body.appendChild(link);
+
+link.click();
+
+document.body.removeChild(link);
+
+URL.revokeObjectURL(url);
+
+
+alert("✅ فاکتور با موفقیت دانلود شد!");
+
+}
+
+
 /* COMMENTS */
 
 function renderComments(id){
@@ -1338,7 +1617,7 @@ if(comments.length===0){
 
 box.innerHTML=
 `<div class="empty">
-هنوز نظری ثبت نشده است. اولین نفر باشید! 💕
+هنوز نظری ثبت نشده است. اولین نفر باشید! 💙
 </div>`;
 
 return;
