@@ -2,899 +2,1308 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>فروشگاه بافتنی هلو</title><section class="hero">
-<div>
-<h1>یه تکه هنر، بافته‌شده با عشق 💚</h1>
-<p>به فروشگاه آزمایشی «بافتنی هلو» خوش اومدی!<br>محصولات دست‌ساز پارسا را ببین و برای سفارش، فرم کوتاه را پر کن.</p>
-<button class="btn" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">دیدن محصولات 🛍️</button>
-</div>
-<div style="font-size:90px">🧶🍑</div>
-</section>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فروشگاه بافتنی هلو 🍑</title>
 
-<main>
-<h2 id="products">محصولات</h2>
-<div class="grid">
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Tahoma,Arial,sans-serif;
+}
 
-<article class="card">
-<img src="عکس-واقعی-انبه" alt="جاکلیدی انبه">
-<div class="info">
-<div class="name">جاکلیدی انبه</div>
-<div class="desc">جاکلیدی بافتنی انبه‌ای و دوست‌داشتنی.</div>
-<div class="price">۶۰٬۰۰۰ تومان</div>
-<div class="row">
-<button class="btn" onclick="add('جاکلیدی انبه',60000)">🛒 افزودن</button>
-<button class="btn" onclick="request('جاکلیدی انبه')">سفارش</button>
-</div>
-</div>
-</article>
+body{
+  background:linear-gradient(135deg,#fff0f6,#eef8ff,#fff5f5);
+  color:#333;
+  min-height:100vh;
+}
 
-<article class="card">
-<img src="عکس-واقعی-نارنگی" alt="جاکلیدی نارنگی">
-<div class="info">
-<div class="name">جاکلیدی نارنگی</div>
-<div class="desc">جاکلیدی میوه‌ای بافتنی و رنگارنگ.</div>
-<div class="price">۶۰٬۰۰۰ تومان</div>
-<div class="row">
-<button class="btn" onclick="add('جاکلیدی نارنگی',60000)">🛒 افزودن</button>
-<button class="btn" onclick="request('جاکلیدی نارنگی')">سفارش</button>
-</div>
-</div>
-</article>
+header{
+  background:linear-gradient(135deg,#ff4f91,#4da9ff,#ff4b55);
+  color:white;
+  padding:25px 15px;
+  text-align:center;
+  box-shadow:0 5px 20px #0002;
+}
 
-<article class="card">
-<img src="عکس-واقعی-خرگوش" alt="جاکلیدی خرگوش">
-<div class="info">
-<div class="name">جاکلیدی خرگوش</div>
-<div class="desc">خرگوش بافتنی بامزه و مناسب هدیه.</div>
-<div class="price">۱۲۰٬۰۰۰ تومان</div>
-<div class="row">
-<button class="btn" onclick="add('جاکلیدی خرگوش',120000)">🛒 افزودن</button>
-<button class="btn" onclick="request('جاکلیدی خرگوش')">سفارش</button>
-</div>
-</div>
-</article>
+header h1{
+  font-size:30px;
+  margin-bottom:8px;
+}
 
-<article class="card">
-<img src="عکس-واقعی-لاک-پشت" alt="جاکلیدی لاک‌پشت">
-<div class="info">
-<div class="name">جاکلیدی لاک‌پشت</div>
-<div class="desc">لاک‌پشت بافتنی فانتزی و دست‌ساز.</div>
-<div class="price">۱۲۰٬۰۰۰ تومان</div>
-<div class="row">
-<button class="btn" onclick="add('جاکلیدی لاک‌پشت',120000)">🛒 افزودن</button>
-<button class="btn" onclick="request('جاکلیدی لاک‌پشت')">سفارش</button>
-</div>
-</div>
-</article>
+header p{
+  font-size:15px;
+}
 
-<article class="card">
-<img src="عکس-واقعی-قورباغه" alt="جاکلیدی قورباغه">
-<div class="info">
-<div class="name">جاکلیدی قورباغه</div>
-<div class="desc">قورباغه بافتنی فانتزی و دوست‌داشتنی.</div>
-<div class="price">۱۲۰٬۰۰۰ تومان</div>
-<div class="row">
-<button class="btn" onclick="add('جاکلیدی قورباغه',120000)">🛒 افزودن</button>
-<button class="btn" onclick="request('جاکلیدی قورباغه')">سفارش</button>
-</div>
-</div>
-</article>
+.top-buttons{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:18px;
+}
 
-<article class="card">
-<img src="عکس-واقعی-دستبند" alt="دستبند بافتنی">
-<div class="info">
-<div class="name">دستبند بافتنی</div>
-<div class="desc">دستبند دست‌ساز و سبک.</div>
-<div class="price">۲۹٬۰۰۰ تومان</div>
-<div class="row">
-<button class="btn" onclick="add('دستبند بافتنی',29000)">🛒 افزودن</button>
-<button class="btn" onclick="request('دستبند بافتنی')">سفارش</button>
-</div>
-</div>
-</article>
+.top-buttons button{
+  border:none;
+  padding:11px 17px;
+  border-radius:25px;
+  background:white;
+  color:#e73573;
+  font-weight:bold;
+  cursor:pointer;
+  box-shadow:0 3px 10px #0002;
+}
 
-<article class="card">
-<img src="عکس-واقعی-سبد" alt="سبد تریکو">
-<div class="info">
-<div class="name">سبد تریکو</div>
-<div class="desc">سبد تریکو دست‌ساز برای نظم دادن به وسایل.</div>
-<div class="price">۱۰۰٬۰۰۰ تومان</div>
-<div class="row">
-<button class="btn" onclick="add('سبد تریکو',100000)">🛒 افزودن</button>
-<button class="btn" onclick="request('سبد تریکو')">سفارش</button>
-</div>
-</div>
-</article>
+.top-buttons button:hover{
+  transform:translateY(-2px);
+}
 
-<article class="card">
-<img src="عکس-واقعی-گربه" alt="گربه">
-<div class="info">
-<div class="name">گربه</div>
-<div class="desc">عروسک گربه‌ای بافتنی و فانتزی.</div>
-<div class="price">۸۰٬۰۰۰ تومان</div>
-<div class="row">
-<button class="btn" onclick="add('گربه',80000)">🛒 افزودن</button>
-<button class="btn" onclick="request('گربه')">سفارش</button>
-</div>
-</div>
-</article>
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:25px 14px;
+}
 
-<article class="card">
-<img src="عکس-واقعی-عروسک" alt="عروسک">
-<div class="info">
-<div class="name">عروسک</div>
-<div class="desc">عروسک بافتنی دست‌ساز و مناسب هدیه.</div>
-<div class="price">۱۰۰٬۰۰۰ تومان</div>
-<div class="row">
-<button class="btn" onclick="add('عروسک',100000)">🛒 افزودن</button>
-<button class="btn" onclick="request('عروسک')">سفارش</button>
-</div>
-</div>
-</article>
+.section-title{
+  text-align:center;
+  margin-bottom:20px;
+  color:#d52f68;
+}
 
-<article class="card">
-<img src="عکس-واقعی-هندوانه" alt="هندوانه">
-<div class="info">
-<div class="name">هندوانه</div>
-<div class="desc">محصول بافتنی هندوانه‌ای فانتزی.</div>
-<div class="price">۶۰٬۰۰۰ تومان</div>
-<div class="row">
-<button class="btn" onclick="add('هندوانه',60000)">🛒 افزودن</button>
-<button class="btn" onclick="request('هندوانه')">سفارش</button>
-</div>
-</div>
-</article>
+/* دو محصول در هر ردیف */
+.products{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+}
 
-<article class="card">
-<img src="عکس-واقعی-وال" alt="وال">
-<div class="info">
-<div class="name">وال</div>
-<div class="desc">وال بافتنی بامزه و مناسب هدیه.</div>
-<div class="price">۸۰٬۰۰۰ تومان</div>
-<div class="row">
-<button class="btn" onclick="add('وال',80000)">🛒 افزودن</button>
-<button class="btn" onclick="request('وال')">سفارش</button>
-</div>
-</div>
-</article>
+.card{
+  background:white;
+  border-radius:20px;
+  padding:14px;
+  text-align:center;
+  box-shadow:0 5px 20px #00000012;
+  border:2px solid #ffd4e3;
+  cursor:pointer;
+  transition:.25s;
+  overflow:hidden;
+}
 
-<article class="card">
-<img src="عکس-واقعی-اسکاچ" alt="اسکاچ">
-<div class="info">
-<div class="name">اسکاچ</div>
-<div class="desc">اسکاچ بافتنی کاربردی و دست‌ساز.</div>
-<div class="price">۴۰٬۰۰۰ تومان</div>
-<div class="row">
-<button class="btn" onclick="add('اسکاچ',40000)">🛒 افزودن</button>
-<button class="btn" onclick="request('اسکاچ')">سفارش</button>
-</div>
-</div>
-</article>
+.card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 10px 25px #0002;
+}
 
-</div>
-</main>
+.product-image{
+  width:100%;
+  height:170px;
+  object-fit:cover;
+  border-radius:15px;
+  margin-bottom:10px;
+}
 
-<div class="modal" id="modal">
-<div class="box">
+.emoji{
+  font-size:55px;
+  margin:8px;
+}
 
-<button class="close" onclick="closeModal()">✕</button>
+.card h3{
+  color:#333;
+  margin:7px 0;
+  font-size:17px;
+}
 
-<h2 id="modalTitle"></h2>
+.price{
+  color:#e52f68;
+  font-size:16px;
+  font-weight:bold;
+  margin:8px 0 12px;
+}
 
-<div id="modalBody"></div>
+.add{
+  border:none;
+  background:linear-gradient(135deg,#ff4385,#ff5360);
+  color:white;
+  padding:10px 14px;
+  border-radius:14px;
+  cursor:pointer;
+  font-weight:bold;
+  width:100%;
+}
 
-</div>
+.add:hover{
+  background:linear-gradient(135deg,#e52c70,#e43d48);
+}
+
+.vip{
+  display:inline-block;
+  background:linear-gradient(90deg,#ffd700,#ff9d00);
+  color:white;
+  padding:5px 12px;
+  border-radius:20px;
+  font-size:12px;
+  margin-top:8px;
+}
+
+/* MODAL */
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#0008;
+  z-index:1000;
+  align-items:center;
+  justify-content:center;
+  padding:15px;
+}
+
+.modal-box{
+  background:white;
+  width:100%;
+  max-width:520px;
+  max-height:90vh;
+  overflow:auto;
+  border-radius:25px;
+  padding:22px;
+  box-shadow:0 10px 40px #0005;
+  position:relative;
+}
+
+.close{
+  position:absolute;
+  left:15px;
+  top:12px;
+  width:35px;
+  height:35px;
+  border:none;
+  border-radius:50%;
+  background:#ffe1e9;
+  color:#d82f64;
+  font-size:20px;
+  cursor:pointer;
+}
+
+.modal-title{
+  text-align:center;
+  color:#d82f68;
+  margin-bottom:15px;
+}
+
+.detail-image{
+  width:100%;
+  height:280px;
+  object-fit:cover;
+  border-radius:20px;
+  margin-bottom:15px;
+}
+
+.detail-price{
+  color:#e72d68;
+  font-size:21px;
+  font-weight:bold;
+  margin:12px 0;
+}
+
+.detail-text{
+  line-height:2;
+  color:#555;
+  margin-bottom:15px;
+}
+
+.input{
+  width:100%;
+  padding:13px;
+  border:2px solid #ffd1df;
+  border-radius:13px;
+  margin:7px 0;
+  outline:none;
+}
+
+.input:focus{
+  border-color:#ff5790;
+}
+
+.main-btn{
+  width:100%;
+  border:none;
+  padding:13px;
+  border-radius:14px;
+  background:linear-gradient(135deg,#ff4385,#418ff0);
+  color:white;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:8px;
+}
+
+.secondary-btn{
+  width:100%;
+  border:none;
+  padding:12px;
+  border-radius:14px;
+  background:#eef5ff;
+  color:#3577c9;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:8px;
+}
+
+.cart-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  border-bottom:1px solid #eee;
+  padding:12px 0;
+}
+
+.cart-item img{
+  width:60px;
+  height:60px;
+  object-fit:cover;
+  border-radius:12px;
+}
+
+.cart-info{
+  flex:1;
+}
+
+.quantity{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  margin-top:5px;
+}
+
+.quantity button{
+  width:27px;
+  height:27px;
+  border:none;
+  border-radius:8px;
+  background:#ffe0ea;
+  color:#d92763;
+  cursor:pointer;
+}
+
+.remove{
+  border:none;
+  background:#ffeded;
+  color:#e33;
+  padding:7px;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.total{
+  font-size:20px;
+  font-weight:bold;
+  color:#d92763;
+  text-align:center;
+  padding:15px;
+}
+
+.invoice{
+  background:#fff;
+  border:2px dashed #ff5b91;
+  padding:18px;
+  border-radius:18px;
+}
+
+.invoice h3{
+  color:#d92763;
+  text-align:center;
+  margin-bottom:15px;
+}
+
+.invoice-line{
+  display:flex;
+  justify-content:space-between;
+  padding:7px 0;
+  border-bottom:1px solid #eee;
+}
+
+.notice{
+  background:#fff3f7;
+  padding:12px;
+  border-radius:12px;
+  color:#c62e62;
+  line-height:1.8;
+  margin-top:12px;
+}
+
+footer{
+  margin-top:30px;
+  background:#242b3a;
+  color:white;
+  text-align:center;
+  padding:25px 15px;
+  line-height:2;
+}
+
+.empty{
+  text-align:center;
+  padding:25px;
+  color:#888;
+}
+
+@media(max-width:360px){
+  .products{
+    gap:8px;
+  }
+
+  .card{
+    padding:10px 7px;
+  }
+
+  .product-image{
+    height:125px;
+  }
+
+  .card h3{
+    font-size:14px;
+  }
+
+  .price{
+    font-size:13px;
+  }
+
+  .add{
+    padding:8px 5px;
+    font-size:11px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🍑 فروشگاه بافتنی هلو</h1>
+  <p>محصولات بافتنی دست‌ساز با عشق 💕</p>
+
+  <div class="top-buttons">
+    <button onclick="openCart()">🛒 سبد خرید (<span id="cartCount">0</span>)</button>
+    <button onclick="openTracking()">📞 پیگیری سفارش</button>
+    <button onclick="openAccount()">👤 حساب من</button>
+  </div>
+
+  <div id="userBadge"></div>
+</header>
+
+<div class="container">
+
+  <h2 class="section-title">🧶 محصولات فروشگاه</h2>
+
+  <div class="products" id="products"></div>
+
 </div>
 
 <footer>
-🧶 بافتنی هلو
-<br>
-ساخته‌شده با عشق برای محصولات دست‌ساز 🍑
+  🍑 فروشگاه بافتنی هلو<br>
+  📞 ۰۹۹۱۵۰۲۳۶۳۲<br>
+  👨‍💻 سازنده: پارسا قلیچ پور
 </footer>
+
+
+<!-- PRODUCT DETAIL MODAL -->
+<div class="modal" id="productModal">
+  <div class="modal-box">
+    <button class="close" onclick="closeModal('productModal')">×</button>
+
+    <h2 class="modal-title" id="detailName"></h2>
+
+    <img id="detailImage" class="detail-image">
+
+    <div id="detailPrice" class="detail-price"></div>
+
+    <div id="detailText" class="detail-text"></div>
+
+    <button class="main-btn" onclick="addDetailToCart()">
+      🛒 افزودن به سبد خرید
+    </button>
+  </div>
+</div>
+
+
+<!-- CART MODAL -->
+<div class="modal" id="cartModal">
+  <div class="modal-box">
+    <button class="close" onclick="closeModal('cartModal')">×</button>
+
+    <h2 class="modal-title">🛒 سبد خرید</h2>
+
+    <div id="cartItems"></div>
+
+    <div class="total">
+      مجموع: <span id="cartTotal">۰</span> تومان
+    </div>
+
+    <button class="main-btn" onclick="createInvoice()">
+      🧾 ساخت فاکتور
+    </button>
+  </div>
+</div>
+
+
+<!-- INVOICE MODAL -->
+<div class="modal" id="invoiceModal">
+  <div class="modal-box">
+    <button class="close" onclick="closeModal('invoiceModal')">×</button>
+
+    <div id="invoiceArea" class="invoice">
+      <h3>🧾 فاکتور فروشگاه بافتنی هلو</h3>
+
+      <div id="invoiceProducts"></div>
+
+      <div class="invoice-line">
+        <b>مبلغ کل</b>
+        <b id="invoiceTotal"></b>
+      </div>
+
+      <br>
+
+      <div>
+        👤 مشتری:
+        <span id="invoiceCustomer"></span>
+      </div>
+
+      <div>
+        📞 شماره:
+        <span>۰۹۹۱۵۰۲۳۶۳۲</span>
+      </div>
+
+      <div>
+        👨‍💻 سازنده:
+        پارسا قلیچ پور
+      </div>
+
+      <div class="notice">
+        حتماً از فاکتور اسکرین‌شات بگیرید یا آن را دانلود کنید. 📸
+      </div>
+    </div>
+
+    <button class="main-btn" onclick="downloadInvoice()">
+      📥 دانلود فاکتور
+    </button>
+  </div>
+</div>
+
+
+<!-- TRACKING MODAL -->
+<div class="modal" id="trackingModal">
+  <div class="modal-box">
+    <button class="close" onclick="closeModal('trackingModal')">×</button>
+
+    <h2 class="modal-title">📞 پیگیری سفارش</h2>
+
+    <p style="text-align:center;line-height:2">
+      برای پیگیری سفارش با این شماره تماس بگیرید:
+      <br>
+      <strong style="font-size:22px;color:#e22f68">
+        ۰۹۹۱۵۰۲۳۶۳۲
+      </strong>
+    </p>
+
+    <a href="tel:09915023632">
+      <button class="main-btn">📞 تماس با فروشگاه</button>
+    </a>
+  </div>
+</div>
+
+
+<!-- ACCOUNT MODAL -->
+<div class="modal" id="accountModal">
+  <div class="modal-box">
+    <button class="close" onclick="closeModal('accountModal')">×</button>
+
+    <h2 class="modal-title">👤 حساب من</h2>
+
+    <div id="accountContent"></div>
+  </div>
+</div>
+
+
+<!-- LOGIN MODAL -->
+<div class="modal" id="loginModal">
+  <div class="modal-box">
+    <button class="close" onclick="closeModal('loginModal')">×</button>
+
+    <h2 class="modal-title">✨ ثبت‌نام</h2>
+
+    <p style="text-align:center;line-height:1.8">
+      برای خرید و ثبت سفارش، یک حساب بسازید.
+      <br>
+      حساب روی همین دستگاه ذخیره می‌شود.
+    </p>
+
+    <input id="nameInput" class="input" placeholder="نام و نام خانوادگی">
+
+    <input id="phoneInput" class="input" placeholder="شماره موبایل">
+
+    <input id="passwordInput" type="password"
+           class="input" placeholder="رمز عبور">
+
+    <button class="main-btn" onclick="registerUser()">
+      ✅ ساخت حساب
+    </button>
+  </div>
+</div>
+
+
+<!-- HIDDEN FORM FOR FORMSUBMIT -->
+<iframe name="hiddenFrame" style="display:none"></iframe>
+
+<form
+  id="orderForm"
+  action="https://formsubmit.co/mailtobaftanihelo@gmail.com"
+  method="POST"
+  target="hiddenFrame"
+  style="display:none">
+
+  <input type="hidden" name="_subject" value="🛒 سفارش جدید فروشگاه بافتنی هلو">
+  <input type="hidden" name="_template" value="table">
+  <input type="hidden" name="_captcha" value="false">
+
+  <input type="hidden" id="emailName" name="نام مشتری">
+  <input type="hidden" id="emailPhone" name="شماره مشتری">
+  <input type="hidden" id="emailProducts" name="محصولات">
+  <input type="hidden" id="emailTotal" name="مبلغ کل">
+</form>
+
 
 <script>
 
-let cart=[];
+const products = [
 
-function fmt(n){
-return Number(n).toLocaleString('fa-IR')+' تومان';
+{
+ id:1,
+ name:"جاکلیدی انبه",
+ price:60000,
+ emoji:"🥭",
+ image:"data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='500'%3E%3Crect width='700' height='500' fill='%23fff0b8'/%3E%3Ctext x='350' y='250' text-anchor='middle' font-size='130'%3E🥭%3C/text%3E%3C/svg%3E",
+ description:"جاکلیدی بافتنی انبه، دست‌ساز و مناسب برای کیف، کوله و کلید."
+},
+
+{
+ id:2,
+ name:"جاکلیدی نارنگی",
+ price:60000,
+ emoji:"🍊",
+ image:"data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='500'%3E%3Crect width='700' height='500' fill='%23ffe0b2'/%3E%3Ctext x='350' y='250' text-anchor='middle' font-size='130'%3E🍊%3C/text%3E%3C/svg%3E",
+ description:"جاکلیدی نارنگی با ظاهر رنگی و بانمک؛ مناسب هدیه و استفاده روزمره."
+},
+
+{
+ id:3,
+ name:"جاکلیدی خرگوش",
+ price:120000,
+ emoji:"🐰",
+ image:"data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='500'%3E%3Crect width='700' height='500' fill='%23ffe1ed'/%3E%3Ctext x='350' y='250' text-anchor='middle' font-size='130'%3E🐰%3C/text%3E%3C/svg%3E",
+ description:"جاکلیدی خرگوشی بامزه و دست‌ساز برای کسانی که عاشق طرح‌های حیوانی هستند."
+},
+
+{
+ id:4,
+ name:"جاکلیدی لاک‌پشت",
+ price:120000,
+ emoji:"🐢",
+ image:"data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='500'%3E%3Crect width='700' height='500' fill='%23dff7df'/%3E%3Ctext x='350' y='250' text-anchor='middle' font-size='130'%3E🐢%3C/text%3E%3C/svg%3E",
+ description:"جاکلیدی لاک‌پشت با طراحی فانتزی و مناسب برای کیف و کوله."
+},
+
+{
+ id:5,
+ name:"جاکلیدی قورباغه",
+ price:120000,
+ emoji:"🐸",
+ image:"data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='500'%3E%3Crect width='700' height='500' fill='%23dfffe8'/%3E%3Ctext x='350' y='250' text-anchor='middle' font-size='130'%3E🐸%3C/text%3E%3C/svg%3E",
+ description:"جاکلیدی قورباغه‌ای بانمک، مناسب هدیه و استفاده روزانه."
+},
+
+{
+ id:6,
+ name:"دستبند بافتنی",
+ price:29000,
+ emoji:"🧶",
+ image:"data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='500'%3E%3Crect width='700' height='500' fill='%23eadcff'/%3E%3Ctext x='350' y='250' text-anchor='middle' font-size='130'%3E🧶%3C/text%3E%3C/svg%3E",
+ description:"دستبند بافتنی سبک و زیبا که می‌تواند برای استفاده روزمره یا هدیه مناسب باشد."
+},
+
+{
+ id:7,
+ name:"سبد تریکو",
+ price:100000,
+ emoji:"🧺",
+ image:"data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='500'%3E%3Crect width='700' height='500' fill='%23f5dfc2'/%3E%3Ctext x='350' y='250' text-anchor='middle' font-size='130'%3E🧺%3C/text%3E%3C/svg%3E",
+ description:"سبد تریکو برای نگهداری وسایل کوچک، اتاق، میز و دکور خانه."
+},
+
+{
+ id:8,
+ name:"گربه",
+ price:80000,
+ emoji:"🐱",
+ image:"data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='500'%3E%3Crect width='700' height='500' fill='%23e8e8ff'/%3E%3Ctext x='350' y='250' text-anchor='middle' font-size='130'%3E🐱%3C/text%3E%3C/svg%3E",
+ description:"عروسک گربه‌ای با طرح فانتزی و مناسب برای هدیه و دکور."
+},
+
+{
+ id:9,
+ name:"عروسک",
+ price:100000,
+ emoji:"🧸",
+ image:"data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='500'%3E%3Crect width='700' height='500' fill='%23ffe5cc'/%3E%3Ctext x='350' y='250' text-anchor='middle' font-size='130'%3E🧸%3C/text%3E%3C/svg%3E",
+ description:"عروسک بافتنی دست‌ساز و مناسب هدیه برای دوستان و خانواده."
+},
+
+{
+ id:10,
+ name:"هندوانه",
+ price:60000,
+ emoji:"🍉",
+ image:"data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='500'%3E%3Crect width='700' height='500' fill='%23ffe1e1'/%3E%3Ctext x='350' y='250' text-anchor='middle' font-size='130'%3E🍉%3C/text%3E%3C/svg%3E",
+ description:"محصول بافتنی با طرح هندوانه و رنگ‌های شاد."
+},
+
+{
+ id:11,
+ name:"وال",
+ price:80000,
+ emoji:"🐳",
+ image:"data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='500'%3E%3Crect width='700' height='500' fill='%23dff2ff'/%3E%3Ctext x='350' y='250' text-anchor='middle' font-size='130'%3E🐳%3C/text%3E%3C/svg%3E",
+ description:"وال بافتنی فانتزی و بامزه، مناسب هدیه و دکور اتاق."
+},
+
+{
+ id:12,
+ name:"اسکاج",
+ price:40000,
+ emoji:"🧽",
+ image:"data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='500'%3E%3Crect width='700' height='500' fill='%23fff2c9'/%3E%3Ctext x='350' y='250' text-anchor='middle' font-size='130'%3E🧽%3C/text%3E%3C/svg%3E",
+ description:"اسکاج بافتنی دست‌ساز و قابل استفاده در آشپزخانه."
 }
 
-function add(name,price){
+];
 
-cart.push({
-name:name,
-price:price
-});
 
-document.getElementById('count').textContent=
-cart.length.toLocaleString('fa-IR');
+let cart = JSON.parse(localStorage.getItem("heloCart")) || [];
 
-alert(
-'به سبد خرید اضافه شد: '+name+' 🧶'
-);
+let currentProduct = null;
+
+
+/* نمایش محصولات */
+
+function renderProducts(){
+
+  const box = document.getElementById("products");
+
+  box.innerHTML = "";
+
+  products.forEach(p=>{
+
+    box.innerHTML += `
+      <div class="card" onclick="openProduct(${p.id})">
+
+        <img
+          class="product-image"
+          src="${p.image}"
+          alt="${p.name}"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='block';"
+        >
+
+        <div class="emoji" style="display:none">
+          ${p.emoji}
+        </div>
+
+        <h3>${p.name}</h3>
+
+        <div class="price">
+          ${formatPrice(p.price)} تومان
+        </div>
+
+        <button
+          class="add"
+          onclick="event.stopPropagation(); addToCart(${p.id})">
+          🛒 افزودن به سبد
+        </button>
+
+      </div>
+    `;
+
+  });
 
 }
+
+
+/* قیمت */
+
+function formatPrice(number){
+
+  return number.toLocaleString("fa-IR");
+
+}
+
+
+/* باز کردن جزئیات محصول */
+
+function openProduct(id){
+
+  currentProduct = products.find(p=>p.id===id);
+
+  if(!currentProduct) return;
+
+  document.getElementById("detailName").innerText =
+    currentProduct.emoji + " " + currentProduct.name;
+
+  document.getElementById("detailImage").src =
+    currentProduct.image;
+
+  document.getElementById("detailPrice").innerText =
+    formatPrice(currentProduct.price) + " تومان";
+
+  document.getElementById("detailText").innerText =
+    currentProduct.description;
+
+  document.getElementById("productModal").style.display="flex";
+
+}
+
+
+/* افزودن از صفحه جزئیات */
+
+function addDetailToCart(){
+
+  if(currentProduct){
+
+    addToCart(currentProduct.id);
+
+    closeModal("productModal");
+
+  }
+
+}
+
+
+/* بررسی حساب */
+
+function requireLogin(){
+
+  const user = JSON.parse(localStorage.getItem("heloUser"));
+
+  if(!user){
+
+    document.getElementById("loginModal").style.display="flex";
+
+    return false;
+
+  }
+
+  return true;
+
+}
+
+
+/* افزودن به سبد */
+
+function addToCart(id){
+
+  if(!requireLogin()) return;
+
+  const product = products.find(p=>p.id===id);
+
+  if(!product) return;
+
+  const existing = cart.find(item=>item.id===id);
+
+  if(existing){
+
+    existing.qty++;
+
+  }else{
+
+    cart.push({
+      id:id,
+      qty:1
+    });
+
+  }
+
+  saveCart();
+
+  alert("✅ محصول به سبد خرید اضافه شد!");
+
+}
+
+
+/* ذخیره سبد */
+
+function saveCart(){
+
+  localStorage.setItem("heloCart",JSON.stringify(cart));
+
+  updateCartCount();
+
+}
+
+
+/* تعداد سبد */
+
+function updateCartCount(){
+
+  let count = cart.reduce((sum,item)=>sum+item.qty,0);
+
+  document.getElementById("cartCount").innerText =
+    formatPrice(count);
+
+}
+
+
+/* باز کردن سبد */
 
 function openCart(){
 
-let body=cart.length
-?
-cart.map((x,i)=>
-`<p>
-${i+1}. ${x.name} — ${fmt(x.price)}
-</p>`
-).join('')
-+
-`
-<hr>
-<b>
-جمع:
-${fmt(cart.reduce((a,x)=>a+x.price,0))}
-</b>
-<br><br>
+  if(!requireLogin()) return;
 
-<button
-class="btn"
-onclick="request('سفارش از سبد خرید')">
-ثبت درخواست سفارش
-</button>
-`
-:
-'<p>سبد خرید هنوز خالیه 😄</p>';
+  renderCart();
 
-document.getElementById('modalTitle').textContent=
-'🛒 سبد خرید';
-
-document.getElementById('modalBody').innerHTML=
-body;
-
-document.getElementById('modal').style.display=
-'flex';
+  document.getElementById("cartModal").style.display="flex";
 
 }
 
-function request(product){
 
-document.getElementById('modalTitle').textContent=
-'📦 درخواست سفارش';
-
-document.getElementById('modalBody').innerHTML=`
-
-<p>
-محصول:
-<b>${product}</b>
-</p>
-
-<input
-id="name"
-placeholder="نام شما"
->
-
-<input
-id="contact"
-placeholder="شماره تماس یا راه ارتباطی"
->
-
-<textarea
-id="note"
-rows="3"
-placeholder="توضیحات سفارش"
-></textarea>
-
-<button
-class="btn"
-onclick="send()">
-ارسال درخواست
-</button>
-
-<p class="small">
-این نسخه آزمایشی است؛ پرداخت آنلاین واقعی هنوز فعال نشده.
-</p>
-
-`;
-
-document.getElementById('modal').style.display=
-'flex';
-
-}
-
-function send(){
-
-alert(
-'درخواست آزمایشی ثبت شد! 🎉\nدر نسخه واقعی، اینجا سفارش برای صاحب فروشگاه ارسال می‌شود.'
-);
-
-closeModal();
-
-}
-
-function closeModal(){
-
-document.getElementById('modal').style.display=
-'none';
-
-}
-
-</script><style>
-.helo-detail-images{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-margin-bottom:14px
-}
-
-.helo-detail-images .helo-detail-img{
-width:100%;
-height:220px;
-object-fit:cover;
-border-radius:16px;
-display:block;
-background:#f7f7f7
-}
-
-@media(max-width:600px){
-.helo-detail-images .helo-detail-img{
-height:170px
-}
-}
-
-.helo-comment{
-padding:10px;
-margin:8px 0;
-border:1px solid #eee;
-border-radius:12px;
-background:#fff
-}
-
-.helo-comment small{
-display:block;
-color:#888;
-margin-top:3px
-}
-
-.helo-comment p{
-margin:6px 0
-}
-</style>
-
-<!-- ====== امکانات جدید فروشگاه هلو - بدون حذف بخش های قبلی ====== -->
-
-<style>
-
-.helo-plus-section{
-max-width:1100px;
-margin:35px auto;
-padding:20px 15px;
-font-family:Tahoma,Arial,sans-serif
-}
-
-.helo-plus-title{
-text-align:center;
-background:linear-gradient(135deg,#ff5a91,#5caeff,#ed4656);
-color:#fff;
-border-radius:20px;
-padding:18px;
-box-shadow:0 8px 25px #0002
-}
-
-.helo-plus-grid{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:16px;
-margin-top:18px
-}
-
-.helo-card{
-background:#fff;
-border:2px solid #ffd8e6;
-border-radius:20px;
-padding:12px;
-text-align:center;
-box-shadow:0 7px 20px #00000012;
-cursor:pointer;
-transition:.2s
-}
-
-.helo-card:hover{
-transform:translateY(-4px);
-box-shadow:0 12px 28px #00000018
-}
-
-.helo-card img{
-width:100%;
-height:190px;
-object-fit:cover;
-border-radius:15px;
-background:#f6f6f6
-}
-
-.helo-card h3{
-margin:10px 0 5px;
-font-size:16px
-}
-
-.helo-price{
-font-weight:bold;
-color:#e33c6d;
-margin:8px
-}
-
-.helo-btns{
-display:flex;
-justify-content:center;
-gap:8px;
-flex-wrap:wrap;
-margin:10px 0
-}
-
-.helo-btn{
-border:0;
-border-radius:12px;
-padding:9px 12px;
-font-family:inherit;
-cursor:pointer
-}
-
-.helo-pink{
-background:#ff4f87;
-color:#fff
-}
-
-.helo-blue{
-background:#459cff;
-color:#fff
-}
-
-.helo-red{
-background:#e94255;
-color:#fff
-}
-
-.helo-gray{
-background:#eee;
-color:#333
-}
-
-.helo-modal{
-display:none;
-position:fixed;
-inset:0;
-background:#0009;
-z-index:10000;
-align-items:center;
-justify-content:center;
-padding:14px;
-font-family:Tahoma,Arial,sans-serif
-}
-
-.helo-box{
-width:min(600px,100%);
-max-height:92vh;
-overflow:auto;
-background:#fff;
-border-radius:24px;
-padding:20px;
-box-shadow:0 20px 60px #0005
-}
-
-.helo-detail-img{
-width:100%;
-max-height:360px;
-object-fit:cover;
-border-radius:18px
-}
-
-.helo-detail h2{
-margin:12px 0 5px
-}
-
-.helo-detail p{
-line-height:2
-}
-
-.helo-input{
-width:100%;
-padding:12px;
-margin:7px 0;
-border:1px solid #ddd;
-border-radius:12px;
-font-family:inherit
-}
-
-.helo-cart-row{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:8px;
-border-bottom:1px solid #eee;
-padding:12px 0
-}
-
-.helo-qty button{
-padding:5px 9px
-}
-
-.helo-total{
-font-size:20px;
-font-weight:bold;
-color:#e33c6d;
-padding:15px 0
-}
-
-.helo-vip{
-display:inline-block;
-background:#ffe477;
-color:#684f00;
-padding:5px 10px;
-border-radius:20px;
-font-weight:bold
-}
-
-@media(max-width:900px){
-
-.helo-plus-grid{
-grid-template-columns:repeat(2,1fr)
-}
-
-}
-
-@media(max-width:420px){
-
-.helo-plus-grid{
-gap:9px
-}
-
-.helo-card{
-padding:7px
-}
-
-.helo-card img{
-height:145px
-}
-
-.helo-card h3{
-font-size:14px
-}
-
-.helo-price{
-font-size:13px
-}
-
-.helo-btn{
-font-size:12px;
-padding:8px 9px
-}
-
-}
-
-</style>
-
-<section
-class="helo-plus-section"
-id="heloPlusProducts">
-
-<div class="helo-plus-title">
-
-<h2>
-🍑 محصولات جدید بافتنی هلو
-</h2>
-
-<p>
-برای دیدن عکس واقعی، جزئیات و خرید، روی محصول بزنید ❤️
-</p>
-
-<div class="helo-btns">
-
-<button
-class="helo-btn helo-pink"
-onclick="heloOpenCart()">
-🛒 سبد خرید
-(<span id="heloCount">۰</span>)
-</button>
-
-<button
-class="helo-btn helo-blue"
-onclick="heloOpenAccount()">
-👤 حساب من
-</button>
-
-<button
-class="helo-btn helo-red"
-onclick="heloOpenTrack()">
-📞 پیگیری سفارش
-</button>
-
-</div>
-
-</div>
-
-<div
-class="helo-plus-grid"
-id="heloProductsGrid">
-</div>
-
-</section>
-
-<div
-class="helo-modal"
-id="heloDetailModal">
-
-<div
-class="helo-box helo-detail"
-id="heloDetailBox">
-</div>
-
-</div>
-
-<div
-class="helo-modal"
-id="heloCartModal">
-
-<div
-class="helo-box"
-id="heloCartBox">
-</div>
-
-</div>
-
-<div
-class="helo-modal"
-id="heloAccountModal">
-
-<div
-class="helo-box"
-id="heloAccountBox">
-</div>
-
-</div>
-
-<div
-class="helo-modal"
-id="heloTrackModal">
-
-<div class="helo-box">
-
-<h2>
-📞 پیگیری سفارش
-</h2>
-
-<p>
-برای پیگیری سفارش با فروشگاه تماس بگیرید:
-</p>
-
-<h2
-style="text-align:center;direction:ltr">
-۰۹۹۱۵۰۲۳۶۳۲
-</h2>
-
-<div class="helo-btns">
-
-<a href="tel:09915023632">
-
-<button
-class="helo-btn helo-blue">
-📞 تماس
-</button>
-
-</a>
-
-<button
-class="helo-btn helo-gray"
-onclick="heloCloseAll()">
-بستن
-</button>
-
-</div>
-
-</div>
-
-</div><iframe name="heloEmailFrame" style="display:none"></iframe>
-<form id="heloEmailForm" action="https://formsubmit.co/mailtobaftanihelo@gmail.com" method="POST" target="heloEmailFrame" style="display:none">
-<input type="hidden" name="_subject" id="heloEmailSubject">
-<input type="hidden" name="_template" value="table">
-<input type="hidden" name="_captcha" value="false">
-<input type="hidden" name="نام مشتری" id="heloEmailName">
-<input type="hidden" name="شماره مشتری" id="heloEmailPhone">
-<input type="hidden" name="محصولات سفارش" id="heloEmailProducts">
-<input type="hidden" name="مبلغ نهایی" id="heloEmailTotal">
-<input type="hidden" name="شماره فروشگاه" value="۰۹۹۱۵۰۲۳۶۳۲">
-</form>
-
-<script>
-(function(){
-const H_PRODUCTS=[
- {id:1,name:'جاکلیدی انبه',price:60000,img:'https://i.etsystatic.com/55661009/r/il/6da577/6499021146/il_570xN.6499021146_larc.jpg',img2:'https://i.etsystatic.com/55661009/r/il/6da577/6499021146/il_570xN.6499021146_larc.jpg',desc:'جاکلیدی بافتنی انبه‌ای و سبک؛ مناسب کیف، کوله و هدیه.'},
- {id:2,name:'جاکلیدی نارنگی',price:60000,img:'https://i.etsystatic.com/55661009/r/il/6da577/6499021146/il_570xN.6499021146_larc.jpg',img2:'https://i.etsystatic.com/55661009/r/il/6da577/6499021146/il_570xN.6499021146_larc.jpg',desc:'جاکلیدی میوه‌ای با ظاهر دست‌ساز و رنگ شاد برای کیف و کوله.'},
- {id:3,name:'جاکلیدی خرگوش',price:120000,img:'https://pahadikala.com/storage/1019/6a1bfc439b00f_cropped_image.jpg',img2:'https://pahadikala.com/storage/1019/6a1bfc439b00f_cropped_image.jpg',desc:'خرگوش بافتنی بامزه و مناسب هدیه و آویز کیف.'},
- {id:4,name:'جاکلیدی لاک‌پشت',price:120000,img:'https://i.etsystatic.com/54248728/r/il/667f23/7136287405/il_fullxfull.7136287405_t6ge.jpg',img2:'https://i.etsystatic.com/54248728/r/il/667f23/7136287405/il_fullxfull.7136287405_t6ge.jpg',desc:'جاکلیدی لاک‌پشت دست‌ساز با ظاهر فانتزی.'},
- {id:5,name:'جاکلیدی قورباغه',price:120000,img:'https://eney-plus.com.ua/newphoto/big/nabir-vyaz-0003_4.jpg',img2:'https://eney-plus.com.ua/newphoto/big/nabir-vyaz-0003_4.jpg',desc:'جاکلیدی قورباغه‌ای فانتزی؛ مناسب هدیه و استفاده روزمره.'},
- {id:6,name:'دستبند بافتنی',price:29000,img:'https://i.etsystatic.com/55661009/r/il/6da577/6499021146/il_570xN.6499021146_larc.jpg',img2:'https://pahadikala.com/storage/1019/6a1bfc439b00f_cropped_image.jpg',desc:'دستبند بافتنی سبک و دست‌ساز با طراحی ساده و دوست‌داشتنی.'},
- {id:7,name:'سبد تریکو',price:100000,img:'https://i.etsystatic.com/54248728/r/il/667f23/7136287405/il_fullxfull.7136287405_t6ge.jpg',img2:'https://i.etsystatic.com/56782292/r/il/fcfaf9/7032337049/il_fullxfull.7032337049_rbq2.jpg',desc:'سبد تریکو برای نظم دادن به وسایل کوچک، با ظاهر دست‌ساز.'},
- {id:8,name:'گربه',price:80000,img:'https://pahadikala.com/storage/1019/6a1bfc439b00f_cropped_image.jpg',img2:'https://i.etsystatic.com/56782292/r/il/fcfaf9/7032337049/il_fullxfull.7032337049_rbq2.jpg',desc:'عروسک گربه‌ای بافتنی و فانتزی؛ مناسب دکور و هدیه.'},
- {id:9,name:'عروسک',price:100000,img:'https://pahadikala.com/storage/1019/6a1bfc439b00f_cropped_image.jpg',img2:'https://i.etsystatic.com/56782292/r/il/fcfaf9/7032337049/il_fullxfull.7032337049_rbq2.jpg',desc:'عروسک بافتنی دست‌ساز و مناسب هدیه.'},
- {id:10,name:'هندوانه',price:60000,img:'https://static.wixstatic.com/media/55b3d9_395b2f0b140048c093c303696d08f59b~mv2.png/v1/fill/w_1024%2Ch_1536%2Cal_c%2Cq_90%2Cenc_avif%2Cquality_auto/55b3d9_395b2f0b140048c093c303696d08f59b~mv2.png',img2:'https://static.wixstatic.com/media/55b3d9_395b2f0b140048c093c303696d08f59b~mv2.png/v1/fill/w_1024%2Ch_1536%2Cal_c%2Cq_90%2Cenc_avif%2Cquality_auto/55b3d9_395b2f0b140048c093c303696d08f59b~mv2.png',desc:'محصول بافتنی هندوانه‌ای فانتزی و رنگارنگ.'},
- {id:11,name:'وال',price:80000,img:'https://i.etsystatic.com/56782292/r/il/fcfaf9/7032337049/il_fullxfull.7032337049_rbq2.jpg',img2:'https://i.etsystatic.com/56782292/r/il/fcfaf9/7032337049/il_fullxfull.7032337049_rbq2.jpg',desc:'وال بافتنی بامزه و مناسب هدیه و دکور.'},
- {id:12,name:'اسکاچ',price:40000,img:'https://i.etsystatic.com/54248728/r/il/667f23/7136287405/il_fullxfull.7136287405_t6ge.jpg',img2:'https://i.etsystatic.com/55661009/r/il/6da577/6499021146/il_570xN.6499021146_larc.jpg',desc:'اسکاچ بافتنی کاربردی و مناسب آشپزخانه.'}
-];
-
-const fmt=n=>Number(n).toLocaleString('fa-IR');
-let H_CART=JSON.parse(localStorage.getItem('heloPlusCart')||'[]');
-let H_USER=JSON.parse(localStorage.getItem('heloUser')||'null');
-
-const grid=document.getElementById('heloProductsGrid');
-
-function render(){
-grid.innerHTML=H_PRODUCTS.map(p=>`<article class="helo-card" onclick="heloDetail(${p.id})"><img src="${p.img}" alt="${p.name}"><h3>${p.name}</h3><div class="helo-price">${fmt(p.price)} تومان</div><button class="helo-btn helo-pink" onclick="event.stopPropagation();heloAdd(${p.id})">🛒 افزودن</button></article>`).join('');
-updateCount();
-}
-
-window.heloDetail=function(id){
-const p=H_PRODUCTS.find(x=>x.id===id);
-document.getElementById('heloDetailBox').innerHTML=`<div class="helo-detail-images"><img class="helo-detail-img" src="${p.img}" alt="${p.name}"><img class="helo-detail-img" src="${p.img2||p.img}" alt="${p.name} عکس دوم"></div><h2>${p.name}</h2><div class="helo-price">${fmt(p.price)} تومان</div><p>${p.desc}</p><h3>💬 نظرات</h3><div id="heloCommentsBox"></div><textarea class="helo-input" id="heloCommentInput" rows="3" placeholder="نظر خودت را درباره این محصول بنویس..."></textarea><button class="helo-btn helo-blue" onclick="heloAddComment(${p.id})">ثبت نظر</button><div class="helo-btns"><button class="helo-btn helo-pink" onclick="heloAdd(${p.id});heloCloseAll()">🛒 افزودن به سبد</button><button class="helo-btn helo-gray" onclick="heloCloseAll()">بستن</button></div>`;
-document.getElementById('heloDetailModal').style.display='flex';
-heloRenderComments(p.id);
-};
-
-window.heloAddComment=function(id){
-let input=document.getElementById('heloCommentInput');
-let text=(input.value||'').trim();
-if(!text){alert('اول نظرت را بنویس 😊');return;}
-let all=JSON.parse(localStorage.getItem('heloComments')||'{}');
-if(!all[id])all[id]=[];
-all[id].push({text,date:new Date().toLocaleDateString('fa-IR')});
-localStorage.setItem('heloComments',JSON.stringify(all));
-input.value='';
-heloRenderComments(id);
-};
-
-window.heloRenderComments=function(id){
-let box=document.getElementById('heloCommentsBox');
-if(!box)return;
-let all=JSON.parse(localStorage.getItem('heloComments')||'{}');
-let arr=all[id]||[];
-box.innerHTML=arr.length?arr.map(c=>`<div class="helo-comment"><b>👤 مشتری</b><small>${c.date}</small><p>${String(c.text).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p></div>`).join(''):'<p class="small">هنوز نظری ثبت نشده؛ اولین نفر باش! 💕</p>';
-};
-
-window.heloAdd=function(id){
-if(!H_USER){alert('برای خرید ابتدا ثبت‌نام کن 👤');heloOpenAccount();return;}
-let x=H_CART.find(a=>a.id===id);
-if(x)x.q++;
-else H_CART.push({id,q:1});
-save();
-alert('محصول به سبد اضافه شد 🍑');
-};
-
-function save(){
-localStorage.setItem('heloPlusCart',JSON.stringify(H_CART));
-updateCount();
-}
-
-function updateCount(){
-document.getElementById('heloCount').textContent=H_CART.reduce((a,x)=>a+x.q,0).toLocaleString('fa-IR');
-}window.heloOpenCart=function(){if(!H_USER){heloOpenAccount();return;}renderCart();document.getElementById('heloCartModal').style.display='flex';};
+/* نمایش سبد */
 
 function renderCart(){
-let total=0;
-let box=document.getElementById('heloCartBox');
 
-if(!H_CART.length){
-box.innerHTML='<h2>🛒 سبد خرید</h2><p>سبد خرید خالی است 😭</p><button class="helo-btn helo-gray" onclick="heloCloseAll()">بستن</button>';
-return;
+  const box = document.getElementById("cartItems");
+
+  if(cart.length===0){
+
+    box.innerHTML =
+      `<div class="empty">🛒 سبد خرید خالی است.</div>`;
+
+    document.getElementById("cartTotal").innerText="۰";
+
+    return;
+
+  }
+
+  let html="";
+  let total=0;
+
+  cart.forEach(item=>{
+
+    const p=products.find(x=>x.id===item.id);
+
+    if(!p) return;
+
+    const itemTotal=p.price*item.qty;
+
+    total+=itemTotal;
+
+    html+=`
+
+      <div class="cart-item">
+
+        <img src="${p.image}">
+
+        <div class="cart-info">
+
+          <b>${p.emoji} ${p.name}</b>
+
+          <div>
+            ${formatPrice(p.price)} تومان
+          </div>
+
+          <div class="quantity">
+
+            <button onclick="changeQty(${p.id},1)">
+              +
+            </button>
+
+            <span>${item.qty}</span>
+
+            <button onclick="changeQty(${p.id},-1)">
+              −
+            </button>
+
+          </div>
+
+        </div>
+
+        <button
+          class="remove"
+          onclick="removeFromCart(${p.id})">
+          🗑️
+        </button>
+
+      </div>
+
+    `;
+
+  });
+
+  box.innerHTML=html;
+
+  document.getElementById("cartTotal").innerText =
+    formatPrice(total);
+
+}/* تغییر تعداد */
+
+function changeQty(id,change){
+
+  const item=cart.find(x=>x.id===id);
+
+  if(!item) return;
+
+  item.qty+=change;
+
+  if(item.qty<=0){
+
+    cart=cart.filter(x=>x.id!==id);
+
+  }
+
+  saveCart();
+
+  renderCart();
+
 }
 
-let rows=H_CART.map(x=>{
-let p=H_PRODUCTS.find(a=>a.id===x.id),t=p.price*x.q;
-total+=t;
 
-return `<div class="helo-cart-row">
-<span>${p.name}<br>${fmt(t)} تومان</span>
-<span class="helo-qty">
-<button class="helo-btn helo-gray" onclick="heloQty(${x.id},-1)">−</button>
-${x.q}
-<button class="helo-btn helo-gray" onclick="heloQty(${x.id},1)">+</button>
-<button class="helo-btn helo-red" onclick="heloRemove(${x.id})">🗑️</button>
-</span>
-</div>`
-}).join('');
+/* حذف */
 
-box.innerHTML=`<h2>🛒 سبد خرید</h2>
-${rows}
-<div class="helo-total">جمع: ${fmt(total)} تومان</div>
-<div class="helo-btns">
-<button class="helo-btn helo-pink" onclick="heloInvoice()">🧾 ساخت فاکتور</button>
-<button class="helo-btn helo-gray" onclick="heloCloseAll()">بستن</button>
-</div>`;
+function removeFromCart(id){
+
+  cart=cart.filter(x=>x.id!==id);
+
+  saveCart();
+
+  renderCart();
+
 }
 
-window.heloQty=function(id,n){
-let x=H_CART.find(a=>a.id===id);
-if(!x)return;
 
-x.q+=n;
+/* ساخت فاکتور */
 
-if(x.q<1)
-H_CART=H_CART.filter(a=>a.id!==id);
+function createInvoice(){
 
-save();
-renderCart();
+  if(cart.length===0){
+
+    alert("🛒 سبد خرید خالی است!");
+
+    return;
+
+  }
+
+  const user =
+    JSON.parse(localStorage.getItem("heloUser"));
+
+  let html="";
+  let total=0;
+
+  cart.forEach(item=>{
+
+    const p=products.find(x=>x.id===item.id);
+
+    if(!p) return;
+
+    const amount=p.price*item.qty;
+
+    total+=amount;
+
+    html+=`
+
+      <div class="invoice-line">
+
+        <span>
+          ${p.emoji} ${p.name} × ${item.qty}
+        </span>
+
+        <span>
+          ${formatPrice(amount)} تومان
+        </span>
+
+      </div>
+
+    `;
+
+  });
+
+  document.getElementById("invoiceProducts").innerHTML=html;
+
+  document.getElementById("invoiceTotal").innerText =
+    formatPrice(total)+" تومان";
+
+  document.getElementById("invoiceCustomer").innerText =
+    user ? user.name : "مشتری";
+
+  sendOrderEmail(user,total);
+
+  closeModal("cartModal");
+
+  document.getElementById("invoiceModal").style.display="flex";
+
+}
+
+
+/* ارسال سفارش ایمیل */
+
+function sendOrderEmail(user,total){
+
+  let productText="";
+
+  cart.forEach(item=>{
+
+    const p=products.find(x=>x.id===item.id);
+
+    if(p){
+
+      productText +=
+        `${p.name} × ${item.qty} = ${formatPrice(p.price*item.qty)} تومان\n`;
+
+    }
+
+  });
+
+  document.getElementById("emailName").value =
+    user ? user.name : "مشتری";
+
+  document.getElementById("emailPhone").value =
+    user ? user.phone : "ثبت نشده";
+
+  document.getElementById("emailProducts").value =
+    productText;
+
+  document.getElementById("emailTotal").value =
+    formatPrice(total)+" تومان";
+
+  document.getElementById("orderForm").submit();
+
+}
+
+
+/* دانلود فاکتور */
+
+function downloadInvoice(){
+
+  const invoice =
+    document.getElementById("invoiceArea");
+
+  const text=invoice.innerText;
+
+  const blob=new Blob(
+    [text],
+    {type:"text/plain;charset=utf-8"}
+  );
+
+  const url=URL.createObjectURL(blob);
+
+  const a=document.createElement("a");
+
+  a.href=url;
+
+  a.download="فاکتور-بافتنی-هلو.txt";
+
+  a.click();
+
+  URL.revokeObjectURL(url);
+
+}
+
+
+/* پیگیری */
+
+function openTracking(){
+
+  document.getElementById("trackingModal").style.display="flex";
+
+}
+
+
+/* حساب */
+
+function openAccount(){
+
+  const user =
+    JSON.parse(localStorage.getItem("heloUser"));
+
+  if(!user){
+
+    document.getElementById("accountContent").innerHTML=`
+
+      <p style="text-align:center;line-height:2">
+        هنوز وارد حساب نشده‌اید.
+      </p>
+
+      <button class="main-btn"
+        onclick="closeModal('accountModal');openLogin()">
+        ✨ ثبت‌نام / ورود
+      </button>
+
+    `;
+
+  }else{
+
+    document.getElementById("accountContent").innerHTML=`
+
+      <div style="text-align:center;line-height:2.2">
+
+        <h3>سلام ${user.name} 👋</h3>
+
+        <p>📞 ${user.phone}</p>
+
+        ${
+          user.vip
+          ?
+          `<div class="vip">👑 حساب VIP پارسا قلیچ پور</div>`
+          :
+          ""
+        }
+
+        <button class="secondary-btn"
+          onclick="logoutUser()">
+          🚪 خروج از حساب
+        </button>
+
+      </div>
+
+    `;
+
+  }
+
+  document.getElementById("accountModal").style.display="flex";
+
+}
+
+
+/* ثبت نام */
+
+function registerUser(){
+
+  const name =
+    document.getElementById("nameInput").value.trim();
+
+  const phone =
+    document.getElementById("phoneInput").value.trim();
+
+  const password =
+    document.getElementById("passwordInput").value.trim();
+
+  if(!name || !phone || !password){
+
+    alert("❌ لطفاً همه قسمت‌ها را پر کنید.");
+
+    return;
+
+  }
+
+  const vip =
+    name === "پارسا قلیچ پور" ||
+    phone === "۰۹۹۱۵۰۲۳۶۳۲" ||
+    phone === "09915023632";
+
+  const user={
+    name:name,
+    phone:phone,
+    vip:vip
+  };
+
+  localStorage.setItem(
+    "heloUser",
+    JSON.stringify(user)
+  );
+
+  closeModal("loginModal");
+
+  updateUserUI();
+
+  alert("🎉 حساب شما با موفقیت ساخته شد!");
+
+}
+
+
+/* باز کردن ثبت نام */
+
+function openLogin(){
+
+  document.getElementById("loginModal").style.display="flex";
+
+}
+
+
+/* خروج */
+
+function logoutUser(){
+
+  localStorage.removeItem("heloUser");
+
+  closeModal("accountModal");
+
+  updateUserUI();
+
+  alert("👋 از حساب خارج شدید.");
+
+}
+
+
+/* نشان حساب */
+
+function updateUserUI(){
+
+  const user =
+    JSON.parse(localStorage.getItem("heloUser"));
+
+  const badge =
+    document.getElementById("userBadge");
+
+  if(user){
+
+    badge.innerHTML =
+      `<div class="vip">
+        ${user.vip ? "👑 VIP | " : ""}
+        ${user.name}
+      </div>`;
+
+  }else{
+
+    badge.innerHTML="";
+
+  }
+
+}
+
+
+/* بستن مودال */
+
+function closeModal(id){
+
+  document.getElementById(id).style.display="none";
+
+}
+
+
+/* کلیک بیرون مودال */
+
+window.onclick=function(e){
+
+  if(e.target.classList.contains("modal")){
+
+    e.target.style.display="none";
+
+  }
+
 };
 
-window.heloRemove=function(id){
-H_CART=H_CART.filter(awindow.heloInvoice=function(){
-if(!H_CART.length){
-alert('سبد خرید خالی است 😭');
-return;
-}
 
-let total=0;
+/* شروع */
 
-let items=H_CART.map(x=>{
-let p=H_PRODUCTS.find(a=>a.id===x.id);
-let t=p.price*x.q;
-total+=t;
-return `${p.name} × ${x.q} = ${fmt(t)} تومان`;
-}).join('\n');
+renderProducts();
 
-let invoice=`فاکتور فروشگاه بافتنی هلو 🧶
+updateCartCount();
 
-نام مشتری: ${H_USER.name}
-شماره تماس: ${H_USER.phone}
+updateUserUI();
 
-محصولات:
-${items}
-
-مبلغ نهایی:
-${fmt(total)} تومان
-
-شماره فروشگاه:
-۰۹۹۱۵۰۲۳۶۳۲`;
-
-let blob=new Blob([invoice],{type:'text/plain;charset=utf-8'});
-let url=URL.createObjectURL(blob);
-
-let a=document.createElement('a');
-a.href=url;
-a.download='فاکتور-بافتنی-هلو.txt';
-a.click();
-
-URL.revokeObjectURL(url);
-
-heloSendOrder(items,total);
-};
-
-function heloSendOrder(items,total){
-document.getElementById('heloEmailSubject').value='سفارش جدید از فروشگاه بافتنی هلو 🧶';
-document.getElementById('heloEmailName').value=H_USER.name;
-document.getElementById('heloEmailPhone').value=H_USER.phone;
-document.getElementById('heloEmailProducts').value=items;
-document.getElementById('heloEmailTotal').value=fmt(total)+' تومان';
-
-document.getElementById('heloEmailForm').submit();
-
-alert('فاکتور ساخته شد و سفارش ارسال شد 📩🧶');
-}
-
-window.heloCloseAll=function(){
-document.querySelectorAll('.helo-modal').forEach(x=>{
-x.style.display='none';
-});
-
-document.querySelectorAll('.modal').forEach(x=>{
-x.style.display='none';
-});
-};
-
-window.addEventListener('click',function(e){
-document.querySelectorAll('.helo-modal').forEach(m=>{
-if(e.target===m)m.style.display='none';
-});
-});
-
-render();
-
-})();
 </script>
 
 </body>
