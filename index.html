@@ -71,7 +71,6 @@ header p{
   color:#d52f68;
 }
 
-/* دو محصول در هر ردیف */
 .products{
   display:grid;
   grid-template-columns:repeat(2,1fr);
@@ -146,7 +145,6 @@ header p{
   margin-top:8px;
 }
 
-/* MODAL */
 .modal{
   display:none;
   position:fixed;
@@ -331,6 +329,32 @@ header p{
   margin-top:12px;
 }
 
+/* نظرات */
+
+.comments{
+  margin-top:20px;
+  border-top:2px solid #ffd4e3;
+  padding-top:15px;
+}
+
+.comments h3{
+  color:#d52f68;
+  margin-bottom:10px;
+}
+
+.comment-box{
+  background:#fff7fa;
+  border-radius:13px;
+  padding:10px;
+  margin:8px 0;
+  line-height:1.8;
+}
+
+.comment-name{
+  font-weight:bold;
+  color:#d52f68;
+}
+
 footer{
   margin-top:30px;
   background:#242b3a;
@@ -421,6 +445,28 @@ footer{
     <button class="main-btn" onclick="addDetailToCart()">
       🛒 افزودن به سبد خرید
     </button>
+
+    <div class="comments">
+      <h3>💬 نظرات</h3>
+
+      <div id="commentsList"></div>
+
+      <input
+        id="commentName"
+        class="input"
+        placeholder="نام شما">
+
+      <textarea
+        id="commentText"
+        class="input"
+        placeholder="نظر شما"
+        style="height:90px;resize:none"></textarea>
+
+      <button class="main-btn" onclick="addComment()">
+        💬 ثبت نظر
+      </button>
+    </div>
+
   </div>
 </div>
 
@@ -428,6 +474,7 @@ footer{
 <!-- CART MODAL -->
 <div class="modal" id="cartModal">
   <div class="modal-box">
+
     <button class="close" onclick="closeModal('cartModal')">×</button>
 
     <h2 class="modal-title">🛒 سبد خرید</h2>
@@ -441,16 +488,20 @@ footer{
     <button class="main-btn" onclick="createInvoice()">
       🧾 ساخت فاکتور
     </button>
+
   </div>
 </div>
 
 
 <!-- INVOICE MODAL -->
 <div class="modal" id="invoiceModal">
+
   <div class="modal-box">
+
     <button class="close" onclick="closeModal('invoiceModal')">×</button>
 
     <div id="invoiceArea" class="invoice">
+
       <h3>🧾 فاکتور فروشگاه بافتنی هلو</h3>
 
       <div id="invoiceProducts"></div>
@@ -480,18 +531,22 @@ footer{
       <div class="notice">
         حتماً از فاکتور اسکرین‌شات بگیرید یا آن را دانلود کنید. 📸
       </div>
+
     </div>
 
     <button class="main-btn" onclick="downloadInvoice()">
       📥 دانلود فاکتور
     </button>
+
   </div>
 </div>
 
 
 <!-- TRACKING MODAL -->
 <div class="modal" id="trackingModal">
+
   <div class="modal-box">
+
     <button class="close" onclick="closeModal('trackingModal')">×</button>
 
     <h2 class="modal-title">📞 پیگیری سفارش</h2>
@@ -499,33 +554,42 @@ footer{
     <p style="text-align:center;line-height:2">
       برای پیگیری سفارش با این شماره تماس بگیرید:
       <br>
+
       <strong style="font-size:22px;color:#e22f68">
         ۰۹۹۱۵۰۲۳۶۳۲
       </strong>
     </p>
 
     <a href="tel:09915023632">
-      <button class="main-btn">📞 تماس با فروشگاه</button>
+      <button class="main-btn">
+        📞 تماس با فروشگاه
+      </button>
     </a>
+
   </div>
 </div>
 
 
 <!-- ACCOUNT MODAL -->
 <div class="modal" id="accountModal">
+
   <div class="modal-box">
+
     <button class="close" onclick="closeModal('accountModal')">×</button>
 
     <h2 class="modal-title">👤 حساب من</h2>
 
     <div id="accountContent"></div>
+
   </div>
 </div>
 
 
 <!-- LOGIN MODAL -->
 <div class="modal" id="loginModal">
+
   <div class="modal-box">
+
     <button class="close" onclick="closeModal('loginModal')">×</button>
 
     <h2 class="modal-title">✨ ثبت‌نام</h2>
@@ -536,16 +600,26 @@ footer{
       حساب روی همین دستگاه ذخیره می‌شود.
     </p>
 
-    <input id="nameInput" class="input" placeholder="نام و نام خانوادگی">
+    <input
+      id="nameInput"
+      class="input"
+      placeholder="نام و نام خانوادگی">
 
-    <input id="phoneInput" class="input" placeholder="شماره موبایل">
+    <input
+      id="phoneInput"
+      class="input"
+      placeholder="شماره موبایل">
 
-    <input id="passwordInput" type="password"
-           class="input" placeholder="رمز عبور">
+    <input
+      id="passwordInput"
+      type="password"
+      class="input"
+      placeholder="رمز عبور">
 
     <button class="main-btn" onclick="registerUser()">
       ✅ ساخت حساب
     </button>
+
   </div>
 </div>
 
@@ -560,14 +634,46 @@ footer{
   target="hiddenFrame"
   style="display:none">
 
-  <input type="hidden" name="_subject" value="🛒 سفارش جدید فروشگاه بافتنی هلو">
-  <input type="hidden" name="_template" value="table">
-  <input type="hidden" name="_captcha" value="false">
+  <input
+    type="hidden"
+    name="_subject"
+    value="🛒 سفارش جدید فروشگاه بافتنی هلو">
 
-  <input type="hidden" id="emailName" name="نام مشتری">
-  <input type="hidden" id="emailPhone" name="شماره مشتری">
-  <input type="hidden" id="emailProducts" name="محصولات">
-  <input type="hidden" id="emailTotal" name="مبلغ کل">
+  <input
+    type="hidden"
+    name="_template"
+    value="table">
+
+  <input
+    type="hidden"
+    name="_captcha"
+    value="false">
+
+  <input
+    type="hidden"
+    name="_next"
+    value="https://formsubmit.co/thank-you">
+
+  <input
+    type="hidden"
+    id="emailName"
+    name="نام مشتری">
+
+  <input
+    type="hidden"
+    id="emailPhone"
+    name="شماره مشتری">
+
+  <input
+    type="hidden"
+    id="emailProducts"
+    name="محصولات">
+
+  <input
+    type="hidden"
+    id="emailTotal"
+    name="مبلغ کل">
+
 </form>
 
 
@@ -764,7 +870,96 @@ function openProduct(id){
   document.getElementById("detailText").innerText =
     currentProduct.description;
 
+  renderComments(currentProduct.id);
+
   document.getElementById("productModal").style.display="flex";
+
+}
+
+
+/* نظرات */
+
+function renderComments(id){
+
+  const comments =
+    JSON.parse(localStorage.getItem("heloComments_"+id)) || [];
+
+  const box =
+    document.getElementById("commentsList");
+
+  if(comments.length===0){
+
+    box.innerHTML =
+      `<div class="empty">هنوز نظری ثبت نشده است. اولین نفر باشید! 💕</div>`;
+
+    return;
+
+  }
+
+  box.innerHTML="";
+
+  comments.forEach(comment=>{
+
+    box.innerHTML += `
+      <div class="comment-box">
+        <div class="comment-name">
+          👤 ${comment.name}
+        </div>
+
+        <div>
+          ${comment.text}
+        </div>
+      </div>
+    `;
+
+  });
+
+}
+
+
+/* ثبت نظر */
+
+function addComment(){
+
+  if(!currentProduct) return;
+
+  const name =
+    document.getElementById("commentName").value.trim();
+
+  const text =
+    document.getElementById("commentText").value.trim();
+
+  if(!name || !text){
+
+    alert("❌ نام و متن نظر را وارد کنید.");
+
+    return;
+
+  }
+
+  const key =
+    "heloComments_"+currentProduct.id;
+
+  const comments =
+    JSON.parse(localStorage.getItem(key)) || [];
+
+  comments.push({
+    name:name,
+    text:text
+  });
+
+  localStorage.setItem(
+    key,
+    JSON.stringify(comments)
+  );
+
+  document.getElementById("commentName").value="";
+
+  document.getElementById("commentText").value="";
+
+  renderComments(currentProduct.id);
+
+  alert("✅ نظر شما ثبت شد!");
 
 }
 
@@ -839,7 +1034,10 @@ function addToCart(id){
 
 function saveCart(){
 
-  localStorage.setItem("heloCart",JSON.stringify(cart));
+  localStorage.setItem(
+    "heloCart",
+    JSON.stringify(cart)
+  );
 
   updateCartCount();
 
@@ -850,7 +1048,8 @@ function saveCart(){
 
 function updateCartCount(){
 
-  let count = cart.reduce((sum,item)=>sum+item.qty,0);
+  let count =
+    cart.reduce((sum,item)=>sum+item.qty,0);
 
   document.getElementById("cartCount").innerText =
     formatPrice(count);
@@ -875,7 +1074,8 @@ function openCart(){
 
 function renderCart(){
 
-  const box = document.getElementById("cartItems");
+  const box =
+    document.getElementById("cartItems");
 
   if(cart.length===0){
 
@@ -893,11 +1093,13 @@ function renderCart(){
 
   cart.forEach(item=>{
 
-    const p=products.find(x=>x.id===item.id);
+    const p =
+      products.find(x=>x.id===item.id);
 
     if(!p) return;
 
-    const itemTotal=p.price*item.qty;
+    const itemTotal =
+      p.price*item.qty;
 
     total+=itemTotal;
 
@@ -1047,7 +1249,7 @@ function createInvoice(){
 }
 
 
-/* ارسال سفارش ایمیل */
+/* ارسال سفارش به ایمیل */
 
 function sendOrderEmail(user,total){
 
