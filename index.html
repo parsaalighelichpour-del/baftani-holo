@@ -2814,6 +2814,1910 @@ updateUserUI();
 initTheme();
 
 </script>
+<!-- =========================================================
+🍑 سیستم کامل سفارش فروشگاه بافتنی هلو
+پرداخت + تحویل + کد سفارش + پیگیری + مدیریت
+========================================================= -->
 
+<style>
+.helo-order-extra{
+  font-family:Tahoma,Arial,sans-serif;
+  direction:rtl;
+}
+
+.helo-order-methods{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin:15px 0;
+}
+
+.helo-order-method{
+  border:2px solid #ddd;
+  border-radius:15px;
+  padding:13px;
+  background:#fff;
+  cursor:pointer;
+  transition:.2s;
+  display:block;
+}
+
+.helo-order-method:hover{
+  transform:translateY(-2px);
+  box-shadow:0 5px 15px #0002;
+}
+
+.helo-order-method.selected{
+  border-color:#2196f3;
+  background:#eaf5ff;
+}
+
+.helo-order-method input{
+  margin-left:7px;
+}
+
+.helo-coordination{
+  background:#fff8df;
+  border:1px solid #f1d46a;
+  border-radius:12px;
+  padding:10px;
+  margin:10px 0;
+  line-height:1.9;
+}
+
+.helo-order-code{
+  background:linear-gradient(135deg,#2196f3,#0d47a1);
+  color:#fff;
+  padding:15px;
+  border-radius:15px;
+  text-align:center;
+  font-size:20px;
+  font-weight:bold;
+  margin:15px 0;
+  direction:ltr;
+}
+
+.helo-status{
+  display:inline-block;
+  padding:7px 12px;
+  border-radius:20px;
+  font-weight:bold;
+  background:#fff3cd;
+}
+
+.helo-admin-order{
+  border:2px solid #eee;
+  border-radius:18px;
+  padding:15px;
+  margin:12px 0;
+  background:#fff;
+  box-shadow:0 4px 15px #0001;
+}
+
+.helo-admin-order select{
+  padding:9px;
+  border-radius:10px;
+  border:1px solid #ccc;
+  margin-top:8px;
+  width:100%;
+  font-family:Tahoma;
+}
+
+.helo-mini-btn{
+  border:0;
+  border-radius:10px;
+  padding:9px 13px;
+  cursor:pointer;
+  margin:4px;
+  font-family:Tahoma;
+}
+
+.helo-blue-btn{
+  background:#2196f3;
+  color:#fff;
+}
+
+.helo-red-btn{
+  background:#e53935;
+  color:#fff;
+}
+
+.helo-green-btn{
+  background:#43a047;
+  color:#fff;
+}
+
+.helo-track-result{
+  background:#f5faff;
+  border:2px solid #2196f3;
+  border-radius:15px;
+  padding:15px;
+  margin-top:15px;
+  line-height:2;
+}
+
+.helo-products-order{
+  text-align:right;
+  background:#fafafa;
+  border-radius:12px;
+  padding:10px;
+  margin:10px 0;
+}
+
+.helo-products-order div{
+  padding:6px 0;
+  border-bottom:1px solid #eee;
+}
+
+.helo-admin-small{
+  font-size:12px;
+  color:#777;
+}
+
+@media(max-width:650px){
+  .helo-order-methods{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+
+<script>
+(function(){
+
+"use strict";
+
+/* =========================================================
+   تنظیمات اصلی
+========================================================= */
+
+const HELO_ORDERS_KEY = "heloOrdersLocal_v2";
+
+const HELO_ADMIN_PASSWORD = "1234";
+
+const HELO_PHONE = "09915023632";
+
+const HELO_PHONE_FA = "۰۹۹۱۵۰۲۳۶۳۲";
+
+const HELO_STATUSES = [
+  "🟡 ثبت شد",
+  "📞 در انتظار هماهنگی",
+  "🧶 در حال آماده‌سازی",
+  "📦 آماده تحویل",
+  "🚚 در حال ارسال",
+  "🤝 آماده تحویل حضوری",
+  "💵 منتظر پرداخت هنگام تحویل",
+  "✅ تحویل داده شد",
+  "❌ لغو شد"
+];
+
+/* =========================================================
+   ابزار ذخیره‌سازی
+========================================================= */
+
+function getOrders(){
+
+  try{
+
+    const data =
+      localStorage.getItem(HELO_ORDERS_KEY);
+
+    if(!data) return [];
+
+    const parsed =
+      JSON.parse(data);
+
+    return Array.isArray(parsed)
+      ? parsed
+      : [];
+
+  }catch(e){
+
+    return [];
+
+  }
+}
+
+function saveOrders(orders){
+
+  try{
+
+    localStorage.setItem(
+      HELO_ORDERS_KEY,
+      JSON.stringify(orders)
+    );
+
+    return true;
+
+  }catch(e){
+
+    alert(
+      "ذخیره سفارش انجام نشد 😕"
+    );
+
+    return false;
+  }
+}
+
+/* =========================================================
+   ابزار عمومی
+========================================================= */
+
+function money(number){
+
+  return Number(number || 0)
+    .toLocaleString("fa-IR")
+    + " تومان";
+
+}
+
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+function createOrderCode(){
+
+  const now = new Date();
+
+  const year =
+    String(now.getFullYear()).slice(-2);
+
+  const month =
+    String(now.getMonth()+1)
+      .padStart(2,"0");
+
+  const day =
+    String(now.getDate())
+      .padStart(2,"0");
+
+  const random =
+    Math.floor(
+      1000 + Math.random()*9000
+    );
+
+  return (
+    "HELO-" +
+    year +
+    month +
+    day +
+    "-" +
+    random
+  );
+}
+
+/* =========================================================
+   ساخت پنجره
+========================================================= */
+
+function makeModal(id){
+
+  let modal =
+    document.getElementById(id);
+
+  if(modal) return modal;
+
+  modal =
+    document.createElement("div");
+
+  modal.id = id;
+
+  modal.className = "helo-modal";
+
+  document.body.appendChild(modal);
+
+  return modal;
+}
+
+/* =========================================================
+   پیدا کردن حساب مشتری
+========================================================= */
+
+function getCurrentUser(){
+
+  try{
+
+    const data =
+      localStorage.getItem("heloUser");
+
+    if(data){
+
+      return JSON.parse(data);
+
+    }
+
+  }catch(e){}
+
+  /*
+    اگر متغیر H_USER در سایت اصلی وجود داشت
+  */
+
+  try{
+
+    if(window.H_USER){
+
+      return window.H_USER;
+
+    }
+
+  }catch(e){}
+
+  return null;
+}
+
+/* =========================================================
+   پیدا کردن سبد خرید
+========================================================= */
+
+function getCart(){
+
+  let cart = [];
+
+  try{
+
+    const saved =
+      localStorage.getItem("heloCart");
+
+    if(saved){
+
+      const parsed =
+        JSON.parse(saved);
+
+      if(Array.isArray(parsed)){
+
+        cart = parsed;
+
+      }
+
+    }
+
+  }catch(e){}
+
+  /*
+    تلاش برای استفاده از H_CART
+  */
+
+  try{
+
+    if(
+      Array.isArray(window.H_CART) &&
+      window.H_CART.length
+    ){
+
+      cart = window.H_CART;
+
+    }
+
+  }catch(e){}
+
+  return cart;
+}
+
+/* =========================================================
+   پیدا کردن محصول
+========================================================= */
+
+function findProduct(item){
+
+  try{
+
+    if(Array.isArray(window.H_PRODUCTS)){
+
+      return window.H_PRODUCTS.find(
+        p =>
+          String(p.id) ===
+          String(item.id)
+      );
+
+    }
+
+  }catch(e){}
+
+  return null;
+}
+
+/* =========================================================
+   تبدیل سبد به سفارش
+========================================================= */
+
+function prepareProducts(){
+
+  const cart =
+    getCart();
+
+  const products = [];
+
+  let total = 0;
+
+  cart.forEach(item => {
+
+    const product =
+      findProduct(item);
+
+    const quantity =
+      Number(
+        item.q ||
+        item.qty ||
+        item.quantity ||
+        1
+      );
+
+    if(product){
+
+      const price =
+        Number(product.price || 0);
+
+      const subtotal =
+        price * quantity;
+
+      products.push({
+
+        id:product.id,
+
+        name:product.name,
+
+        quantity:quantity,
+
+        price:price,
+
+        subtotal:subtotal
+
+      });
+
+      total += subtotal;
+
+    }
+    else if(item.name){
+
+      const price =
+        Number(item.price || 0);
+
+      const subtotal =
+        price * quantity;
+
+      products.push({
+
+        id:item.id || "",
+
+        name:item.name,
+
+        quantity:quantity,
+
+        price:price,
+
+        subtotal:subtotal
+
+      });
+
+      total += subtotal;
+
+    }
+
+  });
+
+  return {
+    products,
+    total
+  };
+}
+
+/* =========================================================
+   پنجره تکمیل سفارش
+========================================================= */
+
+window.heloOpenOrderCheckout =
+function(){
+
+  const modal =
+    makeModal(
+      "heloCheckoutModal"
+    );
+
+  modal.innerHTML = `
+
+    <div
+      class="helo-box helo-order-extra"
+    >
+
+      <h2>📦 تکمیل سفارش</h2>
+
+      <p>
+        همه پرداخت‌ها و روش‌های دریافت
+        <b>بعد از هماهنگی</b> انجام می‌شوند.
+      </p>
+
+      <h3>💰 روش پرداخت</h3>
+
+      <div class="helo-order-methods">
+
+        <label class="helo-order-method">
+
+          <input
+            type="radio"
+            name="heloPaymentMethod"
+            value="💳 کارت‌به‌کارت"
+          >
+
+          <b>💳 کارت‌به‌کارت</b>
+
+          <br>
+
+          <small>
+            اطلاعات پرداخت بعد از هماهنگی اعلام می‌شود.
+          </small>
+
+        </label>
+
+        <label class="helo-order-method">
+
+          <input
+            type="radio"
+            name="heloPaymentMethod"
+            value="💵 پرداخت هنگام تحویل"
+          >
+
+          <b>💵 پرداخت هنگام تحویل</b>
+
+          <br>
+
+          <small>
+            مبلغ هنگام تحویل پرداخت می‌شود.
+          </small>
+
+        </label>
+
+      </div>
+
+      <h3>📦 روش دریافت</h3>
+
+      <div class="helo-order-methods">
+
+        <label class="helo-order-method">
+
+          <input
+            type="radio"
+            name="heloDeliveryMethod"
+            value="🏠 تحویل درب منزل"
+          >
+
+          <b>🏠 تحویل درب منزل</b>
+
+          <br>
+
+          <small>
+            زمان و جزئیات پس از هماهنگی.
+          </small>
+
+        </label>
+
+        <label class="helo-order-method">
+
+          <input
+            type="radio"
+            name="heloDeliveryMethod"
+            value="🤝 تحویل حضوری"
+          >
+
+          <b>🤝 تحویل حضوری</b>
+
+          <br>
+
+          <small>
+            زمان و محل پس از هماهنگی.
+          </small>
+
+        </label>
+
+      </div>
+
+      <div class="helo-coordination">
+
+        📞 <b>هماهنگی سفارش</b>
+
+        <br>
+
+        شماره فروشگاه:
+
+        <b>
+          ${HELO_PHONE_FA}
+        </b>
+
+        <br>
+
+        🏠 آدرس فروشگاه در سایت نمایش داده نمی‌شود.
+
+        <br>
+
+        ⏰ زمان و محل تحویل پس از هماهنگی مشخص می‌شود.
+
+      </div>
+
+      <textarea
+        id="heloCheckoutNote"
+        class="helo-input"
+        rows="3"
+        placeholder="توضیحات سفارش (اختیاری)"
+      ></textarea>
+
+      <div class="helo-btns">
+
+        <button
+          class="helo-btn helo-blue"
+          onclick="heloSubmitOrder()"
+        >
+          ✅ ثبت سفارش
+        </button>
+
+        <button
+          class="helo-btn helo-gray"
+          onclick="heloCloseCheckout()"
+        >
+          بستن
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+  modal.style.display = "flex";
+};
+
+/* =========================================================
+   بستن
+========================================================= */
+
+window.heloCloseCheckout =
+function(){
+
+  const modal =
+    document.getElementById(
+      "heloCheckoutModal"
+    );
+
+  if(modal){
+
+    modal.style.display =
+      "none";
+
+  }
+
+};
+
+/* =========================================================
+   ثبت سفارش
+========================================================= */
+
+window.heloSubmitOrder =
+function(){
+
+  const user =
+    getCurrentUser();
+
+  if(!user){
+
+    alert(
+      "اول وارد حساب کاربری شو 👤"
+    );
+
+    heloCloseCheckout();
+
+    try{
+
+      if(
+        typeof window.heloOpenAccount ===
+        "function"
+      ){
+
+        window.heloOpenAccount();
+
+      }
+
+    }catch(e){}
+
+    return;
+  }
+
+  const payment =
+    document.querySelector(
+      'input[name="heloPaymentMethod"]:checked'
+    );
+
+  if(!payment){
+
+    alert(
+      "روش پرداخت را انتخاب کن 💰"
+    );
+
+    return;
+  }
+
+  const delivery =
+    document.querySelector(
+      'input[name="heloDeliveryMethod"]:checked'
+    );
+
+  if(!delivery){
+
+    alert(
+      "روش دریافت سفارش را انتخاب کن 📦"
+    );
+
+    return;
+  }
+
+  const prepared =
+    prepareProducts();
+
+  if(!prepared.products.length){
+
+    alert(
+      "سبد خرید خالی است 😄"
+    );
+
+    return;
+  }
+
+  const note =
+    document.getElementById(
+      "heloCheckoutNote"
+    )?.value || "";
+
+  const order = {
+
+    id:Date.now(),
+
+    code:createOrderCode(),
+
+    customer:{
+
+      name:
+        user.name || "",
+
+      phone:
+        user.phone || ""
+
+    },
+
+    products:
+      prepared.products,
+
+    total:
+      prepared.total,
+
+    payment:
+      payment.value,
+
+    delivery:
+      delivery.value,
+
+    note:
+      note,
+
+    status:
+      "📞 در انتظار هماهنگی",
+
+    createdAt:
+      new Date()
+        .toLocaleString("fa-IR"),
+
+    updatedAt:
+      new Date()
+        .toLocaleString("fa-IR")
+
+  };
+
+  const orders =
+    getOrders();
+
+  orders.unshift(order);
+
+  if(!saveOrders(orders)){
+
+    return;
+
+  }
+
+  /*
+    پاک کردن سبد خرید
+    فقط در صورت موفقیت ذخیره
+  */
+
+  try{
+
+    localStorage.removeItem(
+      "heloCart"
+    );
+
+  }catch(e){}
+
+  try{
+
+    if(
+      Array.isArray(window.H_CART)
+    ){
+
+      window.H_CART.length = 0;
+
+    }
+
+  }catch(e){}
+
+  heloCloseCheckout();
+
+  showOrderSuccess(order);
+
+};
+
+/* =========================================================
+   نمایش موفقیت
+========================================================= */
+
+function showOrderSuccess(order){
+
+  const modal =
+    makeModal(
+      "heloOrderSuccessModal"
+    );
+
+  const productHTML =
+    order.products
+      .map(p => `
+        <div>
+          🧶
+          ${escapeHTML(p.name)}
+          ×
+          ${p.quantity.toLocaleString("fa-IR")}
+        </div>
+      `)
+      .join("");
+
+  modal.innerHTML = `
+
+    <div
+      class="helo-box helo-order-extra"
+    >
+
+      <h2>🎉 سفارش ثبت شد!</h2>
+
+      <p>
+        سفارش با موفقیت ثبت شد.
+      </p>
+
+      <div class="helo-order-code">
+
+        🔢 کد سفارش
+
+        <br><br>
+
+        ${escapeHTML(order.code)}
+
+      </div>
+
+      <div
+        class="helo-products-order"
+      >
+
+        <b>🛍️ محصولات:</b>
+
+        ${productHTML}
+
+      </div>
+
+      <hr>
+
+      <p>
+        💰 مبلغ:
+        <b>
+          ${money(order.total)}
+        </b>
+      </p>
+
+      <p>
+        💳
+        ${escapeHTML(order.payment)}
+      </p>
+
+      <p>
+        📦
+        ${escapeHTML(order.delivery)}
+      </p>
+
+      <div class="helo-coordination">
+
+        📞 وضعیت:
+
+        <b>
+          📞 در انتظار هماهنگی
+        </b>
+
+        <br><br>
+
+        برای هماهنگی:
+
+        <b>
+          ${HELO_PHONE_FA}
+        </b>
+
+      </div>
+
+      <div class="helo-btns">
+
+        <button
+          class="helo-btn helo-blue"
+          onclick="
+            heloCopyOrderCode(
+              '${escapeHTML(order.code)}'
+            )
+          "
+        >
+          📋 کپی کد
+        </button>
+
+        <button
+          class="helo-btn helo-pink"
+          onclick="
+            heloOpenTrackingBox(
+              '${escapeHTML(order.code)}'
+            )
+          "
+        >
+          🔎 پیگیری
+        </button>
+
+        <a
+          href="tel:${HELO_PHONE}"
+        >
+
+          <button
+            class="helo-btn helo-green"
+          >
+            📞 تماس
+          </button>
+
+        </a>
+
+        <button
+          class="helo-btn helo-gray"
+          onclick="
+            document.getElementById(
+              'heloOrderSuccessModal'
+            ).style.display='none'
+          "
+        >
+          بستن
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+  modal.style.display =
+    "flex";
+}
+
+/* =========================================================
+   کپی کد سفارش
+========================================================= */
+
+window.heloCopyOrderCode =
+function(code){
+
+  if(
+    navigator.clipboard &&
+    navigator.clipboard.writeText
+  ){
+
+    navigator.clipboard
+      .writeText(code)
+      .then(function(){
+
+        alert(
+          "کد سفارش کپی شد 📋✅"
+        );
+
+      })
+      .catch(function(){
+
+        alert(
+          "کد سفارش:\n" + code
+        );
+
+      });
+
+  }else{
+
+    alert(
+      "کد سفارش:\n" + code
+    );
+
+  }
+
+};
+
+/* =========================================================
+   پیگیری سفارش
+========================================================= */
+
+window.heloOpenTrackingBox =
+function(defaultCode){
+
+  const modal =
+    makeModal(
+      "heloTrackingModal"
+    );
+
+  modal.innerHTML = `
+
+    <div
+      class="helo-box helo-order-extra"
+    >
+
+      <h2>🔎 پیگیری سفارش</h2>
+
+      <p>
+        کد سفارش را وارد کن:
+      </p>
+
+      <input
+        id="heloTrackingInput"
+        class="helo-input"
+        value="${escapeHTML(defaultCode || "")}"
+        placeholder="HELO-260928-1234"
+        style="
+          direction:ltr;
+          text-align:center;
+          font-size:17px;
+        "
+      >
+
+      <button
+        class="helo-btn helo-blue"
+        onclick="heloSearchOrder()"
+      >
+        🔎 نمایش وضعیت
+      </button>
+
+      <div id="heloTrackingResult"></div>
+
+      <button
+        class="helo-btn helo-gray"
+        onclick="
+          document.getElementById(
+            'heloTrackingModal'
+          ).style.display='none'
+        "
+      >
+        بستن
+      </button>
+
+    </div>
+  `;
+
+  modal.style.display =
+    "flex";
+
+  if(defaultCode){
+
+    setTimeout(
+      heloSearchOrder,
+      100
+    );
+
+  }
+
+};
+
+/* =========================================================
+   جستجوی سفارش
+========================================================= */
+
+window.heloSearchOrder =
+function(){
+
+  const input =
+    document.getElementById(
+      "heloTrackingInput"
+    );
+
+  const result =
+    document.getElementById(
+      "heloTrackingResult"
+    );
+
+  if(!input || !result)
+    return;
+
+  const code =
+    input.value
+      .trim()
+      .toUpperCase();
+
+  if(!code){
+
+    result.innerHTML = `
+      <div class="helo-coordination">
+        کد سفارش را وارد کن 😄
+      </div>
+    `;
+
+    return;
+  }
+
+  const orders =
+    getOrders();
+
+  const order =
+    orders.find(
+      x =>
+        String(x.code)
+          .toUpperCase() ===
+        code
+    );
+
+  if(!order){
+
+    result.innerHTML = `
+
+      <div class="helo-coordination">
+
+        ❌ سفارش پیدا نشد.
+
+        <br>
+
+        کد سفارش را دوباره بررسی کن.
+
+      </div>
+
+    `;
+
+    return;
+  }
+
+  const productHTML =
+    order.products
+      .map(p => `
+        <div>
+          🧶
+          ${escapeHTML(p.name)}
+          ×
+          ${p.quantity.toLocaleString("fa-IR")}
+          —
+          ${money(p.subtotal)}
+        </div>
+      `)
+      .join("");
+
+  result.innerHTML = `
+
+    <div class="helo-track-result">
+
+      <div class="helo-order-code">
+
+        ${escapeHTML(order.code)}
+
+      </div>
+
+      <h3>
+        وضعیت:
+
+        <br>
+
+        ${escapeHTML(order.status)}
+
+      </h3>
+
+      <p>
+        👤
+        ${escapeHTML(order.customer.name)}
+      </p>
+
+      <p>
+        📅
+        ${escapeHTML(order.createdAt)}
+      </p>
+
+      <p>
+        💰
+        <b>
+          ${money(order.total)}
+        </b>
+      </p>
+
+      <p>
+        💳
+        ${escapeHTML(order.payment)}
+      </p>
+
+      <p>
+        📦
+        ${escapeHTML(order.delivery)}
+      </p>
+
+      <div class="helo-products-order">
+
+        <b>🛍️ سفارش:</b>
+
+        ${productHTML}
+
+      </div>
+
+      <div class="helo-coordination">
+
+        📞 برای هماهنگی:
+
+        <b>
+          ${HELO_PHONE_FA}
+        </b>
+
+        <br>
+
+        🏠 آدرس فروشگاه در سایت نمایش داده نمی‌شود.
+
+      </div>
+
+    </div>
+
+  `;
+
+};
+
+/* =========================================================
+   پنل مدیریت
+========================================================= */
+
+window.heloOpenAdminOrders =
+function(){
+
+  const password =
+    prompt(
+      "🔐 رمز پنل مدیریت:"
+    );
+
+  if(password !== HELO_ADMIN_PASSWORD){
+
+    alert(
+      "رمز اشتباه است ❌"
+    );
+
+    return;
+  }
+
+  renderAdmin();
+
+};
+
+/* =========================================================
+   نمایش پنل
+========================================================= */
+
+function renderAdmin(){
+
+  const modal =
+    makeModal(
+      "heloAdminModal"
+    );
+
+  const orders =
+    getOrders();
+
+  let html = `
+
+    <div
+      class="helo-box helo-order-extra"
+      style="
+        max-width:900px;
+        max-height:90vh;
+        overflow:auto;
+      "
+    >
+
+      <h2>
+        🧑‍💼 مدیریت سفارش‌های هلو
+      </h2>
+
+      <div class="helo-coordination">
+
+        📦 تعداد سفارش‌ها:
+
+        <b>
+          ${orders.length.toLocaleString("fa-IR")}
+        </b>
+
+      </div>
+
+  `;
+
+  if(!orders.length){
+
+    html += `
+
+      <p style="text-align:center">
+
+        هنوز سفارشی ثبت نشده 😄
+
+      </p>
+
+    `;
+
+  }else{
+
+    orders.forEach(order => {
+
+      const products =
+        order.products
+          .map(p => `
+            <div>
+              🧶
+              ${escapeHTML(p.name)}
+              ×
+              ${p.quantity.toLocaleString("fa-IR")}
+              —
+              ${money(p.subtotal)}
+            </div>
+          `)
+          .join("");
+
+      const options =
+        HELO_STATUSES
+          .map(status => `
+
+            <option
+              value="${escapeHTML(status)}"
+              ${
+                status === order.status
+                  ? "selected"
+                  : ""
+              }
+            >
+              ${escapeHTML(status)}
+            </option>
+
+          `)
+          .join("");
+
+      html += `
+
+        <div
+          class="helo-admin-order"
+        >
+
+          <h3>
+            🔢
+            ${escapeHTML(order.code)}
+          </h3>
+
+          <p>
+            👤
+            <b>
+              ${escapeHTML(
+                order.customer.name
+              )}
+            </b>
+          </p>
+
+          <p>
+            📞
+            ${escapeHTML(
+              order.customer.phone
+            )}
+          </p>
+
+          <p>
+            📅
+            ${escapeHTML(
+              order.createdAt
+            )}
+          </p>
+
+          <p>
+            💰
+            <b>
+              ${money(order.total)}
+            </b>
+          </p>
+
+          <p>
+            💳
+            ${escapeHTML(order.payment)}
+          </p>
+
+          <p>
+            📦
+            ${escapeHTML(order.delivery)}
+          </p>
+
+          <div
+            class="helo-products-order"
+          >
+
+            <b>
+              🛍️ محصولات:
+            </b>
+
+            ${products}
+
+          </div>
+
+          ${
+            order.note
+              ? `
+                <p>
+                  📝
+                  ${escapeHTML(order.note)}
+                </p>
+              `
+              : ""
+          }
+
+          <hr>
+
+          <p>
+            وضعیت فعلی:
+            <span class="helo-status">
+              ${escapeHTML(order.status)}
+            </span>
+          </p>
+
+          <select
+            onchange="
+              heloUpdateStatus(
+                '${escapeHTML(order.code)}',
+                this.value
+              )
+            "
+          >
+
+            ${options}
+
+          </select>
+
+          <br>
+
+          <button
+            class="
+              helo-mini-btn
+              helo-green-btn
+            "
+            onclick="
+              heloCallCustomer(
+                '${escapeHTML(
+                  order.customer.phone
+                )}'
+              )
+            "
+          >
+            📞 تماس با مشتری
+          </button>
+
+          <button
+            class="
+              helo-mini-btn
+              helo-red-btn
+            "
+            onclick="
+              heloDeleteOrder(
+                '${escapeHTML(order.code)}'
+              )
+            "
+          >
+            🗑 حذف
+          </button>
+
+        </div>
+
+      `;
+
+    });
+
+  }
+
+  html += `
+
+      <div class="helo-btns">
+
+        <button
+          class="
+            helo-mini-btn
+            helo-blue-btn
+          "
+          onclick="heloBackupOrders()"
+        >
+          📥 پشتیبان سفارش‌ها
+        </button>
+
+        <button
+          class="
+            helo-mini-btn
+            helo-green-btn
+          "
+          onclick="heloImportOrders()"
+        >
+          📤 بازیابی سفارش‌ها
+        </button>
+
+        <button
+          class="helo-btn helo-gray"
+          onclick="
+            document.getElementById(
+              'heloAdminModal'
+            ).style.display='none'
+          "
+        >
+          بستن
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+  modal.innerHTML = html;
+
+  modal.style.display =
+    "flex";
+
+}
+
+/* =========================================================
+   تغییر وضعیت
+========================================================= */
+
+window.heloUpdateStatus =
+function(code,status){
+
+  const orders =
+    getOrders();
+
+  const index =
+    orders.findIndex(
+      x => x.code === code
+    );
+
+  if(index === -1){
+
+    alert(
+      "سفارش پیدا نشد ❌"
+    );
+
+    return;
+  }
+
+  orders[index].status =
+    status;
+
+  orders[index].updatedAt =
+    new Date()
+      .toLocaleString("fa-IR");
+
+  saveOrders(orders);
+
+  renderAdmin();
+
+};
+
+/* =========================================================
+   تماس با مشتری
+========================================================= */
+
+window.heloCallCustomer =
+function(phone){
+
+  const clean =
+    String(phone)
+      .replace(/[^\d+]/g,"");
+
+  window.location.href =
+    "tel:" + clean;
+
+};
+
+/* =========================================================
+   حذف سفارش
+========================================================= */
+
+window.heloDeleteOrder =
+function(code){
+
+  const ok =
+    confirm(
+      "آیا مطمئنی این سفارش حذف شود؟"
+    );
+
+  if(!ok)
+    return;
+
+  let orders =
+    getOrders();
+
+  orders =
+    orders.filter(
+      x => x.code !== code
+    );
+
+  saveOrders(orders);
+
+  renderAdmin();
+
+};
+
+/* =========================================================
+   پشتیبان سفارش‌ها
+========================================================= */
+
+window.heloBackupOrders =
+function(){
+
+  const orders =
+    getOrders();
+
+  if(!orders.length){
+
+    alert(
+      "هنوز سفارشی وجود ندارد."
+    );
+
+    return;
+  }
+
+  const text =
+    JSON.stringify(
+      orders,
+      null,
+      2
+    );
+
+  const blob =
+    new Blob(
+      [text],
+      {
+        type:
+        "application/json;charset=utf-8"
+      }
+    );
+
+  const url =
+    URL.createObjectURL(blob);
+
+  const a =
+    document.createElement("a");
+
+  a.href = url;
+
+  a.download =
+    "backup-orders-helo.json";
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+
+  URL.revokeObjectURL(url);
+
+};
+
+/* =========================================================
+   بازیابی سفارش‌ها
+========================================================= */
+
+window.heloImportOrders =
+function(){
+
+  const input =
+    document.createElement("input");
+
+  input.type =
+    "file";
+
+  input.accept =
+    ".json,application/json";
+
+  input.onchange =
+    function(){
+
+      const file =
+        input.files[0];
+
+      if(!file)
+        return;
+
+      const reader =
+        new FileReader();
+
+      reader.onload =
+        function(){
+
+          try{
+
+            const imported =
+              JSON.parse(
+                reader.result
+              );
+
+            if(!Array.isArray(imported)){
+
+              throw new Error();
+
+            }
+
+            saveOrders(imported);
+
+            alert(
+              "سفارش‌ها بازیابی شدند ✅"
+            );
+
+            renderAdmin();
+
+          }catch(e){
+
+            alert(
+              "فایل پشتیبان معتبر نیست ❌"
+            );
+
+          }
+
+        };
+
+      reader.readAsText(file);
+
+    };
+
+  input.click();
+
+};
+
+/* =========================================================
+   دکمه مدیریت
+========================================================= */
+
+function addAdminButton(){
+
+  if(
+    document.getElementById(
+      "heloAdminOrdersButton"
+    )
+  ){
+    return;
+  }
+
+  const button =
+    document.createElement("button");
+
+  button.id =
+    "heloAdminOrdersButton";
+
+  button.innerHTML =
+    "🧑‍💼 مدیریت سفارش‌ها";
+
+  button.className =
+    "helo-btn helo-blue";
+
+  button.style.position =
+    "fixed";
+
+  button.style.left =
+    "12px";
+
+  button.style.bottom =
+    "12px";
+
+  button.style.zIndex =
+    "99999";
+
+  button.style.opacity =
+    ".65";
+
+  button.style.boxShadow =
+    "0 4px 15px #0004";
+
+  button.onclick =
+    heloOpenAdminOrders;
+
+  document.body.appendChild(button);
+
+}
+
+/* =========================================================
+   دکمه پیگیری
+========================================================= */
+
+function addTrackingButton(){
+
+  if(
+    document.getElementById(
+      "heloRealTrackingButton"
+    )
+  ){
+    return;
+  }
+
+  const button =
+    document.createElement("button");
+
+  button.id =
+    "heloRealTrackingButton";
+
+  button.innerHTML =
+    "🔎 پیگیری سفارش";
+
+  button.className =
+    "helo-btn helo-blue";
+
+  button.style.position =
+    "fixed";
+
+  button.style.left =
+    "12px";
+
+  button.style.bottom =
+    "65px";
+
+  button.style.zIndex =
+    "99998";
+
+  button.style.opacity =
+    ".65";
+
+  button.style.boxShadow =
+    "0 4px 15px #0004";
+
+  button.onclick =
+    function(){
+
+      heloOpenTrackingBox("");
+
+    };
+
+  document.body.appendChild(button);
+
+}
+
+/* =========================================================
+   راه‌اندازی
+========================================================= */
+
+setTimeout(
+  function(){
+
+    addAdminButton();
+
+    addTrackingButton();
+
+  },
+  1200
+);
+
+/* =========================================================
+   دسترسی ساده برای سایت اصلی
+========================================================= */
+
+window.HELO_LOCAL_ORDERS = {
+
+  get:getOrders,
+
+  save:saveOrders,
+
+  createCode:createOrderCode,
+
+  openCheckout:
+    window.heloOpenOrderCheckout,
+
+  openTracking:
+    window.heloOpenTrackingBox,
+
+  openAdmin:
+    window.heloOpenAdminOrders
+
+};
+
+})();
+</script>
 </body>
 </html>
