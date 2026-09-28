@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
 <title>فروشگاه بافتنی هلو 🍑</title>
 
 <style>
+
 *{
     box-sizing:border-box;
 }
@@ -33,7 +35,6 @@ header h1{
 
 header p{
     margin:0;
-    font-size:16px;
 }
 
 .top-buttons{
@@ -54,11 +55,6 @@ header p{
     background:white;
     color:#e94f91;
     box-shadow:0 3px 8px rgba(0,0,0,.15);
-    transition:.2s;
-}
-
-.top-buttons button:hover{
-    transform:translateY(-2px);
 }
 
 #cartCount{
@@ -66,7 +62,6 @@ header p{
     color:white;
     border-radius:50%;
     padding:2px 7px;
-    margin-right:3px;
 }
 
 .container{
@@ -79,7 +74,6 @@ header p{
     text-align:center;
     color:#e84f91;
     margin:10px 0 25px;
-    font-size:25px;
 }
 
 .products{
@@ -100,17 +94,14 @@ header p{
 
 .product:hover{
     transform:translateY(-5px);
-    box-shadow:0 9px 22px rgba(0,0,0,.14);
 }
 
 .product-emoji{
     font-size:60px;
-    margin-bottom:8px;
 }
 
 .product h3{
     margin:8px 0;
-    color:#444;
 }
 
 .price{
@@ -130,10 +121,6 @@ header p{
     font-size:15px;
     font-weight:bold;
     cursor:pointer;
-}
-
-.product button:hover{
-    opacity:.9;
 }
 
 footer{
@@ -170,7 +157,6 @@ footer{
 .modal-box h2{
     text-align:center;
     color:#e84f91;
-    margin-top:5px;
 }
 
 .close{
@@ -360,326 +346,426 @@ label{
     padding:30px;
     color:#888;
 }
+
 </style>
 </head>
 
 <body>
 
 <header>
-    <h1>🍑 فروشگاه بافتنی هلو</h1>
-    <p>محصولات بافتنی دست‌ساز با عشق 💕</p>
 
-    <div class="top-buttons">
-        <button onclick="openCart()">
-            🛒 سبد خرید
-            <span id="cartCount">0</span>
-        </button>
+<h1>🍑 فروشگاه بافتنی هلو</h1>
 
-        <button onclick="openTracking()">
-            📞 پیگیری سفارش
-        </button>
-    </div>
+<p>
+محصولات بافتنی دست‌ساز با عشق 💕
+</p>
+
+<div class="top-buttons">
+
+<button onclick="openCart()">
+🛒 سبد خرید
+<span id="cartCount">۰</span>
+</button>
+
+<button onclick="openTracking()">
+📞 پیگیری سفارش
+</button>
+
+</div>
+
 </header>
+
 
 <div class="container">
 
-    <h2 class="section-title">🧶 محصولات فروشگاه</h2>
+<h2 class="section-title">
+🧶 محصولات فروشگاه
+</h2>
 
-    <div class="products">
+<div class="products">
 
-        <div class="product">
-            <div class="product-emoji">🥭</div>
-            <h3>جاکلیدی انبه</h3>
-            <div class="price">۶۰٬۰۰۰ تومان</div>
-            <button onclick="addToCart(1)">🛒 افزودن به سبد</button>
-        </div>
 
-        <div class="product">
-            <div class="product-emoji">🍊</div>
-            <h3>جاکلیدی نارنگی</h3>
-            <div class="price">۶۰٬۰۰۰ تومان</div>
-            <button onclick="addToCart(2)">🛒 افزودن به سبد</button>
-        </div>
-
-        <div class="product">
-            <div class="product-emoji">🐰</div>
-            <h3>جاکلیدی خرگوش</h3>
-            <div class="price">۱۲۰٬۰۰۰ تومان</div>
-            <button onclick="addToCart(3)">🛒 افزودن به سبد</button>
-        </div>
-
-        <div class="product">
-            <div class="product-emoji">🐢</div>
-            <h3>جاکلیدی لاک‌پشت</h3>
-            <div class="price">۱۲۰٬۰۰۰ تومان</div>
-            <button onclick="addToCart(4)">🛒 افزودن به سبد</button>
-        </div>
-
-        <div class="product">
-            <div class="product-emoji">🐸</div>
-            <h3>جاکلیدی قورباغه</h3>
-            <div class="price">۱۲۰٬۰۰۰ تومان</div>
-            <button onclick="addToCart(5)">🛒 افزودن به سبد</button>
-        </div>
-
-        <div class="product">
-            <div class="product-emoji">📿</div>
-            <h3>دستبند بافتنی</h3>
-            <div class="price">۲۹٬۰۰۰ تومان</div>
-            <button onclick="addToCart(6)">🛒 افزودن به سبد</button>
-        </div>
-
-        <div class="product">
-            <div class="product-emoji">🧺</div>
-            <h3>سبد تریکو</h3>
-            <div class="price">۱۰۰٬۰۰۰ تومان</div>
-            <button onclick="addToCart(7)">🛒 افزودن به سبد</button>
-        </div>
-
-        <div class="product">
-            <div class="product-emoji">🐱</div>
-            <h3>گربه</h3>
-            <div class="price">۸۰٬۰۰۰ تومان</div>
-            <button onclick="addToCart(8)">🛒 افزودن به سبد</button>
-        </div>
-
-        <div class="product">
-            <div class="product-emoji">🧸</div>
-            <h3>عروسک</h3>
-            <div class="price">۱۰۰٬۰۰۰ تومان</div>
-            <button onclick="addToCart(9)">🛒 افزودن به سبد</button>
-        </div>
-
-        <div class="product">
-            <div class="product-emoji">🍉</div>
-            <h3>هندوانه</h3>
-            <div class="price">۶۰٬۰۰۰ تومان</div>
-            <button onclick="addToCart(10)">🛒 افزودن به سبد</button>
-        </div>
-
-        <div class="product">
-            <div class="product-emoji">🐋</div>
-            <h3>وال</h3>
-            <div class="price">۸۰٬۰۰۰ تومان</div>
-            <button onclick="addToCart(11)">🛒 افزودن به سبد</button>
-        </div>
-
-        <div class="product">
-            <div class="product-emoji">🧽</div>
-            <h3>اسکاج</h3>
-            <div class="price">۴۰٬۰۰۰ تومان</div>
-            <button onclick="addToCart(12)">🛒 افزودن به سبد</button>
-        </div>
-
-    </div>
+<div class="product">
+<div class="product-emoji">🥭</div>
+<h3>جاکلیدی انبه</h3>
+<div class="price">۶۰٬۰۰۰ تومان</div>
+<button onclick="addToCart(1)">🛒 افزودن به سبد</button>
 </div>
 
+
+<div class="product">
+<div class="product-emoji">🍊</div>
+<h3>جاکلیدی نارنگی</h3>
+<div class="price">۶۰٬۰۰۰ تومان</div>
+<button onclick="addToCart(2)">🛒 افزودن به سبد</button>
+</div>
+
+
+<div class="product">
+<div class="product-emoji">🐰</div>
+<h3>جاکلیدی خرگوش</h3>
+<div class="price">۱۲۰٬۰۰۰ تومان</div>
+<button onclick="addToCart(3)">🛒 افزودن به سبد</button>
+</div>
+
+
+<div class="product">
+<div class="product-emoji">🐢</div>
+<h3>جاکلیدی لاک‌پشت</h3>
+<div class="price">۱۲۰٬۰۰۰ تومان</div>
+<button onclick="addToCart(4)">🛒 افزودن به سبد</button>
+</div>
+
+
+<div class="product">
+<div class="product-emoji">🐸</div>
+<h3>جاکلیدی قورباغه</h3>
+<div class="price">۱۲۰٬۰۰۰ تومان</div>
+<button onclick="addToCart(5)">🛒 افزودن به سبد</button>
+</div>
+
+
+<div class="product">
+<div class="product-emoji">📿</div>
+<h3>دستبند بافتنی</h3>
+<div class="price">۲۹٬۰۰۰ تومان</div>
+<button onclick="addToCart(6)">🛒 افزودن به سبد</button>
+</div>
+
+
+<div class="product">
+<div class="product-emoji">🧺</div>
+<h3>سبد تریکو</h3>
+<div class="price">۱۰۰٬۰۰۰ تومان</div>
+<button onclick="addToCart(7)">🛒 افزودن به سبد</button>
+</div>
+
+
+<div class="product">
+<div class="product-emoji">🐱</div>
+<h3>گربه</h3>
+<div class="price">۸۰٬۰۰۰ تومان</div>
+<button onclick="addToCart(8)">🛒 افزودن به سبد</button>
+</div>
+
+
+<div class="product">
+<div class="product-emoji">🧸</div>
+<h3>عروسک</h3>
+<div class="price">۱۰۰٬۰۰۰ تومان</div>
+<button onclick="addToCart(9)">🛒 افزودن به سبد</button>
+</div>
+
+
+<div class="product">
+<div class="product-emoji">🍉</div>
+<h3>هندوانه</h3>
+<div class="price">۶۰٬۰۰۰ تومان</div>
+<button onclick="addToCart(10)">🛒 افزودن به سبد</button>
+</div>
+
+
+<div class="product">
+<div class="product-emoji">🐋</div>
+<h3>وال</h3>
+<div class="price">۸۰٬۰۰۰ تومان</div>
+<button onclick="addToCart(11)">🛒 افزودن به سبد</button>
+</div>
+
+
+<div class="product">
+<div class="product-emoji">🧽</div>
+<h3>اسکاج</h3>
+<div class="price">۴۰٬۰۰۰ تومان</div>
+<button onclick="addToCart(12)">🛒 افزودن به سبد</button>
+</div>
+
+
+</div>
+</div>
+
+
 <footer>
-    🍑 فروشگاه بافتنی هلو
-    <br>
-    📞 ۰۹۹۱۵۰۲۳۶۳۲
-    <br>
-    👤 ساخته شده توسط پارسا قلیچ پور
+
+🍑 فروشگاه بافتنی هلو
+<br>
+
+📞 ۰۹۹۱۵۰۲۳۶۳۲
+<br>
+
+👤 ساخته شده توسط پارسا قلیچ پور
+
 </footer>
 
 
 <!-- سبد خرید -->
+
 <div class="modal" id="cartModal">
-    <div class="modal-box">
-        <button class="close" onclick="closeModal('cartModal')">×</button>
 
-        <h2>🛒 سبد خرید</h2>
+<div class="modal-box">
 
-        <div id="cartItems"></div>
+<button class="close"
+onclick="closeModal('cartModal')">
+×
+</button>
 
-        <div class="total" id="cartTotal">
-            مجموع: ۰ تومان
-        </div>
+<h2>🛒 سبد خرید</h2>
 
-        <button class="main-btn" onclick="openCustomerForm()">
-            📦 ثبت سفارش
-        </button>
+<div id="cartItems"></div>
 
-        <button class="secondary-btn" onclick="openInvoice()">
-            🧾 ساخت فاکتور
-        </button>
-    </div>
+<div class="total" id="cartTotal">
+مجموع: ۰ تومان
+</div>
+
+<button class="main-btn"
+onclick="openCustomerForm()">
+
+📦 ثبت سفارش
+
+</button>
+
+<button class="secondary-btn"
+onclick="openInvoice()">
+
+🧾 ساخت فاکتور
+
+</button>
+
+</div>
 </div>
 
 
-<!-- اطلاعات مشتری -->
+<!-- ثبت سفارش -->
+
 <div class="modal" id="customerModal">
-    <div class="modal-box">
-        <button class="close" onclick="closeModal('customerModal')">×</button>
 
-        <h2>📦 ثبت سفارش</h2>
+<div class="modal-box">
 
-        <p style="text-align:center;color:#777;">
-            اطلاعات زیر را وارد کنید تا سفارش برای فروشگاه ارسال شود.
-        </p>
+<button class="close"
+onclick="closeModal('customerModal')">
+×
+</button>
 
-        <label>👤 نام و نام خانوادگی</label>
-        <input
-            id="customerName"
-            type="text"
-            placeholder="مثلاً پارسا قلیچ پور"
-        >
+<h2>📦 ثبت سفارش</h2>
 
-        <label>📱 شماره تماس</label>
-        <input
-            id="customerPhone"
-            type="tel"
-            placeholder="مثلاً ۰۹۱۲۱۲۳۴۵۶۷"
-        >
+<p style="text-align:center;color:#777;">
+اطلاعات خود را وارد کنید تا سفارش برای فروشگاه ارسال شود.
+</p>
 
-        <button class="main-btn" onclick="sendOrder()">
-            📧 ثبت و ارسال سفارش
-        </button>
+<label>
+👤 نام و نام خانوادگی
+</label>
 
-        <div class="success" id="orderSuccess">
-            ✅ سفارش شما ارسال شد!<br>
-            فروشگاه سفارش شما را از طریق ایمیل دریافت می‌کند.
-        </div>
+<input
+id="customerName"
+type="text"
+placeholder="مثلاً پارسا قلیچ پور"
+>
 
-        <p style="font-size:13px;color:#888;text-align:center;margin-top:15px;">
-            🔒 اطلاعات سفارش فقط برای ثبت و پیگیری سفارش استفاده می‌شود.
-        </p>
-    </div>
+
+<label>
+📱 شماره تماس
+</label>
+
+<input
+id="customerPhone"
+type="tel"
+placeholder="مثلاً ۰۹۱۲۱۲۳۴۵۶۷"
+>
+
+
+<button class="main-btn"
+onclick="sendOrder()">
+
+📧 ثبت و ارسال سفارش
+
+</button>
+
+
+<div class="success" id="orderSuccess">
+
+✅ سفارش شما ارسال شد!
+
+<br>
+
+فروشگاه سفارش شما را از طریق ایمیل دریافت می‌کند.
+
+</div>
+
+</div>
 </div>
 
 
 <!-- فاکتور -->
+
 <div class="modal" id="invoiceModal">
-    <div class="modal-box">
-        <button class="close" onclick="closeModal('invoiceModal')">×</button>
 
-        <div id="invoiceContent"></div>
+<div class="modal-box">
 
-        <button class="main-btn" onclick="downloadInvoice()">
-            📥 دانلود فاکتور
-        </button>
+<button class="close"
+onclick="closeModal('invoiceModal')">
+×
+</button>
 
-        <p class="note">
-            حتماً از فاکتور اسکرین‌شات بگیرید یا آن را دانلود کنید.
-        </p>
-    </div>
+<div id="invoiceContent"></div>
+
+<button class="main-btn"
+onclick="downloadInvoice()">
+
+📥 دانلود فاکتور
+
+</button>
+
+<p class="note">
+
+حتماً از فاکتور اسکرین‌شات بگیرید یا آن را دانلود کنید.
+
+</p>
+
+</div>
 </div>
 
 
 <!-- پیگیری سفارش -->
+
 <div class="modal" id="trackingModal">
-    <div class="modal-box">
-        <button class="close" onclick="closeModal('trackingModal')">×</button>
 
-        <h2>📞 پیگیری سفارش</h2>
+<div class="modal-box">
 
-        <div class="tracking">
-            <p>
-                برای پیگیری سفارش با شماره زیر تماس بگیرید:
-            </p>
+<button class="close"
+onclick="closeModal('trackingModal')">
+×
+</button>
 
-            <span class="phone">۰۹۹۱۵۰۲۳۶۳۲</span>
+<h2>
+📞 پیگیری سفارش
+</h2>
 
-            <a
-                href="tel:09915023632"
-                style="text-decoration:none;"
-            >
-                <button class="main-btn">
-                    📞 تماس با فروشگاه
-                </button>
-            </a>
-        </div>
-    </div>
+<div class="tracking">
+
+<p>
+برای پیگیری سفارش با شماره زیر تماس بگیرید:
+</p>
+
+<span class="phone">
+۰۹۹۱۵۰۲۳۶۳۲
+</span>
+
+<a
+href="tel:09915023632"
+style="text-decoration:none;"
+>
+
+<button class="main-btn">
+
+📞 تماس با فروشگاه
+
+</button>
+
+</a>
+
 </div>
+
+</div>
+</div>
+
+
+<!-- فرم مخفی -->
+
+<iframe
+name="formsubmitFrame"
+style="display:none;">
+</iframe>
 
 
 <script>
 
+
 const products = [
 
-    {
-        id:1,
-        name:"جاکلیدی انبه",
-        price:60000,
-        emoji:"🥭"
-    },
+{
+id:1,
+name:"جاکلیدی انبه",
+price:60000,
+emoji:"🥭"
+},
 
-    {
-        id:2,
-        name:"جاکلیدی نارنگی",
-        price:60000,
-        emoji:"🍊"
-    },
+{
+id:2,
+name:"جاکلیدی نارنگی",
+price:60000,
+emoji:"🍊"
+},
 
-    {
-        id:3,
-        name:"جاکلیدی خرگوش",
-        price:120000,
-        emoji:"🐰"
-    },
+{
+id:3,
+name:"جاکلیدی خرگوش",
+price:120000,
+emoji:"🐰"
+},
 
-    {
-        id:4,
-        name:"جاکلیدی لاک‌پشت",
-        price:120000,
-        emoji:"🐢"
-    },
+{
+id:4,
+name:"جاکلیدی لاک‌پشت",
+price:120000,
+emoji:"🐢"
+},
 
-    {
-        id:5,
-        name:"جاکلیدی قورباغه",
-        price:120000,
-        emoji:"🐸"
-    },
+{
+id:5,
+name:"جاکلیدی قورباغه",
+price:120000,
+emoji:"🐸"
+},
 
-    {
-        id:6,
-        name:"دستبند بافتنی",
-        price:29000,
-        emoji:"📿"
-    },
+{
+id:6,
+name:"دستبند بافتنی",
+price:29000,
+emoji:"📿"
+},
 
-    {
-        id:7,
-        name:"سبد تریکو",
-        price:100000,
-        emoji:"🧺"
-    },
+{
+id:7,
+name:"سبد تریکو",
+price:100000,
+emoji:"🧺"
+},
 
-    {
-        id:8,
-        name:"گربه",
-        price:80000,
-        emoji:"🐱"
-    },
+{
+id:8,
+name:"گربه",
+price:80000,
+emoji:"🐱"
+},
 
-    {
-        id:9,
-        name:"عروسک",
-        price:100000,
-        emoji:"🧸"
-    },
+{
+id:9,
+name:"عروسک",
+price:100000,
+emoji:"🧸"
+},
 
-    {
-        id:10,
-        name:"هندوانه",
-        price:60000,
-        emoji:"🍉"
-    },
+{
+id:10,
+name:"هندوانه",
+price:60000,
+emoji:"🍉"
+},
 
-    {
-        id:11,
-        name:"وال",
-        price:80000,
-        emoji:"🐋"
-    },
+{
+id:11,
+name:"وال",
+price:80000,
+emoji:"🐋"
+},
 
-    {
-        id:12,
-        name:"اسکاج",
-        price:40000,
-        emoji:"🧽"
-    }
+{
+id:12,
+name:"اسکاج",
+price:40000,
+emoji:"🧽"
+}
 
 ];
 
@@ -689,367 +775,385 @@ let cart = [];
 
 function formatPrice(number){
 
-    return number.toLocaleString("fa-IR") + " تومان";
+return number.toLocaleString("fa-IR") +
+" تومان";
 
 }
 
 
 function addToCart(id){
 
-    const item = cart.find(x => x.id === id);
+const item =
+cart.find(x => x.id === id);
 
-    if(item){
+if(item){
 
-        item.quantity++;
+item.quantity++;
 
-    }else{
+}else{
 
-        cart.push({
-            id:id,
-            quantity:1
-        });
+cart.push({
+id:id,
+quantity:1
+});
 
-    }
+}
 
-    updateCart();
+updateCart();
 
-    alert("✅ محصول به سبد خرید اضافه شد!");
+alert("✅ محصول به سبد خرید اضافه شد!");
 
 }
 
 
 function updateCart(){
 
-    const count =
-        cart.reduce(
-            (sum,item) => sum + item.quantity,
-            0
-        );
+const count =
+cart.reduce(
+(sum,item) =>
+sum + item.quantity,
+0
+);
 
-    document.getElementById("cartCount").textContent =
-        count.toLocaleString("fa-IR");
+document.getElementById("cartCount").textContent =
+count.toLocaleString("fa-IR");
 
-
-    renderCart();
+renderCart();
 
 }
 
 
 function renderCart(){
 
-    const container =
-        document.getElementById("cartItems");
+const container =
+document.getElementById("cartItems");
 
-    if(cart.length === 0){
+if(cart.length === 0){
 
-        container.innerHTML =
-            '<div class="empty">🛒 سبد خرید خالی است.</div>';
+container.innerHTML =
+'<div class="empty">🛒 سبد خرید خالی است.</div>';
 
-        document.getElementById("cartTotal").textContent =
-            "مجموع: ۰ تومان";
+document.getElementById("cartTotal").textContent =
+"مجموع: ۰ تومان";
 
-        return;
-    }
+return;
 
-
-    let html = "";
-
-    cart.forEach(item => {
-
-        const product =
-            products.find(p => p.id === item.id);
-
-        const itemTotal =
-            product.price * item.quantity;
+}
 
 
-        html += `
-
-        <div class="cart-item">
-
-            <div style="font-size:32px;">
-                ${product.emoji}
-            </div>
-
-            <div class="cart-info">
-
-                <div class="cart-name">
-                    ${product.name}
-                </div>
-
-                <div class="cart-price">
-                    ${formatPrice(itemTotal)}
-                </div>
-
-            </div>
-
-            <div class="quantity">
-
-                <button
-                    onclick="changeQuantity(${item.id},1)"
-                >
-                    +
-                </button>
-
-                <strong>
-                    ${item.quantity.toLocaleString("fa-IR")}
-                </strong>
-
-                <button
-                    onclick="changeQuantity(${item.id},-1)"
-                >
-                    −
-                </button>
-
-            </div>
-
-            <button
-                class="remove"
-                onclick="removeFromCart(${item.id})"
-            >
-                🗑️
-            </button>
-
-        </div>
-
-        `;
-
-    });
+let html = "";
 
 
-    container.innerHTML = html;
+cart.forEach(item => {
+
+const product =
+products.find(p => p.id === item.id);
+
+const itemTotal =
+product.price * item.quantity;
 
 
-    const total = getTotal();
+html += `
 
-    document.getElementById("cartTotal").textContent =
-        "مجموع: " + formatPrice(total);
+<div class="cart-item">
+
+<div style="font-size:32px;">
+${product.emoji}
+</div>
+
+<div class="cart-info">
+
+<div class="cart-name">
+${product.name}
+</div>
+
+<div class="cart-price">
+${formatPrice(itemTotal)}
+</div>
+
+</div>
+
+<div class="quantity">
+
+<button onclick="changeQuantity(${item.id},1)">
++
+</button>
+
+<strong>
+${item.quantity.toLocaleString("fa-IR")}
+</strong>
+
+<button onclick="changeQuantity(${item.id},-1)">
+−
+</button>
+
+</div>
+
+<button
+class="remove"
+onclick="removeFromCart(${item.id})">
+
+🗑️
+
+</button>
+
+</div>
+
+`;
+
+});
+
+
+container.innerHTML = html;
+
+document.getElementById("cartTotal").textContent =
+"مجموع: " + formatPrice(getTotal());
 
 }
 
 
 function changeQuantity(id,change){
 
-    const item =
-        cart.find(x => x.id === id);
+const item =
+cart.find(x => x.id === id);
 
-    if(!item) return;
+if(!item) return;
 
-    item.quantity += change;
+item.quantity += change;
 
-    if(item.quantity <= 0){
+if(item.quantity <= 0){
 
-        cart =
-            cart.filter(x => x.id !== id);
+cart =
+cart.filter(x => x.id !== id);
 
-    }
+}
 
-    updateCart();
+updateCart();
 
 }
 
 
 function removeFromCart(id){
 
-    cart =
-        cart.filter(x => x.id !== id);
+cart =
+cart.filter(x => x.id !== id);
 
-    updateCart();
+updateCart();
 
 }
 
 
 function getTotal(){
 
-    return cart.reduce(
+return cart.reduce(
 
-        (sum,item) => {
+(sum,item) => {
 
-            const product =
-                products.find(p => p.id === item.id);
+const product =
+products.find(p => p.id === item.id);
 
-            return sum + product.price * item.quantity;
+return sum +
+product.price *
+item.quantity;
 
-        },
+},
 
-        0
+0
 
-    );
+);
 
 }
 
 
 function openCart(){
 
-    updateCart();
+updateCart();
 
-    document.getElementById("cartModal").style.display =
-        "flex";
+document.getElementById("cartModal").style.display =
+"flex";
 
 }
 
 
 function openTracking(){
 
-    document.getElementById("trackingModal").style.display =
-        "flex";
+document.getElementById("trackingModal").style.display =
+"flex";
 
 }
 
 
 function openCustomerForm(){
 
-    if(cart.length === 0){
+if(cart.length === 0){
 
-        alert("🛒 اول یک محصول به سبد خرید اضافه کن!");
+alert("🛒 اول یک محصول به سبد خرید اضافه کن!");
 
-        return;
-    }
+return;
 
-    document.getElementById("orderSuccess").style.display =
-        "none";
+}
 
-    document.getElementById("customerModal").style.display =
-        "flex";
+document.getElementById("orderSuccess").style.display =
+"none";
+
+document.getElementById("customerModal").style.display =
+"flex";
 
 }
 
 
 function openInvoice(){
 
-    if(cart.length === 0){
+if(cart.length === 0){
 
-        alert("🛒 سبد خرید خالی است!");
+alert("🛒 سبد خرید خالی است!");
 
-        return;
-    }
+return;
 
-
-    let html = `
-
-        <div class="invoice">
-
-            <div class="invoice-title">
-                🍑 فروشگاه بافتنی هلو
-            </div>
-
-            <p style="text-align:center;">
-                🧾 فاکتور سفارش
-            </p>
-
-            <hr>
-
-    `;
+}
 
 
-    cart.forEach(item => {
+let html = `
 
-        const product =
-            products.find(p => p.id === item.id);
+<div class="invoice">
 
-        const total =
-            product.price * item.quantity;
+<div class="invoice-title">
+🍑 فروشگاه بافتنی هلو
+</div>
 
+<p style="text-align:center;">
+🧾 فاکتور سفارش
+</p>
 
-        html += `
+<hr>
 
-            <div class="invoice-row">
-
-                <span>
-                    ${product.emoji}
-                    ${product.name}
-                    × ${item.quantity.toLocaleString("fa-IR")}
-                </span>
-
-                <strong>
-                    ${formatPrice(total)}
-                </strong>
-
-            </div>
-
-        `;
-
-    });
+`;
 
 
-    html += `
+cart.forEach(item => {
 
-            <div class="invoice-total">
-                مجموع کل: ${formatPrice(getTotal())}
-            </div>
+const product =
+products.find(p => p.id === item.id);
 
-            <hr>
-
-            <p>
-                📞 شماره فروشگاه:
-                <strong>۰۹۹۱۵۰۲۳۶۳۲</strong>
-            </p>
-
-            <p>
-                👤 سازنده:
-                <strong>پارسا قلیچ پور</strong>
-            </p>
-
-        </div>
-
-    `;
+const total =
+product.price * item.quantity;
 
 
-    document.getElementById("invoiceContent").innerHTML =
-        html;
+html += `
 
-    document.getElementById("invoiceModal").style.display =
-        "flex";
+<div class="invoice-row">
+
+<span>
+
+${product.emoji}
+${product.name}
+×
+${item.quantity.toLocaleString("fa-IR")}
+
+</span>
+
+<strong>
+
+${formatPrice(total)}
+
+</strong>
+
+</div>
+
+`;
+
+});
+
+
+html += `
+
+<div class="invoice-total">
+
+مجموع کل:
+${formatPrice(getTotal())}
+
+</div>
+
+<hr>
+
+<p>
+📞 شماره فروشگاه:
+<strong>
+۰۹۹۱۵۰۲۳۶۳۲
+</strong>
+</p>
+
+<p>
+👤 سازنده:
+<strong>
+پارسا قلیچ پور
+</strong>
+</p>
+
+</div>
+
+`;
+
+
+document.getElementById("invoiceContent").innerHTML =
+html;
+
+document.getElementById("invoiceModal").style.display =
+"flex";
 
 }
 
 
 function downloadInvoice(){
 
-    if(cart.length === 0){
+if(cart.length === 0){
 
-        alert("سبد خرید خالی است!");
+alert("🛒 سبد خرید خالی است!");
 
-        return;
-    }
+return;
 
-
-    let rows = "";
+}
 
 
-    cart.forEach(item => {
-
-        const product =
-            products.find(p => p.id === item.id);
-
-        const total =
-            product.price * item.quantity;
+let rows = "";
 
 
-        rows += `
+cart.forEach(item => {
 
-            <tr>
+const product =
+products.find(p => p.id === item.id);
 
-                <td>
-                    ${product.emoji} ${product.name}
-                </td>
-
-                <td>
-                    ${item.quantity}
-                </td>
-
-                <td>
-                    ${total.toLocaleString("fa-IR")} تومان
-                </td>
-
-            </tr>
-
-        `;
-
-    });
+const total =
+product.price *
+item.quantity;
 
 
-    const html = `
+rows += `
+
+<tr>
+
+<td>
+${product.emoji}
+${product.name}
+</td>
+
+<td>
+${item.quantity}
+</td>
+
+<td>
+${total.toLocaleString("fa-IR")}
+تومان
+</td>
+
+</tr>
+
+`;
+
+});
+
+
+const html = `
 
 <!DOCTYPE html>
 
@@ -1059,65 +1163,61 @@ function downloadInvoice(){
 
 <meta charset="UTF-8">
 
-<title>فاکتور فروشگاه بافتنی هلو</title>
+<title>
+فاکتور فروشگاه بافتنی هلو
+</title>
 
 <style>
 
 body{
-    font-family:Tahoma,Arial;
-    padding:30px;
-    background:#fff5fa;
-    color:#333;
+font-family:Tahoma;
+padding:30px;
+background:#fff5fa;
 }
 
 .box{
-    max-width:700px;
-    margin:auto;
-    background:white;
-    padding:30px;
-    border-radius:20px;
+max-width:700px;
+margin:auto;
+background:white;
+padding:30px;
+border-radius:20px;
 }
 
 h1{
-    text-align:center;
-    color:#e84f91;
+text-align:center;
+color:#e84f91;
 }
 
 table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:20px;
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
 }
 
 th,td{
-    border:1px solid #ddd;
-    padding:12px;
-    text-align:center;
+border:1px solid #ddd;
+padding:12px;
+text-align:center;
 }
 
 th{
-    background:#ffe1ed;
+background:#ffe1ed;
 }
 
 .total{
-    text-align:center;
-    margin-top:25px;
-    font-size:22px;
-    font-weight:bold;
-    color:#168fd1;
-}
-
-.info{
-    margin-top:25px;
-    line-height:2;
+text-align:center;
+margin-top:25px;
+font-size:22px;
+font-weight:bold;
+color:#168fd1;
 }
 
 .note{
-    margin-top:25px;
-    padding:15px;
-    background:#fff0f7;
-    border-radius:12px;
-    text-align:center;
+margin-top:25px;
+padding:15px;
+background:#fff0f7;
+border-radius:12px;
+text-align:center;
 }
 
 </style>
@@ -1128,7 +1228,9 @@ th{
 
 <div class="box">
 
-<h1>🍑 فروشگاه بافتنی هلو</h1>
+<h1>
+🍑 فروشگاه بافتنی هلو
+</h1>
 
 <p style="text-align:center;">
 🧾 فاکتور سفارش
@@ -1137,9 +1239,19 @@ th{
 <table>
 
 <tr>
-<th>محصول</th>
-<th>تعداد</th>
-<th>قیمت</th>
+
+<th>
+محصول
+</th>
+
+<th>
+تعداد
+</th>
+
+<th>
+قیمت
+</th>
+
 </tr>
 
 ${rows}
@@ -1147,21 +1259,22 @@ ${rows}
 </table>
 
 <div class="total">
+
 مجموع کل:
-${getTotal().toLocaleString("fa-IR")} تومان
+${getTotal().toLocaleString("fa-IR")}
+تومان
+
 </div>
 
-<div class="info">
-
+<p>
 📞 شماره فروشگاه:
 ۰۹۹۱۵۰۲۳۶۳۲
+</p>
 
-<br>
-
+<p>
 👤 سازنده:
 پارسا قلیچ پور
-
-</div>
+</p>
 
 <div class="note">
 
@@ -1175,244 +1288,227 @@ ${getTotal().toLocaleString("fa-IR")} تومان
 
 </html>
 
-    `;
+`;
 
 
-    const blob =
-        new Blob(
-            [html],
-            {type:"text/html;charset=utf-8"}
-        );
+const blob =
+new Blob(
+[html],
+{
+type:"text/html;charset=utf-8"
+}
+);
 
 
-    const url =
-        URL.createObjectURL(blob);
+const url =
+URL.createObjectURL(blob);
 
 
-    const a =
-        document.createElement("a");
+const a =
+document.createElement("a");
 
-    a.href = url;
+a.href = url;
 
-    a.download =
-        "فاکتور-فروشگاه-بافتنی-هلو.html";
+a.download =
+"فاکتور-فروشگاه-بافتنی-هلو.html";
 
-    document.body.appendChild(a);
+document.body.appendChild(a);
 
-    a.click();
+a.click();
 
-    document.body.removeChild(a);
+document.body.removeChild(a);
 
-    URL.revokeObjectURL(url);
+URL.revokeObjectURL(url);
 
 }
 
 
-async function sendOrder(){
+/* ⭐ ارسال سفارش به ایمیل */
 
-    if(cart.length === 0){
+function sendOrder(){
 
-        alert("🛒 سبد خرید خالی است!");
+if(cart.length === 0){
 
-        return;
-    }
+alert("🛒 سبد خرید خالی است!");
 
+return;
 
-    const name =
-        document.getElementById("customerName").value.trim();
+}
 
-    const phone =
-        document.getElementById("customerPhone").value.trim();
 
+const name =
+document
+.getElementById("customerName")
+.value
+.trim();
 
-    if(name === ""){
 
-        alert("👤 لطفاً نام خود را وارد کنید.");
+const phone =
+document
+.getElementById("customerPhone")
+.value
+.trim();
 
-        return;
-    }
 
+if(name === ""){
 
-    if(phone === ""){
+alert("👤 لطفاً نام خود را وارد کنید.");
 
-        alert("📱 لطفاً شماره تماس خود را وارد کنید.");
+return;
 
-        return;
-    }
+}
 
 
-    let orderText = "";
+if(phone === ""){
 
+alert("📱 لطفاً شماره تماس خود را وارد کنید.");
 
-    cart.forEach(item => {
+return;
 
-        const product =
-            products.find(p => p.id === item.id);
+}
 
-        const itemTotal =
-            product.price * item.quantity;
 
+let orderText = "";
 
-        orderText +=
-            product.emoji +
-            " " +
-            product.name +
-            " × " +
-            item.quantity +
-            " = " +
-            itemTotal.toLocaleString("fa-IR") +
-            " تومان\n";
 
-    });
+cart.forEach(item => {
 
+const product =
+products.find(p => p.id === item.id);
 
-    const orderData = {
+const itemTotal =
+product.price *
+item.quantity;
 
-        "_subject":
-            "🛍️ سفارش جدید فروشگاه بافتنی هلو",
 
-        "_template":
-            "table",
+orderText +=
 
-        "_captcha":
-            "false",
+product.emoji +
+" " +
+product.name +
+" × " +
+item.quantity +
+" = " +
+itemTotal.toLocaleString("fa-IR") +
+" تومان\n";
 
-        "نام مشتری":
-            name,
+});
 
-        "شماره تماس":
-            phone,
 
-        "سفارش":
-            orderText,
+const form =
+document.createElement("form");
 
-        "مبلغ کل":
-            getTotal().toLocaleString("fa-IR") +
-            " تومان",
 
-        "شماره فروشگاه":
-            "۰۹۹۱۵۰۲۳۶۳۲",
+form.method = "POST";
 
-        "سازنده":
-            "پارسا قلیچ پور"
 
-    };
+form.action =
+"https://formsubmit.co/Parsaalighlichpour@gmail.com";
 
 
-    const button =
-        document.querySelector(
-            "#customerModal .main-btn"
-        );
+form.target =
+"formsubmitFrame";
 
 
-    button.disabled = true;
+const fields = {
 
-    button.textContent =
-        "⏳ در حال ارسال...";
+"_subject":
+"🛍️ سفارش جدید فروشگاه بافتنی هلو",
 
+"_template":
+"table",
 
-    try{
+"_captcha":
+"false",
 
-        const response =
-            await fetch(
-                "https://formsubmit.co/ajax/Parsaalighlichpour@gmail.com",
-                {
+"نام مشتری":
+name,
 
-                    method:"POST",
+"شماره تماس":
+phone,
 
-                    headers:{
-                        "Content-Type":
-                            "application/json",
+"سفارش":
+orderText,
 
-                        "Accept":
-                            "application/json"
-                    },
+"مبلغ کل":
+getTotal().toLocaleString("fa-IR")
++
+" تومان",
 
-                    body:
-                        JSON.stringify(orderData)
+"شماره فروشگاه":
+"۰۹۹۱۵۰۲۳۶۳۲",
 
-                }
-            );
+"سازنده":
+"پارسا قلیچ پور"
 
+};
 
-        const result =
-            await response.json();
 
+for(const key in fields){
 
-        if(
-            response.ok &&
-            (
-                result.success === true ||
-                result.success === "true"
-            )
-        ){
+const input =
+document.createElement("input");
 
-            document.getElementById(
-                "orderSuccess"
-            ).style.display = "block";
+input.type =
+"hidden";
 
+input.name =
+key;
 
-            button.textContent =
-                "✅ سفارش ثبت شد";
+input.value =
+fields[key];
 
+form.appendChild(input);
 
-            alert(
-                "🎉 سفارش با موفقیت ارسال شد!"
-            );
+}
 
 
-        }else{
+document.body.appendChild(form);
 
-            throw new Error(
-                "ارسال سفارش ناموفق بود."
-            );
 
-        }
+form.submit();
 
 
-    }catch(error){
+form.remove();
 
-        console.error(error);
 
-        alert(
-            "❌ ارسال سفارش انجام نشد.\n" +
-            "لطفاً اینترنت را بررسی کنید و دوباره امتحان کنید."
-        );
+document.getElementById("orderSuccess").style.display =
+"block";
 
-        button.textContent =
-            "📧 ثبت و ارسال سفارش";
 
-    }
+alert(
 
+"✅ سفارش ارسال شد!\n\n" +
 
-    button.disabled = false;
+"اگر این اولین سفارش است، ایمیل FormSubmit را در Gmail بررسی کن و لینک تأیید را بزن."
+
+);
 
 }
 
 
 function closeModal(id){
 
-    document.getElementById(id).style.display =
-        "none";
+document.getElementById(id).style.display =
+"none";
 
 }
 
 
 window.addEventListener(
-    "click",
-    function(event){
+"click",
+function(event){
 
-        if(
-            event.target.classList.contains("modal")
-        ){
+if(
+event.target.classList.contains("modal")
+){
 
-            event.target.style.display =
-                "none";
+event.target.style.display =
+"none";
 
-        }
+}
 
-    }
-);
+});
 
 
 updateCart();
@@ -1420,4 +1516,5 @@ updateCart();
 </script>
 
 </body>
+
 </html>
