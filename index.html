@@ -191,7 +191,6 @@ oninput="renderProducts()">
 <p>سازنده: پارسا قلیچ پور</p>
 </footer>
 
-
 <!-- PRODUCT -->
 
 <div id="productModal" class="modal">
@@ -226,7 +225,6 @@ placeholder="نظر شما" style="height:80px"></textarea>
 </div>
 </div>
 
-
 <!-- CART -->
 
 <div id="cartModal" class="modal">
@@ -256,7 +254,6 @@ placeholder="مثلاً HELO10">
 </div>
 </div>
 
-
 <!-- ACCOUNT -->
 
 <div id="accountModal" class="modal">
@@ -271,7 +268,6 @@ placeholder="مثلاً HELO10">
 </div>
 </div>
 
-
 <!-- TRACKING -->
 
 <div id="trackingModal" class="modal">
@@ -285,7 +281,6 @@ placeholder="مثلاً HELO10">
 
 </div>
 </div>
-
 
 <!-- ADMIN LOGIN -->
 
@@ -311,7 +306,6 @@ placeholder="رمز مدیریت">
 
 </div>
 </div>
-
 
 <!-- ADMIN PANEL -->
 
@@ -396,9 +390,8 @@ placeholder="رمز مدیریت">
 </div>
 </div>
 
-
 <!-- =========================
-     EMAIL
+     ارسال سفارش به ایمیل
 ========================= -->
 
 <iframe name="hiddenFrame" style="display:none"></iframe>
@@ -451,7 +444,6 @@ name="وضعیت"
 id="emailStatus">
 
 </form>
-
 
 <script>
 
@@ -573,7 +565,7 @@ font-size="180">${p.emoji}</text>
 </svg>
 `;
 
-return "data:image/svg+xml;charset=UTF-8,"+
+return "data:image/svg+xml;charset=UTF-8"+
 encodeURIComponent(svg);
 
 }
@@ -1000,7 +992,7 @@ openAccount();
 
 
 /* =========================
-   ارسال ایمیل سفارش
+   ارسال سفارش به ایمیل
 ========================= */
 
 function sendOrderEmail(order){
@@ -1008,25 +1000,16 @@ function sendOrderEmail(order){
 let productText="";
 
 order.items.forEach(item=>{
-
 productText +=
 `${item.name} × ${item.qty} = ${price(item.price*item.qty)} تومان\n`;
-
 });
 
 document.getElementById("emailName").value=order.customer;
-
 document.getElementById("emailPhone").value=order.phone;
-
 document.getElementById("emailOrderId").value=order.id;
-
 document.getElementById("emailProducts").value=productText;
-
-document.getElementById("emailTotal").value=
-price(order.total)+" تومان";
-
+document.getElementById("emailTotal").value=price(order.total)+" تومان";
 document.getElementById("emailDate").value=order.date;
-
 document.getElementById("emailStatus").value=order.status;
 
 document.getElementById("orderEmailForm").submit();
@@ -1136,11 +1119,8 @@ localStorage.setItem(
 JSON.stringify(orders)
 );
 
-
-/* ارسال پیام سفارش به ایمیل */
-
+/* ارسال سفارش به ایمیل */
 sendOrderEmail(order);
-
 
 cart=[];
 
@@ -1355,3 +1335,406 @@ document.getElementById("adminProducts").innerHTML=
 products.map(p=>`
 
 <div class="order">
+
+<div class="flex">
+
+<strong>${p.emoji} ${p.name}</strong>
+
+<span>
+موجودی:
+<strong id="stock-${p.id}">
+${price(p.stock)}
+</strong>
+</span>
+
+</div>
+
+<br>
+
+<button class="qty"
+onclick="changeStock(${p.id},-1)">−</button>
+
+<button class="qty"
+onclick="changeStock(${p.id},1)">+</button>
+
+</div>
+
+`).join("");
+
+renderAdminOrders();
+
+}
+
+
+/* =========================
+   تغییر موجودی
+========================= */
+
+function changeStock(id,n){
+
+let p=products.find(x=>x.id===id);
+
+if(!p)return;
+
+p.stock+=n;
+
+if(p.stock<0)p.stock=0;
+
+document.getElementById("stock-"+id)
+.innerText=price(p.stock);
+
+localStorage.setItem(
+"heloProducts",
+JSON.stringify(products)
+);
+
+document.getElementById("stockCount")
+.innerText=price(
+products.reduce((a,p)=>a+p.stock,0)
+);
+
+renderProducts();
+
+}
+
+
+/* =========================
+   سفارش‌های مدیریت
+========================= */
+
+function renderAdminOrders(){
+
+let box=document.getElementById("adminOrders");
+
+if(!orders.length){
+
+box.innerHTML=
+`<div class="empty">هنوز سفارشی ثبت نشده است.</div>`;
+
+return;
+
+}
+
+box.innerHTML=orders.map(o=>`
+
+<div class="order">
+
+<h3>📦 ${o.id}</h3>
+
+<p>👤 مشتری: ${o.customer}</p>
+
+<p>📱 شماره: ${o.phone}</p>
+
+<p>📅 ${o.date}</p>
+
+<p>💰 ${price(o.total)} تومان</p>
+
+<p>
+وضعیت:
+<span class="status">${o.status}</span>
+</p>
+
+<h4>محصولات:</h4>
+
+${o.items.map(i=>`
+<p>${i.name} × ${i.qty}</p>
+`).join("")}
+
+<hr>
+
+<select class="input"
+onchange="changeOrderStatus('${o.id}',this.value)">
+
+<option ${o.status==="در حال آماده‌سازی"?"selected":""}>
+در حال آماده‌سازی
+</option>
+
+<option ${o.status==="آماده"?"selected":""}>
+آماده
+</option>
+
+<option ${o.status==="آماده و ارسال شده"?"selected":""}>
+آماده و ارسال شده
+</option>
+
+</select>
+
+<br>
+
+<button class="delete"
+onclick="deleteOrder('${o.id}')">
+🗑️ حذف سفارش
+</button>
+
+</div>
+
+`).join("");
+
+}
+
+
+/* =========================
+   تغییر وضعیت سفارش
+========================= */
+
+function changeOrderStatus(id,status){
+
+let o=orders.find(x=>x.id===id);
+
+if(!o)return;
+
+o.status=status;
+
+localStorage.setItem(
+"heloOrders",
+JSON.stringify(orders)
+);
+
+renderAdminOrders();
+
+}
+
+
+/* =========================
+   حذف سفارش
+========================= */
+
+function deleteOrder(id){
+
+if(!confirm("سفارش حذف شود؟"))return;
+
+orders=orders.filter(x=>x.id!==id);
+
+localStorage.setItem(
+"heloOrders",
+JSON.stringify(orders)
+);
+
+renderAdmin();
+
+}
+
+
+/* =========================
+   تنظیمات آماده‌سازی
+========================= */
+
+function saveSettings(){
+
+let days=
+Number(document.getElementById("prepareDays").value);
+
+if(days<0)days=0;
+
+settings.prepareDays=days;
+
+localStorage.setItem(
+"heloSettings",
+JSON.stringify(settings)
+);
+
+document.getElementById("settingsMessage")
+.innerText=
+"✅ تنظیمات ذخیره شد.";
+
+}
+
+
+/* =========================
+   خروج مدیریت
+========================= */
+
+function adminLogout(){
+
+adminLogged=false;
+
+closeModal("adminModal");
+
+}
+
+
+/* =========================
+   نظرات
+========================= */
+
+function renderComments(){
+
+if(!currentProduct)return;
+
+let key="heloComments_"+currentProduct.id;
+
+let comments=
+JSON.parse(localStorage.getItem(key)||"[]");
+
+let box=document.getElementById("comments");
+
+if(!comments.length){
+
+box.innerHTML="هنوز نظری ثبت نشده است 💙";
+
+return;
+
+}
+
+box.innerHTML=comments.map(c=>`
+
+<div class="cart-item">
+
+<strong>👤 ${c.name}</strong>
+
+<div>${c.text}</div>
+
+</div>
+
+`).join("");
+
+}
+
+function addComment(){
+
+if(!currentProduct)return;
+
+let name=
+document.getElementById("commentName").value.trim();
+
+let text=
+document.getElementById("commentText").value.trim();
+
+if(!name||!text){
+
+alert("❌ نام و نظر را وارد کنید.");
+
+return;
+
+}
+
+let key="heloComments_"+currentProduct.id;
+
+let comments=
+JSON.parse(localStorage.getItem(key)||"[]");
+
+comments.push({name,text});
+
+localStorage.setItem(key,JSON.stringify(comments));
+
+document.getElementById("commentName").value="";
+
+document.getElementById("commentText").value="";
+
+renderComments();
+
+alert("✅ نظر ثبت شد.");
+
+}
+
+
+/* =========================
+   امتیاز
+========================= */
+
+function renderRating(){
+
+let key="heloRating_"+currentProduct.id;
+
+let ratings=
+JSON.parse(localStorage.getItem(key)||"[]");
+
+let avg=ratings.length?
+(
+ratings.reduce((a,b)=>a+b,0)/ratings.length
+).toFixed(1):"ثبت نشده";
+
+document.getElementById("rating").innerHTML=`
+
+⭐ میانگین امتیاز:
+<strong>${avg}</strong>
+
+<br><br>
+
+${[1,2,3,4,5].map(x=>
+`<button onclick="rate(${x})"
+style="font-size:25px;background:none">
+⭐
+</button>`
+).join("")}
+
+`;
+
+}
+
+function rate(n){
+
+let key="heloRating_"+currentProduct.id;
+
+let ratings=
+JSON.parse(localStorage.getItem(key)||"[]");
+
+ratings.push(n);
+
+localStorage.setItem(key,JSON.stringify(ratings));
+
+renderRating();
+
+}
+
+
+/* =========================
+   حالت شب
+========================= */
+
+function darkMode(){
+
+document.body.classList.toggle("dark-mode");
+
+localStorage.setItem(
+"heloDark",
+document.body.classList.contains("dark-mode")?"1":"0"
+);
+
+}
+
+
+/* =========================
+   پشتیبانی
+========================= */
+
+function support(){
+
+location.href="tel:09915023632";
+
+}
+
+
+/* =========================
+   بستن پنجره
+========================= */
+
+function closeModal(id){
+
+document.getElementById(id).style.display="none";
+
+}
+
+window.onclick=function(e){
+
+if(e.target.classList.contains("modal"))
+e.target.style.display="none";
+
+}
+
+
+/* =========================
+   شروع سایت
+========================= */
+
+if(localStorage.getItem("heloDark")==="1")
+document.body.classList.add("dark-mode");
+
+renderProducts();
+
+updateCartCount();
+
+</script>
+
+</body>
+</html>
