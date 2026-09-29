@@ -164,7 +164,7 @@ background:#263238;color:white;border-color:#546e7a
 
 <input id="search" class="search"
 placeholder="🔎 جستجوی محصول..."
-oninput="renderProducts">
+oninput="renderProducts()">
 
 <div class="tools">
 
@@ -397,7 +397,7 @@ placeholder="رمز مدیریت">
 </div>
 
 
-<!-- EMAIL FRAME -->
+<!-- EMAIL -->
 
 <iframe name="hiddenEmailFrame" style="display:none"></iframe>
 
@@ -967,16 +967,113 @@ item.name+" × "+item.qty+
 let form=document.createElement("form");
 
 form.action="https://formsubmit.co/mailtobaftanihelo@gmail.com";
+
 form.method="POST";
+
 form.target="hiddenEmailFrame";
+
 form.style.display="none";
 
 let fields={
 
-"_subject":"🛒 سفارش جدید فروشگاه بافتنی هلو - "+order.id,
+"_subject":
+"🛒 سفارش جدید فروشگاه بافتنی هلو - "+order.id,
 
 "_template":"table",
 
 "_captcha":"false",
 
-"شماره سفارش
+"شماره سفارش":order.id,
+
+"نام مشتری":order.customer,
+
+"شماره مشتری":order.phone,
+
+"محصولات":productText,
+
+"مبلغ کل":price(order.total)+" تومان",
+
+"تاریخ":order.date,
+
+"وضعیت":order.status,
+
+"زمان آماده‌سازی":order.days+" روز"
+
+};
+
+Object.keys(fields).forEach(key=>{
+
+let input=document.createElement("input");
+
+input.type="hidden";
+
+input.name=key;
+
+input.value=fields[key];
+
+form.appendChild(input);
+
+});
+
+document.body.appendChild(form);
+
+form.submit();
+
+setTimeout(()=>{
+
+form.remove();
+
+},1000);
+
+}
+
+
+/* =========================
+   ثبت سفارش
+========================= */
+
+function createOrder(){
+
+if(!cart.length){
+
+alert("❌ سبد خرید خالی است.");
+
+return;
+
+}
+
+let user=JSON.parse(
+localStorage.getItem("heloUser")||"null"
+);
+
+if(!user){
+
+alert("❌ ابتدا وارد حساب شوید.");
+
+closeModal("cartModal");
+
+openAccount();
+
+return;
+
+}
+
+let total=0;
+
+let items=[];
+
+for(let item of cart){
+
+let p=products.find(x=>x.id===item.id);
+
+if(!p)continue;
+
+if(item.qty>p.stock){
+
+alert("❌ موجودی "+p.name+" کافی نیست.");
+
+return;
+
+}
+
+let sum=p.price*item
