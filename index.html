@@ -479,16 +479,10 @@ min="0">
      سیستم ایمیل سفارش
 ========================= -->
 
-<iframe
-name="hiddenFrame"
-style="display:none">
-</iframe>
-
 <form
 id="orderEmailForm"
-action="https://formsubmit.co/mailtobaftanihelo@gmail.com"
+action="https://formsubmit.co/ajax/mailtobaftanihelo@gmail.com"
 method="POST"
-target="hiddenFrame"
 style="display:none">
 
 <input
@@ -1105,28 +1099,64 @@ productText +=
 
 });
 
-document.getElementById("emailName").value=
-order.customer;
+let emailData={
 
-document.getElementById("emailPhone").value=
-order.phone;
+_subject:"🛒 سفارش جدید فروشگاه بافتنی هلو",
 
-document.getElementById("emailOrderId").value=
-order.id;
+_template:"table",
 
-document.getElementById("emailProducts").value=
-productText;
+_captcha:"false",
 
-document.getElementById("emailTotal").value=
-price(order.total)+" تومان";
+"نام مشتری":order.customer,
 
-document.getElementById("emailDate").value=
-order.date;
+"شماره مشتری":order.phone,
 
-document.getElementById("emailStatus").value=
-order.status;
+"شماره سفارش":order.id,
 
-document.getElementById("orderEmailForm").submit();
+"محصولات سفارش":productText,
+
+"مبلغ نهایی":price(order.total)+" تومان",
+
+"تاریخ سفارش":order.date,
+
+"وضعیت سفارش":order.status
+
+};
+
+fetch(
+"https://formsubmit.co/ajax/mailtobaftanihelo@gmail.com",
+{
+method:"POST",
+
+headers:{
+"Content-Type":"application/json",
+"Accept":"application/json"
+},
+
+body:JSON.stringify(emailData)
+
+})
+
+.then(response=>{
+
+if(!response.ok)
+throw new Error("Email request failed");
+
+return response.json();
+
+})
+
+.then(data=>{
+
+console.log("✅ ایمیل سفارش ارسال شد:",data);
+
+})
+
+.catch(error=>{
+
+console.error("❌ خطا در ارسال ایمیل:",error);
+
+});
 
 }
 
