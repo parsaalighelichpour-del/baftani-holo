@@ -249,8 +249,6 @@ class="channel-btn">
 </footer>
 
 
-<!-- PRODUCT -->
-
 <div id="productModal" class="modal">
 <div class="modal-content">
 
@@ -293,8 +291,6 @@ style="height:80px"></textarea>
 </div>
 
 
-<!-- CART -->
-
 <div id="cartModal" class="modal">
 <div class="modal-content">
 
@@ -325,8 +321,6 @@ placeholder="مثلاً HELO10">
 </div>
 
 
-<!-- ACCOUNT -->
-
 <div id="accountModal" class="modal">
 <div class="modal-content">
 
@@ -340,8 +334,6 @@ placeholder="مثلاً HELO10">
 </div>
 
 
-<!-- TRACKING -->
-
 <div id="trackingModal" class="modal">
 <div class="modal-content">
 
@@ -354,8 +346,6 @@ placeholder="مثلاً HELO10">
 </div>
 </div>
 
-
-<!-- ADMIN LOGIN -->
 
 <div id="adminLoginModal" class="modal">
 <div class="modal-content">
@@ -380,8 +370,6 @@ placeholder="رمز مدیریت">
 </div>
 </div>
 
-
-<!-- ADMIN PANEL -->
 
 <div id="adminModal" class="modal">
 <div class="modal-content">
@@ -475,9 +463,7 @@ min="0">
 </div>
 
 
-<!-- =========================
-     سیستم ایمیل سفارش
-========================= -->
+<!-- سیستم ایمیل سفارش -->
 
 <form
 id="orderEmailForm"
@@ -485,141 +471,62 @@ action="https://formsubmit.co/ajax/mailtobaftanihelo@gmail.com"
 method="POST"
 style="display:none">
 
-<input
-type="hidden"
-name="_subject"
-value="🛒 سفارش جدید فروشگاه بافتنی هلو">
+<input type="hidden" name="_subject" value="🛒 سفارش جدید فروشگاه بافتنی هلو">
+<input type="hidden" name="_template" value="table">
+<input type="hidden" name="_captcha" value="false">
 
-<input
-type="hidden"
-name="_template"
-value="table">
-
-<input
-type="hidden"
-name="_captcha"
-value="false">
-
-<input
-type="hidden"
-name="نام مشتری"
-id="emailName">
-
-<input
-type="hidden"
-name="شماره مشتری"
-id="emailPhone">
-
-<input
-type="hidden"
-name="شماره سفارش"
-id="emailOrderId">
-
-<input
-type="hidden"
-name="محصولات سفارش"
-id="emailProducts">
-
-<input
-type="hidden"
-name="مبلغ نهایی"
-id="emailTotal">
-
-<input
-type="hidden"
-name="تاریخ سفارش"
-id="emailDate">
-
-<input
-type="hidden"
-name="وضعیت سفارش"
-id="emailStatus">
+<input type="hidden" name="نام مشتری" id="emailName">
+<input type="hidden" name="شماره مشتری" id="emailPhone">
+<input type="hidden" name="شماره سفارش" id="emailOrderId">
+<input type="hidden" name="محصولات سفارش" id="emailProducts">
+<input type="hidden" name="مبلغ نهایی" id="emailTotal">
+<input type="hidden" name="تاریخ سفارش" id="emailDate">
+<input type="hidden" name="وضعیت سفارش" id="emailStatus">
 
 </form>
 
 
 <script>
 
-/* =========================
-   محصولات
-========================= */
-
 const products=[
 
 {id:1,name:"جاکلیدی انبه",price:60000,category:"جاکلیدی",emoji:"🥭",stock:10,description:"جاکلیدی بافتنی انبه، زیبا و مناسب هدیه."},
-
 {id:2,name:"جاکلیدی نارنگی",price:60000,category:"جاکلیدی",emoji:"🍊",stock:10,description:"جاکلیدی نارنگی بافتنی."},
-
 {id:3,name:"جاکلیدی خرگوش",price:120000,category:"جاکلیدی",emoji:"🐰",stock:8,description:"جاکلیدی خرگوش بافتنی."},
-
 {id:4,name:"جاکلیدی لاک‌پشت",price:120000,category:"جاکلیدی",emoji:"🐢",stock:8,description:"جاکلیدی لاک‌پشت بافتنی."},
-
 {id:5,name:"جاکلیدی قورباغه",price:120000,category:"جاکلیدی",emoji:"🐸",stock:8,description:"جاکلیدی قورباغه بافتنی."},
-
 {id:6,name:"دستبند بافتنی",price:29000,category:"دستبند",emoji:"🧶",stock:20,description:"دستبند بافتنی زیبا."},
-
 {id:7,name:"سبد تریکو",price:100000,category:"کاربردی",emoji:"🧺",stock:5,description:"سبد تریکو برای نظم دادن به وسایل."},
-
 {id:8,name:"گربه",price:80000,category:"عروسک",emoji:"🐱",stock:7,description:"عروسک گربه بافتنی."},
-
 {id:9,name:"عروسک",price:100000,category:"عروسک",emoji:"🧸",stock:6,description:"عروسک بافتنی دست‌ساز."},
-
 {id:10,name:"هندوانه",price:60000,category:"میوه",emoji:"🍉",stock:10,description:"محصول بافتنی طرح هندوانه."},
-
 {id:11,name:"وال",price:80000,category:"عروسک",emoji:"🐳",stock:6,description:"وال بافتنی بامزه."},
-
 {id:12,name:"اسکاج",price:40000,category:"کاربردی",emoji:"🧽",stock:15,description:"اسکاج بافتنی کاربردی."},
-
 {id:13,name:"جاکلیدی خرس",price:80000,category:"جاکلیدی",emoji:"🐻",stock:8,description:"جاکلیدی خرس بافتنی."},
-
 {id:14,name:"جاکلیدی زنبور",price:70000,category:"جاکلیدی",emoji:"🐝",stock:8,description:"جاکلیدی زنبور بافتنی."},
-
 {id:15,name:"توت‌فرنگی بافتنی",price:60000,category:"میوه",emoji:"🍓",stock:10,description:"توت‌فرنگی بافتنی زیبا."},
-
 {id:16,name:"قارچ بافتنی",price:70000,category:"عروسک",emoji:"🍄",stock:7,description:"قارچ بافتنی بامزه."},
-
 {id:17,name:"گل بافتنی",price:50000,category:"میوه",emoji:"🌸",stock:10,description:"گل بافتنی دست‌ساز."},
-
 {id:18,name:"اختاپوس بافتنی",price:90000,category:"عروسک",emoji:"🐙",stock:6,description:"اختاپوس بافتنی نرم."},
-
 {id:19,name:"پنگوئن بافتنی",price:110000,category:"عروسک",emoji:"🐧",stock:5,description:"پنگوئن بافتنی دوست‌داشتنی."},
-
 {id:20,name:"عروسک قورباغه",price:100000,category:"عروسک",emoji:"🐸",stock:6,description:"عروسک قورباغه بافتنی."},
-
 {id:21,name:"زنبور بافتنی",price:90000,category:"عروسک",emoji:"🐝",stock:6,description:"زنبور بافتنی دست‌ساز."},
-
 {id:22,name:"آویز ابر بافتنی",price:75000,category:"کاربردی",emoji:"☁️",stock:8,description:"آویز ابر برای دکور اتاق."}
 
 ];
 
-
-/* =========================
-   داده‌ها
-========================= */
-
 let cart=JSON.parse(localStorage.getItem("heloCart")||"[]");
-
 let favorites=JSON.parse(localStorage.getItem("heloFavorites")||"[]");
-
 let orders=JSON.parse(localStorage.getItem("heloOrders")||"[]");
-
 let currentProduct=null;
-
 let selectedCategory="همه";
-
 let discount=0;
-
 let adminLogged=false;
 
 let settings=JSON.parse(
 localStorage.getItem("heloSettings")||
 '{"prepareDays":3}'
 );
-
-
-/* =========================
-   ابزار
-========================= */
 
 function price(n){
 return Number(n).toLocaleString("fa-IR");
@@ -631,26 +538,13 @@ updateCartCount();
 }
 
 function updateCartCount(){
-
 let n=cart.reduce((a,b)=>a+b.qty,0);
-
 document.getElementById("cartCount").innerText=price(n);
-
 }
-
-
-/* =========================
-   ایموجی محصولات
-========================= */
 
 function image(p){
 return p.emoji;
 }
-
-
-/* =========================
-   نمایش محصولات
-========================= */
 
 function renderProducts(){
 
@@ -733,11 +627,6 @@ onclick="openProduct(${p.id})">
 
 }
 
-
-/* =========================
-   دسته‌بندی
-========================= */
-
 function category(c,b){
 
 selectedCategory=c;
@@ -750,11 +639,6 @@ b.classList.add("active");
 renderProducts();
 
 }
-
-
-/* =========================
-   علاقه‌مندی
-========================= */
 
 function toggleFav(id){
 
@@ -771,11 +655,6 @@ JSON.stringify(favorites)
 renderProducts();
 
 }
-
-
-/* =========================
-   محصول
-========================= */
 
 function openProduct(id){
 
@@ -801,7 +680,6 @@ currentProduct.stock>0
 `<span class="stock out">ناموجود</span>`;
 
 renderComments();
-
 renderRating();
 
 document.getElementById("productModal").style.display="block";
@@ -830,11 +708,6 @@ save();
 alert("✅ محصول به سبد خرید اضافه شد.");
 
 }
-
-
-/* =========================
-   سبد
-========================= */
 
 function openCart(){
 
@@ -906,7 +779,6 @@ onclick="removeCart(${p.id})">
 }).join("");
 
 let off=Math.round(total*discount/100);
-
 let final=total-off;
 
 document.getElementById("cartSummary").innerHTML=`
@@ -945,7 +817,6 @@ if(item.qty<=0)
 cart=cart.filter(x=>x.id!==id);
 
 save();
-
 renderCart();
 
 }
@@ -955,15 +826,9 @@ function removeCart(id){
 cart=cart.filter(x=>x.id!==id);
 
 save();
-
 renderCart();
 
 }
-
-
-/* =========================
-   تخفیف
-========================= */
 
 function discountCode(){
 
@@ -989,11 +854,6 @@ alert("🎁 تخفیف اعمال شد.");
 renderCart();
 
 }
-
-
-/* =========================
-   حساب
-========================= */
 
 function openAccount(){
 
@@ -1053,7 +913,6 @@ document.getElementById("accountModal").style.display="block";
 function login(){
 
 let name=document.getElementById("loginName").value.trim();
-
 let phone=document.getElementById("loginPhone").value.trim();
 
 if(!name||!phone){
@@ -1085,7 +944,7 @@ openAccount();
 
 
 /* =========================
-   ارسال کامل سفارش به ایمیل
+   ایمیل اصلاح شده
 ========================= */
 
 function sendOrderEmail(order){
@@ -1095,66 +954,61 @@ let productText="";
 order.items.forEach((item,index)=>{
 
 productText +=
-`${index+1}) ${item.name} ${item.qty} عدد | قیمت واحد: ${price(item.price)} تومان | جمع: ${price(item.price*item.qty)} تومان\n`;
+`${index+1}) ${item.name} - ${item.qty} عدد - قیمت واحد: ${price(item.price)} تومان - جمع: ${price(item.price*item.qty)} تومان\n`;
 
 });
 
-let emailData={
+let form=document.getElementById("orderEmailForm");
 
-_subject:"🛒 سفارش جدید فروشگاه بافتنی هلو",
+document.getElementById("emailName").value=order.customer;
+document.getElementById("emailPhone").value=order.phone;
+document.getElementById("emailOrderId").value=order.id;
+document.getElementById("emailProducts").value=productText;
+document.getElementById("emailTotal").value=price(order.total)+" تومان";
+document.getElementById("emailDate").value=order.date;
+document.getElementById("emailStatus").value=order.status;
 
-_template:"table",
-
-_captcha:"false",
-
-"نام مشتری":order.customer,
-
-"شماره مشتری":order.phone,
-
-"شماره سفارش":order.id,
-
-"محصولات سفارش":productText,
-
-"مبلغ نهایی":price(order.total)+" تومان",
-
-"تاریخ سفارش":order.date,
-
-"وضعیت سفارش":order.status
-
-};
+let formData=new FormData(form);
 
 fetch(
 "https://formsubmit.co/ajax/mailtobaftanihelo@gmail.com",
 {
 method:"POST",
-
+body:formData,
 headers:{
-"Content-Type":"application/json",
 "Accept":"application/json"
-},
+}
+}
+)
+.then(async response=>{
 
-body:JSON.stringify(emailData)
+let data=null;
+
+try{
+data=await response.json();
+}catch(e){}
+
+if(!response.ok){
+
+throw new Error(
+data&&data.message
+?data.message
+:"FormSubmit خطا داد."
+);
+
+}
+
+return data;
 
 })
-
-.then(response=>{
-
-if(!response.ok)
-throw new Error("Email request failed");
-
-return response.json();
-
-})
-
 .then(data=>{
 
-console.log("✅ ایمیل سفارش ارسال شد:",data);
+console.log("✅ سفارش با موفقیت برای ایمیل ارسال شد:",data);
 
 })
-
 .catch(error=>{
 
-console.error("❌ خطا در ارسال ایمیل:",error);
+console.error("❌ خطای ارسال ایمیل:",error);
 
 });
 
@@ -1192,7 +1046,6 @@ return;
 }
 
 let total=0;
-
 let items=[];
 
 for(let item of cart){
@@ -1214,18 +1067,15 @@ let sum=p.price*item.qty;
 total+=sum;
 
 items.push({
-
 id:p.id,
 name:p.name,
 qty:item.qty,
 price:p.price
-
 });
 
 }
 
 let off=Math.round(total*discount/100);
-
 let final=total-off;
 
 items.forEach(item=>{
@@ -1263,11 +1113,10 @@ localStorage.setItem(
 JSON.stringify(orders)
 );
 
-/* ارسال ایمیل بلافاصله بعد از ثبت سفارش */
+/* ارسال ایمیل */
 sendOrderEmail(order);
 
 cart=[];
-
 discount=0;
 
 save();
@@ -1288,11 +1137,6 @@ closeModal("cartModal");
 openTracking();
 
 }
-
-
-/* =========================
-   پیگیری سفارش
-========================= */
 
 function openTracking(){
 
@@ -1378,11 +1222,6 @@ document.getElementById("trackingModal")
 
 }
 
-
-/* =========================
-   پنل مدیریت
-========================= */
-
 function openAdmin(){
 
 let user=JSON.parse(
@@ -1414,15 +1253,9 @@ document.getElementById("adminLoginModal")
 
 }
 
-
-/* =========================
-   ورود مدیریت
-========================= */
-
 function adminLogin(){
 
 let u=document.getElementById("adminUser").value;
-
 let p=document.getElementById("adminPass").value;
 
 if(u==="parsa"&&p==="helo1405"){
@@ -1443,11 +1276,6 @@ alert("❌ نام کاربری یا رمز اشتباه است.");
 }
 
 }
-
-
-/* =========================
-   مدیریت محصولات
-========================= */
 
 function renderAdmin(){
 
@@ -1508,11 +1336,6 @@ renderAdminOrders();
 
 }
 
-
-/* =========================
-   تغییر موجودی
-========================= */
-
 function changeStock(id,n){
 
 let p=products.find(x=>x.id===id);
@@ -1539,11 +1362,6 @@ products.reduce((a,p)=>a+p.stock,0)
 renderProducts();
 
 }
-
-
-/* =========================
-   سفارش‌های مدیریت
-========================= */
 
 function renderAdminOrders(){
 
@@ -1617,11 +1435,6 @@ onclick="deleteOrder('${o.id}')">
 
 }
 
-
-/* =========================
-   تغییر وضعیت
-========================= */
-
 function changeOrderStatus(id,status){
 
 let o=orders.find(x=>x.id===id);
@@ -1639,11 +1452,6 @@ renderAdminOrders();
 
 }
 
-
-/* =========================
-   حذف سفارش
-========================= */
-
 function deleteOrder(id){
 
 if(!confirm("سفارش حذف شود؟"))return;
@@ -1658,11 +1466,6 @@ JSON.stringify(orders)
 renderAdmin();
 
 }
-
-
-/* =========================
-   تنظیمات
-========================= */
 
 function saveSettings(){
 
@@ -1684,11 +1487,6 @@ document.getElementById("settingsMessage")
 
 }
 
-
-/* =========================
-   خروج مدیریت
-========================= */
-
 function adminLogout(){
 
 adminLogged=false;
@@ -1696,11 +1494,6 @@ adminLogged=false;
 closeModal("adminModal");
 
 }
-
-
-/* =========================
-   نظرات
-========================= */
 
 function renderComments(){
 
@@ -1764,7 +1557,6 @@ comments.push({name,text});
 localStorage.setItem(key,JSON.stringify(comments));
 
 document.getElementById("commentName").value="";
-
 document.getElementById("commentText").value="";
 
 renderComments();
@@ -1772,11 +1564,6 @@ renderComments();
 alert("✅ نظر ثبت شد.");
 
 }
-
-
-/* =========================
-   امتیاز
-========================= */
 
 function renderRating(){
 
@@ -1823,11 +1610,6 @@ renderRating();
 
 }
 
-
-/* =========================
-   حالت شب
-========================= */
-
 function darkMode(){
 
 document.body.classList.toggle("dark-mode");
@@ -1839,21 +1621,11 @@ document.body.classList.contains("dark-mode")?"1":"0"
 
 }
 
-
-/* =========================
-   پشتیبانی
-========================= */
-
 function support(){
 
 location.href="tel:09915023632";
 
 }
-
-
-/* =========================
-   بستن پنجره
-========================= */
 
 function closeModal(id){
 
@@ -1868,16 +1640,10 @@ e.target.style.display="none";
 
 }
 
-
-/* =========================
-   شروع سایت
-========================= */
-
 if(localStorage.getItem("heloDark")==="1")
 document.body.classList.add("dark-mode");
 
 renderProducts();
-
 updateCartCount();
 
 </script>
