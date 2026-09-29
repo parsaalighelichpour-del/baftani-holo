@@ -200,7 +200,7 @@ style="text-decoration:none">
 
 <input id="search" class="search"
 placeholder="🔎 جستجوی محصول..."
-oninput="renderProducts()">
+oninput="renderProducts">
 
 <div class="tools">
 
@@ -223,13 +223,9 @@ oninput="renderProducts()">
 
 <h2>📢 کانال بله فروشگاه بافتنی هلو</h2>
 
-<p>
-📸 عکس واقعی محصولات در کانال بله قرار دارد.
-</p>
+<p>📸 عکس واقعی محصولات در کانال بله قرار دارد.</p>
 
-<p>
-برای دیدن عکس واقعی محصولات وارد کانال شوید 👇
-</p>
+<p>برای دیدن عکس واقعی محصولات وارد کانال شوید 👇</p>
 
 <a
 href="https://ble.ir/Parsa_Gh93"
@@ -247,7 +243,6 @@ class="channel-btn">
 <p>📞 ۰۹۹۱۵۰۲۳۶۳۲</p>
 <p>سازنده: پارسا قلیچ پور</p>
 </footer>
-
 
 <div id="productModal" class="modal">
 <div class="modal-content">
@@ -290,7 +285,6 @@ style="height:80px"></textarea>
 </div>
 </div>
 
-
 <div id="cartModal" class="modal">
 <div class="modal-content">
 
@@ -320,7 +314,6 @@ placeholder="مثلاً HELO10">
 </div>
 </div>
 
-
 <div id="accountModal" class="modal">
 <div class="modal-content">
 
@@ -333,7 +326,6 @@ placeholder="مثلاً HELO10">
 </div>
 </div>
 
-
 <div id="trackingModal" class="modal">
 <div class="modal-content">
 
@@ -345,7 +337,6 @@ placeholder="مثلاً HELO10">
 
 </div>
 </div>
-
 
 <div id="adminLoginModal" class="modal">
 <div class="modal-content">
@@ -369,7 +360,6 @@ placeholder="رمز مدیریت">
 
 </div>
 </div>
-
 
 <div id="adminModal" class="modal">
 <div class="modal-content">
@@ -462,7 +452,6 @@ min="0">
 </div>
 </div>
 
-
 <!-- سیستم ایمیل سفارش -->
 
 <form
@@ -484,7 +473,6 @@ style="display:none">
 <input type="hidden" name="وضعیت سفارش" id="emailStatus">
 
 </form>
-
 
 <script>
 
@@ -944,10 +932,10 @@ openAccount();
 
 
 /* =========================
-   ایمیل اصلاح شده
+   سیستم ایمیل جدید
 ========================= */
 
-function sendOrderEmail(order){
+async function sendOrderEmail(order){
 
 let productText="";
 
@@ -970,17 +958,36 @@ document.getElementById("emailStatus").value=order.status;
 
 let formData=new FormData(form);
 
-fetch(
+let maxAttempts=3;
+
+for(let attempt=1;attempt<=maxAttempts;attempt++){
+
+try{
+
+console.log(
+"📧 تلاش برای ارسال ایمیل سفارش:",
+attempt
+);
+
+let controller=new AbortController();
+
+let timeout=setTimeout(()=>{
+controller.abort();
+},15000);
+
+let response=await fetch(
 "https://formsubmit.co/ajax/mailtobaftanihelo@gmail.com",
 {
 method:"POST",
 body:formData,
 headers:{
 "Accept":"application/json"
+},
+signal:controller.signal
 }
-}
-)
-.then(async response=>{
+);
+
+clearTimeout(timeout);
 
 let data=null;
 
@@ -988,7 +995,16 @@ try{
 data=await response.json();
 }catch(e){}
 
-if(!response.ok){
+if(response.ok){
+
+console.log(
+"✅ ایمیل سفارش با موفقیت ارسال شد:",
+data
+);
+
+return true;
+
+}
 
 throw new Error(
 data&&data.message
@@ -996,21 +1012,30 @@ data&&data.message
 :"FormSubmit خطا داد."
 );
 
+}catch(error){
+
+console.error(
+"❌ تلاش "+attempt+" برای ارسال ایمیل ناموفق بود:",
+error
+);
+
+if(attempt<maxAttempts){
+
+await new Promise(resolve=>
+setTimeout(resolve,2000)
+);
+
 }
 
-return data;
+}
 
-})
-.then(data=>{
+}
 
-console.log("✅ سفارش با موفقیت برای ایمیل ارسال شد:",data);
+console.error(
+"❌ بعد از ۳ تلاش، ارسال ایمیل انجام نشد."
+);
 
-})
-.catch(error=>{
-
-console.error("❌ خطای ارسال ایمیل:",error);
-
-});
+return false;
 
 }
 
@@ -1019,7 +1044,7 @@ console.error("❌ خطای ارسال ایمیل:",error);
    ثبت سفارش
 ========================= */
 
-function createOrder(){
+async function createOrder(){
 
 if(!cart.length){
 
@@ -1113,9 +1138,6 @@ localStorage.setItem(
 JSON.stringify(orders)
 );
 
-/* ارسال ایمیل */
-sendOrderEmail(order);
-
 cart=[];
 discount=0;
 
@@ -1126,15 +1148,40 @@ localStorage.setItem(
 JSON.stringify(products)
 );
 
-alert(
-"✅ سفارش ثبت شد!\n\n"+
-"شماره سفارش: "+order.id+
-"\nزمان آماده‌سازی: "+order.days+" روز"
-);
-
 closeModal("cartModal");
 
 openTracking();
+
+alert(
+"✅ سفارش ثبت شد!\n\n"+
+"شماره سفارش: "+order.id+
+"\nزمان آماده‌سازی: "+order.days+" روز\n\n"+
+"📧 در حال ارسال اطلاعات سفارش به ایمیل فروشگاه..."
+);
+
+/*
+ایمیل بعد از ثبت سفارش ارسال می‌شود.
+حتی اگر ایمیل با مشکل مواجه شود،
+خود سفارش از بین نمی‌رود.
+*/
+
+let emailSent=await sendOrderEmail(order);
+
+if(emailSent){
+
+console.log(
+"📩 اطلاعات سفارش "+order.id+
+" برای "+ "mailtobaftanihelo@gmail.com"+
+" ارسال شد."
+);
+
+}else{
+
+console.warn(
+"⚠️ سفارش ثبت شد اما ارسال ایمیل ناموفق بود."
+);
+
+}
 
 }
 
@@ -1566,87 +1613,3 @@ alert("✅ نظر ثبت شد.");
 }
 
 function renderRating(){
-
-let key="heloRating_"+currentProduct.id;
-
-let ratings=
-JSON.parse(localStorage.getItem(key)||"[]");
-
-let avg=ratings.length?
-(
-ratings.reduce((a,b)=>a+b,0)/ratings.length
-).toFixed(1):"ثبت نشده";
-
-document.getElementById("rating").innerHTML=`
-
-⭐ میانگین امتیاز:
-<strong>${avg}</strong>
-
-<br><br>
-
-${[1,2,3,4,5].map(x=>
-`<button onclick="rate(${x})"
-style="font-size:25px;background:none">
-⭐
-</button>`
-).join("")}
-
-`;
-
-}
-
-function rate(n){
-
-let key="heloRating_"+currentProduct.id;
-
-let ratings=
-JSON.parse(localStorage.getItem(key)||"[]");
-
-ratings.push(n);
-
-localStorage.setItem(key,JSON.stringify(ratings));
-
-renderRating();
-
-}
-
-function darkMode(){
-
-document.body.classList.toggle("dark-mode");
-
-localStorage.setItem(
-"heloDark",
-document.body.classList.contains("dark-mode")?"1":"0"
-);
-
-}
-
-function support(){
-
-location.href="tel:09915023632";
-
-}
-
-function closeModal(id){
-
-document.getElementById(id).style.display="none";
-
-}
-
-window.onclick=function(e){
-
-if(e.target.classList.contains("modal"))
-e.target.style.display="none";
-
-}
-
-if(localStorage.getItem("heloDark")==="1")
-document.body.classList.add("dark-mode");
-
-renderProducts();
-updateCartCount();
-
-</script>
-
-</body>
-</html>
