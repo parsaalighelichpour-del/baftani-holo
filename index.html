@@ -397,9 +397,9 @@ placeholder="رمز مدیریت">
 </div>
 
 
-<!-- EMAIL -->
+<!-- EMAIL FRAME -->
 
-<iframe name="hiddenEmailFrame" style="display:none"></iframe>
+<iframe name="hiddenFrame" style="display:none"></iframe>
 
 
 <script>
@@ -959,45 +959,55 @@ let productText="";
 order.items.forEach(item=>{
 
 productText +=
-item.name+" × "+item.qty+
-" = "+price(item.price*item.qty)+" تومان\n";
+`${item.name} × ${item.qty} = ${price(item.price*item.qty)} تومان\n`;
 
 });
 
 let form=document.createElement("form");
 
-form.action="https://formsubmit.co/mailtobaftanihelo@gmail.com";
+form.action=
+"https://formsubmit.co/mailtobaftanihelo@gmail.com";
 
 form.method="POST";
 
-form.target="hiddenEmailFrame";
+form.target="hiddenFrame";
 
 form.style.display="none";
 
 let fields={
 
 "_subject":
-"🛒 سفارش جدید فروشگاه بافتنی هلو - "+order.id,
+"🛒 سفارش جدید فروشگاه بافتنی هلو",
 
-"_template":"table",
+"_template":
+"table",
 
-"_captcha":"false",
+"_captcha":
+"false",
 
-"شماره سفارش":order.id,
+"نام مشتری":
+order.customer,
 
-"نام مشتری":order.customer,
+"شماره مشتری":
+order.phone,
 
-"شماره مشتری":order.phone,
+"شماره سفارش":
+order.id,
 
-"محصولات":productText,
+"محصولات":
+productText,
 
-"مبلغ کل":price(order.total)+" تومان",
+"مبلغ کل":
+price(order.total)+" تومان",
 
-"تاریخ":order.date,
+"تاریخ":
+order.date,
 
-"وضعیت":order.status,
+"وضعیت":
+order.status,
 
-"زمان آماده‌سازی":order.days+" روز"
+"زمان آماده‌سازی":
+order.days+" روز"
 
 };
 
@@ -1023,7 +1033,7 @@ setTimeout(()=>{
 
 form.remove();
 
-},1000);
+},1500);
 
 }
 
@@ -1076,4 +1086,10 @@ return;
 
 }
 
-let sum=p.price*item
+let sum=p.price*item.qty;
+
+total+=sum;
+
+items.push({
+
+id:p
