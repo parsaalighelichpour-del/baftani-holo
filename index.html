@@ -397,9 +397,60 @@ placeholder="رمز مدیریت">
 </div>
 
 
-<!-- EMAIL FRAME -->
+<!-- =========================
+     EMAIL
+========================= -->
 
 <iframe name="hiddenFrame" style="display:none"></iframe>
+
+<form
+id="orderEmailForm"
+action="https://formsubmit.co/mailtobaftanihelo@gmail.com"
+method="POST"
+target="hiddenFrame"
+style="display:none">
+
+<input type="hidden"
+name="_subject"
+value="🛒 سفارش جدید فروشگاه بافتنی هلو">
+
+<input type="hidden"
+name="_template"
+value="table">
+
+<input type="hidden"
+name="_captcha"
+value="false">
+
+<input type="hidden"
+name="نام مشتری"
+id="emailName">
+
+<input type="hidden"
+name="شماره مشتری"
+id="emailPhone">
+
+<input type="hidden"
+name="شماره سفارش"
+id="emailOrderId">
+
+<input type="hidden"
+name="محصولات"
+id="emailProducts">
+
+<input type="hidden"
+name="مبلغ کل"
+id="emailTotal">
+
+<input type="hidden"
+name="تاریخ"
+id="emailDate">
+
+<input type="hidden"
+name="وضعیت"
+id="emailStatus">
+
+</form>
 
 
 <script>
@@ -949,7 +1000,7 @@ openAccount();
 
 
 /* =========================
-   ارسال سفارش به ایمیل
+   ارسال ایمیل سفارش
 ========================= */
 
 function sendOrderEmail(order){
@@ -963,77 +1014,22 @@ productText +=
 
 });
 
-let form=document.createElement("form");
+document.getElementById("emailName").value=order.customer;
 
-form.action=
-"https://formsubmit.co/mailtobaftanihelo@gmail.com";
+document.getElementById("emailPhone").value=order.phone;
 
-form.method="POST";
+document.getElementById("emailOrderId").value=order.id;
 
-form.target="hiddenFrame";
+document.getElementById("emailProducts").value=productText;
 
-form.style.display="none";
+document.getElementById("emailTotal").value=
+price(order.total)+" تومان";
 
-let fields={
+document.getElementById("emailDate").value=order.date;
 
-"_subject":
-"🛒 سفارش جدید فروشگاه بافتنی هلو",
+document.getElementById("emailStatus").value=order.status;
 
-"_template":
-"table",
-
-"_captcha":
-"false",
-
-"نام مشتری":
-order.customer,
-
-"شماره مشتری":
-order.phone,
-
-"شماره سفارش":
-order.id,
-
-"محصولات":
-productText,
-
-"مبلغ کل":
-price(order.total)+" تومان",
-
-"تاریخ":
-order.date,
-
-"وضعیت":
-order.status,
-
-"زمان آماده‌سازی":
-order.days+" روز"
-
-};
-
-Object.keys(fields).forEach(key=>{
-
-let input=document.createElement("input");
-
-input.type="hidden";
-
-input.name=key;
-
-input.value=fields[key];
-
-form.appendChild(input);
-
-});
-
-document.body.appendChild(form);
-
-form.submit();
-
-setTimeout(()=>{
-
-form.remove();
-
-},1500);
+document.getElementById("orderEmailForm").submit();
 
 }
 
@@ -1092,4 +1088,270 @@ total+=sum;
 
 items.push({
 
-id:p
+id:p.id,
+name:p.name,
+qty:item.qty,
+price:p.price
+
+});
+
+}
+
+let off=Math.round(total*discount/100);
+
+let final=total-off;
+
+items.forEach(item=>{
+
+let p=products.find(x=>x.id===item.id);
+
+p.stock-=item.qty;
+
+});
+
+let order={
+
+id:"HL-"+Date.now().toString().slice(-6),
+
+customer:user.name,
+
+phone:user.phone,
+
+items:items,
+
+total:final,
+
+date:new Date().toLocaleDateString("fa-IR"),
+
+status:"در حال آماده‌سازی",
+
+days:Number(settings.prepareDays)||3
+
+};
+
+orders.unshift(order);
+
+localStorage.setItem(
+"heloOrders",
+JSON.stringify(orders)
+);
+
+
+/* ارسال پیام سفارش به ایمیل */
+
+sendOrderEmail(order);
+
+
+cart=[];
+
+discount=0;
+
+save();
+
+localStorage.setItem(
+"heloProducts",
+JSON.stringify(products)
+);
+
+alert(
+"✅ سفارش ثبت شد!\n\n"+
+"شماره سفارش: "+order.id+
+"\nزمان آماده‌سازی: "+order.days+" روز"
+);
+
+closeModal("cartModal");
+
+openTracking();
+
+}
+
+
+/* =========================
+   پیگیری سفارش مشتری
+========================= */
+
+function openTracking(){
+
+let user=JSON.parse(
+localStorage.getItem("heloUser")||"null"
+);
+
+let box=document.getElementById("tracking");
+
+if(!user){
+
+box.innerHTML=`
+
+<p>برای دیدن سفارش‌های خود ابتدا وارد حساب شوید.</p>
+
+<button class="main-btn"
+onclick="closeModal('trackingModal');openAccount()">
+👤 ورود به حساب
+</button>
+
+`;
+
+}else{
+
+let mine=orders.filter(
+o=>o.phone===user.phone
+);
+
+if(!mine.length){
+
+box.innerHTML=
+`<div class="empty">هنوز سفارشی ثبت نکرده‌اید 📦</div>`;
+
+}else{
+
+box.innerHTML=mine.map(o=>`
+
+<div class="order">
+
+<h3>📦 سفارش ${o.id}</h3>
+
+<p>📅 تاریخ: ${o.date}</p>
+
+<p>
+⏳ وضعیت:
+<span class="status ${o.status==="آماده و ارسال شده"?"sent":o.status==="آماده"?"ready":""}">
+${o.status}
+</span>
+</p>
+
+<p>
+🕐 زمان آماده‌سازی:
+${o.days} روز
+</p>
+
+<p>
+💰 مبلغ:
+<strong>${price(o.total)} تومان</strong>
+</p>
+
+<hr>
+
+${o.items.map(i=>`
+<div>
+${i.name} × ${i.qty}
+</div>
+`).join("")}
+
+</div>
+
+`).join("");
+
+}
+
+}
+
+document.getElementById("trackingModal")
+.style.display="block";
+
+}
+
+
+/* =========================
+   پنل مدیریت
+========================= */
+
+function openAdmin(){
+
+let user=JSON.parse(
+localStorage.getItem("heloUser")||"null"
+);
+
+if(
+user &&
+(
+user.name==="پارسا قلیچ پور"||
+user.phone==="09915023632"||
+user.phone==="۰۹۹۱۵۰۲۳۶۳۲"
+)
+){
+
+adminLogged=true;
+
+renderAdmin();
+
+document.getElementById("adminModal")
+.style.display="block";
+
+}else{
+
+document.getElementById("adminLoginModal")
+.style.display="block";
+
+}
+
+}
+
+
+/*
+⚠️ این رمز فقط برای نسخه مرورگری است.
+برای امنیت واقعی باید سرور داشته باشی.
+*/
+
+function adminLogin(){
+
+let u=document.getElementById("adminUser").value;
+
+let p=document.getElementById("adminPass").value;
+
+/*
+نام کاربری:
+parsa
+
+رمز:
+helo1405
+*/
+
+if(u==="parsa"&&p==="helo1405"){
+
+adminLogged=true;
+
+closeModal("adminLoginModal");
+
+renderAdmin();
+
+document.getElementById("adminModal")
+.style.display="block";
+
+}else{
+
+alert("❌ نام کاربری یا رمز اشتباه است.");
+
+}
+
+}
+
+
+/* =========================
+   مدیریت محصولات
+========================= */
+
+function renderAdmin(){
+
+document.getElementById("productCount")
+.innerText=price(products.length);
+
+document.getElementById("stockCount")
+.innerText=price(
+products.reduce((a,p)=>a+p.stock,0)
+);
+
+document.getElementById("orderCount")
+.innerText=price(orders.length);
+
+document.getElementById("salesCount")
+.innerText=price(
+orders.reduce((a,o)=>a+o.total,0)
+);
+
+document.getElementById("prepareDays")
+.value=settings.prepareDays;
+
+document.getElementById("adminProducts").innerHTML=
+products.map(p=>`
+
+<div class="order">
