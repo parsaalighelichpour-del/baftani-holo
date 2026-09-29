@@ -77,6 +77,10 @@ nav{
   background:#42a5f5;
 }
 
+.nav-btn:nth-child(4){
+  background:#00897b;
+}
+
 /* MAIN */
 
 .container{
@@ -600,6 +604,10 @@ body.dark-mode .empty{
 👤 حساب من
 </button>
 
+<button class="nav-btn" onclick="window.open('https://ble.ir/Parsa_Gh93','_blank')">
+📢 کانال بله
+</button>
+
 </nav>
 
 </header>
@@ -888,6 +896,16 @@ style="display:none">
 سازنده: پارسا قلیچ پور
 </p>
 
+<p>
+📢 کانال بله:
+<a
+href="https://ble.ir/Parsa_Gh93"
+target="_blank"
+style="color:#90caf9;text-decoration:none;font-weight:bold">
+Parsa_Gh93
+</a>
+</p>
+
 </footer>
 
 
@@ -1148,8 +1166,6 @@ images:[
 ],
 description:"اسکاج بافتنی کاربردی و قابل شست‌وشو."
 },
-
-/* ۱۰ محصول جدید */
 
 {
 id:13,
@@ -2262,7 +2278,7 @@ productText +=
 
 if(discount>0){
 
-productText+=
+productText +=
 `تخفیف ${appliedDiscount}٪ = ${formatPrice(discount)} تومان\n`;
 
 }
