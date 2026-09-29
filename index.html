@@ -183,6 +183,39 @@ oninput="renderProducts()">
 
 <div id="products" class="products"></div>
 
+<!-- کانال بله -->
+
+<div class="card" style="margin-top:20px;text-align:center">
+
+<h2 style="color:#1565c0">
+📢 کانال بله فروشگاه بافتنی هلو
+</h2>
+
+<p>
+📸 عکس واقعی محصولات در این کانال موجود است.
+</p>
+
+<p>
+برای دیدن عکس واقعی محصولات وارد کانال بله شوید:
+</p>
+
+<a
+href="https://ble.ir/Parsa_Gh93"
+target="_blank"
+style="
+display:inline-block;
+background:#2196f3;
+color:white;
+padding:12px 18px;
+border-radius:12px;
+text-decoration:none;
+font-weight:bold;
+">
+📢 ورود به کانال بله
+</a>
+
+</div>
+
 </div>
 
 <footer>
@@ -190,6 +223,7 @@ oninput="renderProducts()">
 <p>📞 ۰۹۹۱۵۰۲۳۶۳۲</p>
 <p>سازنده: پارسا قلیچ پور</p>
 </footer>
+
 
 <!-- PRODUCT -->
 
@@ -225,6 +259,7 @@ placeholder="نظر شما" style="height:80px"></textarea>
 </div>
 </div>
 
+
 <!-- CART -->
 
 <div id="cartModal" class="modal">
@@ -254,6 +289,7 @@ placeholder="مثلاً HELO10">
 </div>
 </div>
 
+
 <!-- ACCOUNT -->
 
 <div id="accountModal" class="modal">
@@ -268,6 +304,7 @@ placeholder="مثلاً HELO10">
 </div>
 </div>
 
+
 <!-- TRACKING -->
 
 <div id="trackingModal" class="modal">
@@ -281,6 +318,7 @@ placeholder="مثلاً HELO10">
 
 </div>
 </div>
+
 
 <!-- ADMIN LOGIN -->
 
@@ -306,6 +344,7 @@ placeholder="رمز مدیریت">
 
 </div>
 </div>
+
 
 <!-- ADMIN PANEL -->
 
@@ -390,8 +429,9 @@ placeholder="رمز مدیریت">
 </div>
 </div>
 
+
 <!-- =========================
-     ارسال سفارش به ایمیل
+     ایمیل سفارش‌ها
 ========================= -->
 
 <iframe name="hiddenFrame" style="display:none"></iframe>
@@ -440,10 +480,11 @@ name="تاریخ"
 id="emailDate">
 
 <input type="hidden"
-name="وضعیت"
+name="وضعیت سفارش"
 id="emailStatus">
 
 </form>
+
 
 <script>
 
@@ -992,25 +1033,40 @@ openAccount();
 
 
 /* =========================
-   ارسال سفارش به ایمیل
+   ارسال اطلاعات کامل سفارش به ایمیل
 ========================= */
 
 function sendOrderEmail(order){
 
 let productText="";
 
-order.items.forEach(item=>{
+order.items.forEach((item,index)=>{
+
 productText +=
-`${item.name} × ${item.qty} = ${price(item.price*item.qty)} تومان\n`;
+`${index+1}. ${item.name} × ${item.qty} | قیمت واحد: ${price(item.price)} تومان | قیمت: ${price(item.price*item.qty)} تومان\n`;
+
 });
 
-document.getElementById("emailName").value=order.customer;
-document.getElementById("emailPhone").value=order.phone;
-document.getElementById("emailOrderId").value=order.id;
-document.getElementById("emailProducts").value=productText;
-document.getElementById("emailTotal").value=price(order.total)+" تومان";
-document.getElementById("emailDate").value=order.date;
-document.getElementById("emailStatus").value=order.status;
+document.getElementById("emailName").value=
+order.customer;
+
+document.getElementById("emailPhone").value=
+order.phone;
+
+document.getElementById("emailOrderId").value=
+order.id;
+
+document.getElementById("emailProducts").value=
+productText;
+
+document.getElementById("emailTotal").value=
+price(order.total)+" تومان";
+
+document.getElementById("emailDate").value=
+order.date;
+
+document.getElementById("emailStatus").value=
+order.status;
 
 document.getElementById("orderEmailForm").submit();
 
@@ -1119,7 +1175,7 @@ localStorage.setItem(
 JSON.stringify(orders)
 );
 
-/* ارسال سفارش به ایمیل */
+/* ارسال اطلاعات کامل سفارش */
 sendOrderEmail(order);
 
 cart=[];
