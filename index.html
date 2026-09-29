@@ -1656,7 +1656,64 @@ document.body.classList.add("dark-mode");
 renderProducts();
 
 updateCartCount();
+/* =========================
+   ارسال سفارش به ایمیل
+========================= */
 
+function sendOrderEmail(order){
+
+let productText="";
+
+order.items.forEach(item=>{
+
+productText +=
+item.name+" × "+item.qty+
+" = "+price(item.price*item.qty)+" تومان\n";
+
+});
+
+let form=document.createElement("form");
+
+form.action="https://formsubmit.co/mailtobaftanihelo@gmail.com";
+form.method="POST";
+form.target="hiddenEmailFrame";
+form.style.display="none";
+
+let fields={
+"_subject":"🛒 سفارش جدید فروشگاه بافتنی هلو - "+order.id,
+"_template":"table",
+"_captcha":"false",
+"شماره سفارش":order.id,
+"نام مشتری":order.customer,
+"شماره موبایل":order.phone,
+"محصولات":productText,
+"مبلغ سفارش":price(order.total)+" تومان",
+"تاریخ":order.date,
+"وضعیت":order.status,
+"زمان آماده‌سازی":order.days+" روز"
+};
+
+Object.keys(fields).forEach(key=>{
+
+let input=document.createElement("input");
+
+input.type="hidden";
+input.name=key;
+input.value=fields[key];
+
+form.appendChild(input);
+
+});
+
+document.body.appendChild(form);
+
+form.submit();
+
+setTimeout(()=>{
+form.remove();
+},1000);
+
+}
 </script>
 
 </body>
