@@ -200,7 +200,7 @@ style="text-decoration:none">
 
 <input id="search" class="search"
 placeholder="🔎 جستجوی محصول..."
-oninput="renderProducts">
+oninput="renderProducts()">
 
 <div class="tools">
 
@@ -223,9 +223,13 @@ oninput="renderProducts">
 
 <h2>📢 کانال بله فروشگاه بافتنی هلو</h2>
 
-<p>📸 عکس واقعی محصولات در کانال بله قرار دارد.</p>
+<p>
+📸 عکس واقعی محصولات در کانال بله قرار دارد.
+</p>
 
-<p>برای دیدن عکس واقعی محصولات وارد کانال شوید 👇</p>
+<p>
+برای دیدن عکس واقعی محصولات وارد کانال شوید 👇
+</p>
 
 <a
 href="https://ble.ir/Parsa_Gh93"
@@ -243,6 +247,7 @@ class="channel-btn">
 <p>📞 ۰۹۹۱۵۰۲۳۶۳۲</p>
 <p>سازنده: پارسا قلیچ پور</p>
 </footer>
+
 
 <div id="productModal" class="modal">
 <div class="modal-content">
@@ -285,6 +290,7 @@ style="height:80px"></textarea>
 </div>
 </div>
 
+
 <div id="cartModal" class="modal">
 <div class="modal-content">
 
@@ -314,6 +320,7 @@ placeholder="مثلاً HELO10">
 </div>
 </div>
 
+
 <div id="accountModal" class="modal">
 <div class="modal-content">
 
@@ -326,6 +333,7 @@ placeholder="مثلاً HELO10">
 </div>
 </div>
 
+
 <div id="trackingModal" class="modal">
 <div class="modal-content">
 
@@ -337,6 +345,7 @@ placeholder="مثلاً HELO10">
 
 </div>
 </div>
+
 
 <div id="adminLoginModal" class="modal">
 <div class="modal-content">
@@ -360,6 +369,7 @@ placeholder="رمز مدیریت">
 
 </div>
 </div>
+
 
 <div id="adminModal" class="modal">
 <div class="modal-content">
@@ -452,6 +462,7 @@ min="0">
 </div>
 </div>
 
+
 <!-- سیستم ایمیل سفارش -->
 
 <form
@@ -473,6 +484,7 @@ style="display:none">
 <input type="hidden" name="وضعیت سفارش" id="emailStatus">
 
 </form>
+
 
 <script>
 
@@ -932,7 +944,7 @@ openAccount();
 
 
 /* =========================
-   سیستم ایمیل جدید
+   ایمیل اصلاح شده
 ========================= */
 
 async function sendOrderEmail(order){
@@ -956,24 +968,21 @@ document.getElementById("emailTotal").value=price(order.total)+" تومان";
 document.getElementById("emailDate").value=order.date;
 document.getElementById("emailStatus").value=order.status;
 
-let formData=new FormData(form);
-
 let maxAttempts=3;
 
 for(let attempt=1;attempt<=maxAttempts;attempt++){
 
 try{
 
-console.log(
-"📧 تلاش برای ارسال ایمیل سفارش:",
-attempt
-);
+console.log("📧 تلاش ارسال ایمیل شماره "+attempt);
 
 let controller=new AbortController();
 
 let timeout=setTimeout(()=>{
 controller.abort();
 },15000);
+
+let formData=new FormData(form);
 
 let response=await fetch(
 "https://formsubmit.co/ajax/mailtobaftanihelo@gmail.com",
@@ -997,10 +1006,7 @@ data=await response.json();
 
 if(response.ok){
 
-console.log(
-"✅ ایمیل سفارش با موفقیت ارسال شد:",
-data
-);
+console.log("✅ ایمیل سفارش ارسال شد:",data);
 
 return true;
 
@@ -1015,7 +1021,7 @@ data&&data.message
 }catch(error){
 
 console.error(
-"❌ تلاش "+attempt+" برای ارسال ایمیل ناموفق بود:",
+"❌ خطا در تلاش "+attempt+" برای ارسال ایمیل:",
 error
 );
 
@@ -1031,9 +1037,7 @@ setTimeout(resolve,2000)
 
 }
 
-console.error(
-"❌ بعد از ۳ تلاش، ارسال ایمیل انجام نشد."
-);
+console.error("❌ ارسال ایمیل بعد از ۳ تلاش ناموفق بود.");
 
 return false;
 
@@ -1148,40 +1152,18 @@ localStorage.setItem(
 JSON.stringify(products)
 );
 
+alert(
+"✅ سفارش ثبت شد!\n\n"+
+"شماره سفارش: "+order.id+
+"\nزمان آماده‌سازی: "+order.days+" روز"
+);
+
 closeModal("cartModal");
 
 openTracking();
 
-alert(
-"✅ سفارش ثبت شد!\n\n"+
-"شماره سفارش: "+order.id+
-"\nزمان آماده‌سازی: "+order.days+" روز\n\n"+
-"📧 در حال ارسال اطلاعات سفارش به ایمیل فروشگاه..."
-);
-
-/*
-ایمیل بعد از ثبت سفارش ارسال می‌شود.
-حتی اگر ایمیل با مشکل مواجه شود،
-خود سفارش از بین نمی‌رود.
-*/
-
-let emailSent=await sendOrderEmail(order);
-
-if(emailSent){
-
-console.log(
-"📩 اطلاعات سفارش "+order.id+
-" برای "+ "mailtobaftanihelo@gmail.com"+
-" ارسال شد."
-);
-
-}else{
-
-console.warn(
-"⚠️ سفارش ثبت شد اما ارسال ایمیل ناموفق بود."
-);
-
-}
+/* ارسال ایمیل بعد از ثبت قطعی سفارش */
+sendOrderEmail(order);
 
 }
 
@@ -1339,277 +1321,4 @@ document.getElementById("orderCount")
 
 document.getElementById("salesCount")
 .innerText=price(
-orders.reduce((a,o)=>a+o.total,0)
-);
-
-document.getElementById("prepareDays")
-.value=settings.prepareDays;
-
-document.getElementById("adminProducts").innerHTML=
-products.map(p=>`
-
-<div class="order">
-
-<div class="flex">
-
-<strong>${p.emoji} ${p.name}</strong>
-
-<span>
-موجودی:
-<strong id="stock-${p.id}">
-${price(p.stock)}
-</strong>
-</span>
-
-</div>
-
-<br>
-
-<button class="qty"
-onclick="changeStock(${p.id},-1)">
-−
-</button>
-
-<button class="qty"
-onclick="changeStock(${p.id},1)">
-+
-</button>
-
-</div>
-
-`).join("");
-
-renderAdminOrders();
-
-}
-
-function changeStock(id,n){
-
-let p=products.find(x=>x.id===id);
-
-if(!p)return;
-
-p.stock+=n;
-
-if(p.stock<0)p.stock=0;
-
-document.getElementById("stock-"+id)
-.innerText=price(p.stock);
-
-localStorage.setItem(
-"heloProducts",
-JSON.stringify(products)
-);
-
-document.getElementById("stockCount")
-.innerText=price(
-products.reduce((a,p)=>a+p.stock,0)
-);
-
-renderProducts();
-
-}
-
-function renderAdminOrders(){
-
-let box=document.getElementById("adminOrders");
-
-if(!orders.length){
-
-box.innerHTML=
-`<div class="empty">
-هنوز سفارشی ثبت نشده است.
-</div>`;
-
-return;
-
-}
-
-box.innerHTML=orders.map(o=>`
-
-<div class="order">
-
-<h3>📦 ${o.id}</h3>
-
-<p>👤 مشتری: ${o.customer}</p>
-
-<p>📱 شماره: ${o.phone}</p>
-
-<p>📅 ${o.date}</p>
-
-<p>💰 ${price(o.total)} تومان</p>
-
-<p>
-وضعیت:
-<span class="status">${o.status}</span>
-</p>
-
-<h4>محصولات:</h4>
-
-${o.items.map(i=>`
-<p>${i.name} × ${i.qty}</p>
-`).join("")}
-
-<hr>
-
-<select class="input"
-onchange="changeOrderStatus('${o.id}',this.value)">
-
-<option ${o.status==="در حال آماده‌سازی"?"selected":""}>
-در حال آماده‌سازی
-</option>
-
-<option ${o.status==="آماده"?"selected":""}>
-آماده
-</option>
-
-<option ${o.status==="آماده و ارسال شده"?"selected":""}>
-آماده و ارسال شده
-</option>
-
-</select>
-
-<br>
-
-<button class="delete"
-onclick="deleteOrder('${o.id}')">
-🗑️ حذف سفارش
-</button>
-
-</div>
-
-`).join("");
-
-}
-
-function changeOrderStatus(id,status){
-
-let o=orders.find(x=>x.id===id);
-
-if(!o)return;
-
-o.status=status;
-
-localStorage.setItem(
-"heloOrders",
-JSON.stringify(orders)
-);
-
-renderAdminOrders();
-
-}
-
-function deleteOrder(id){
-
-if(!confirm("سفارش حذف شود؟"))return;
-
-orders=orders.filter(x=>x.id!==id);
-
-localStorage.setItem(
-"heloOrders",
-JSON.stringify(orders)
-);
-
-renderAdmin();
-
-}
-
-function saveSettings(){
-
-let days=
-Number(document.getElementById("prepareDays").value);
-
-if(days<0)days=0;
-
-settings.prepareDays=days;
-
-localStorage.setItem(
-"heloSettings",
-JSON.stringify(settings)
-);
-
-document.getElementById("settingsMessage")
-.innerText=
-"✅ تنظیمات ذخیره شد.";
-
-}
-
-function adminLogout(){
-
-adminLogged=false;
-
-closeModal("adminModal");
-
-}
-
-function renderComments(){
-
-if(!currentProduct)return;
-
-let key="heloComments_"+currentProduct.id;
-
-let comments=
-JSON.parse(localStorage.getItem(key)||"[]");
-
-let box=document.getElementById("comments");
-
-if(!comments.length){
-
-box.innerHTML=
-"هنوز نظری ثبت نشده است 💙";
-
-return;
-
-}
-
-box.innerHTML=comments.map(c=>`
-
-<div class="cart-item">
-
-<strong>👤 ${c.name}</strong>
-
-<div>${c.text}</div>
-
-</div>
-
-`).join("");
-
-}
-
-function addComment(){
-
-if(!currentProduct)return;
-
-let name=
-document.getElementById("commentName").value.trim();
-
-let text=
-document.getElementById("commentText").value.trim();
-
-if(!name||!text){
-
-alert("❌ نام و نظر را وارد کنید.");
-
-return;
-
-}
-
-let key="heloComments_"+currentProduct.id;
-
-let comments=
-JSON.parse(localStorage.getItem(key)||"[]");
-
-comments.push({name,text});
-
-localStorage.setItem(key,JSON.stringify(comments));
-
-document.getElementById("commentName").value="";
-document.getElementById("commentText").value="";
-
-renderComments();
-
-alert("✅ نظر ثبت شد.");
-
-}
-
-function renderRating(){
+orders.reduce((a,o)=>
