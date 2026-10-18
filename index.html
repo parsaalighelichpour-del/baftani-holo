@@ -284,7 +284,12 @@ const order={id:'HELO-'+Date.now().toString().slice(-8),date:new Date().toLocale
 let orders=readJSON('heloOrdersLocal',[]);orders.unshift(order);saveJSON('heloOrdersLocal',orders.slice(0,50));
 $('invoiceCustomer').innerHTML=`<div class="invoice-line"><span>شماره سفارش</span><strong>${esc(order.id)}</strong></div><div class="invoice-line"><span>مشتری</span><strong>${esc(user.name)}</strong></div><div class="invoice-line"><span>شماره</span><strong>${esc(user.phone)}</strong></div><div class="invoice-line"><span>تاریخ</span><strong>${esc(order.date)}</strong></div>`;
 $('invoiceProducts').innerHTML=cart.map(i=>{const p=products.find(x=>x.id===i.id);return p?`<div class="invoice-line"><span>${esc(p.name)} × ${formatPrice(i.qty)}</span><strong>${formatPrice(p.price*i.qty)} تومان</strong></div>`:''}).join('')+(discountAmount()?`<div class="invoice-line"><span>تخفیف ${appliedDiscount}٪</span><strong>− ${formatPrice(discountAmount())} تومان</strong></div>`:'');
-$('invoiceTotal').textContent=formatPrice(order.total)+' تومان';
+$('invoiceTotal').textContent=formatPrice(order.total)+' تومان';alert(
+'⚠️ اخطار مهم!\n\n' +
+'حتماً از فاکتور خود اسکرین‌شات بگیرید یا آن را دانلود کنید و به پیوی بله بفرستید.\n\n' +
+'📩 آیدی بله: parsa12123\n\n' +
+'❗ در غیر این صورت، سفارش شما پیگیری نخواهد شد.'
+);
 $('emailName').value=user.name;$('emailPhone').value=user.phone;
 $('emailProducts').value=cart.map(i=>{const p=products.find(x=>x.id===i.id);return p?`${p.name} × ${i.qty} = ${formatPrice(p.price*i.qty)} تومان`:''}).join('\n')+`\nشماره سفارش: ${order.id}`;
 $('emailTotal').value=formatPrice(order.total)+' تومان';
