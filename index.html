@@ -321,7 +321,7 @@ async function adminLogin(){
  const password=$('adminPassword').value;
  if(!password){alert('رمز عبور را وارد کن.');return}
  if(!window.HeloServer){alert('اتصال سرور هنوز آماده نشده؛ صفحه را دوباره بارگذاری کن.');return}
- const result=await window.HeloServer.loginAdmin('parsaalighlichpour@gmail.com',password);
+ const result=await window.HeloServer.loginAdmin('Alighlichpoor@gmail.com',password);
  if(result){closeModal('adminLoginModal');$('adminModal').style.display='block';renderAdminProducts();await renderAdminOrders();alert('با موفقیت وارد پنل مدیریت شدی 💙')}
 }
 async function adminLogout(){adminUnlocked=false;closeModal('adminModal');if(window.HeloServer)await window.HeloServer.signOut();alert('از پنل مدیریت خارج شدی.')}
