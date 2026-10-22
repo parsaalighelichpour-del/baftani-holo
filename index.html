@@ -177,9 +177,9 @@ body.dark-mode .cart-item,body.dark-mode .invoice-line,body.dark-mode .summary-t
 
 <div class="modal" id="adminLoginModal"><div class="modal-content">
 <button class="close" onclick="closeModal('adminLoginModal')">×</button><h2>🔐 ورود مدیریت</h2>
-<p>رمز عبور مدیریت را وارد کن.</p>
-<input id="adminPassword" class="field" type="password" placeholder="رمز عبور" autocomplete="current-password" dir="ltr">
-<button class="btn" onclick="adminLogin()">ورود به پنل مدیریت</button>
+<p>ایمیلت را وارد کن تا لینک ورود برایت فرستاده شود.</p>
+<input id="adminEmail" class="field" type="email" value="Alighlichpoor@gmail.com" placeholder="ایمیل مدیر" autocomplete="email" dir="ltr">
+<button class="btn" onclick="adminLogin()">ارسال لینک ورود</button>
 </div></div>
 
 <div class="modal" id="adminModal"><div class="modal-content">
@@ -316,13 +316,13 @@ function closeModal(id){$(id).style.display='none'}
 window.addEventListener('click',e=>{if(e.target.classList.contains('modal'))e.target.style.display='none'});
 window.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal').forEach(m=>m.style.display='none')});
 
-function openAdminLogin(){if(adminUnlocked){renderAdminProducts();renderAdminOrders();$('adminModal').style.display='block';return}$('adminPassword').value='';$('adminLoginModal').style.display='block'}
+function openAdminLogin(){if(adminUnlocked){renderAdminProducts();renderAdminOrders();$('adminModal').style.display='block';return}$('adminEmail').value='Alighlichpoor@gmail.com';$('adminLoginModal').style.display='block'}
 async function adminLogin(){
- const password=$('adminPassword').value;
- if(!password){alert('رمز عبور را وارد کن.');return}
+ const email=$('adminEmail').value.trim();
+ if(!email){alert('ایمیل مدیر را وارد کن.');return}
  if(!window.HeloServer){alert('اتصال سرور هنوز آماده نشده؛ صفحه را دوباره بارگذاری کن.');return}
- const result=await window.HeloServer.loginAdmin('Alighlichpoor@gmail.com',password);
- if(result){closeModal('adminLoginModal');$('adminModal').style.display='block';renderAdminProducts();await renderAdminOrders();alert('با موفقیت وارد پنل مدیریت شدی 💙')}
+ const result=await window.HeloServer.requestAdminLogin(email);
+ if(result){alert('لینک ورود به ایمیلت فرستاده شد. ایمیلت را باز کن و روی لینک بزن.');closeModal('adminLoginModal')}
 }
 async function adminLogout(){adminUnlocked=false;closeModal('adminModal');if(window.HeloServer)await window.HeloServer.signOut();alert('از پنل مدیریت خارج شدی.')}
 function showAdminTab(tab){$('adminProductsTab').classList.toggle('hide',tab!=='products');$('adminOrdersTab').classList.toggle('hide',tab!=='orders')}
@@ -393,16 +393,12 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
     if (error) { console.error("دریافت سفارش‌ها ناموفق بود:", error.message); return []; }
     return data || [];
   }
-  async function loginAdmin(email, password) {
-    const { error } = await db.auth.signInWithPassword({ email, password });
-    if (error) {
-      console.error("ورود مدیریت ناموفق بود:", error.message);
-      const message = error.message === "Invalid login credentials"
-        ? "ایمیل یا رمز عبور اشتباه است؛ رمز حساب مدیر را در Supabase تنظیم کن."
-        : "ورود ناموفق بود: " + error.message;
-      alert(message);
-      return false;
-    }
+  async function requestAdminLogin(email) {
+    const { error } = await db.auth.signInWithOtp({
+      email,
+      options: { shouldCreateUser: false, emailRedirectTo: window.location.origin + window.location.pathname }
+    });
+    if (error) { console.error("ارسال لینک ورود ناموفق بود:", error.message); alert("ارسال لینک ورود ناموفق بود: " + error.message); return false; }
     return true;
   }
   async function checkAdminSession(session) {
@@ -422,7 +418,7 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
   }
   window.HeloServer = {
     getProducts: getServerProducts, saveProduct: saveServerProduct,
-    saveOrder: saveServerOrder, getOrders, loginAdmin,
+    saveOrder: saveServerOrder, getOrders, requestAdminLogin,
     signOut: async function(){const {error}=await db.auth.signOut();if(error)console.error("خروج ناموفق بود:",error.message)}
   };
   db.auth.getSession().then(({data}) => checkAdminSession(data.session));
