@@ -181,8 +181,8 @@ body.dark-mode .cart-item,body.dark-mode .invoice-line,body.dark-mode .summary-t
 
 <div class="modal" id="adminLoginModal" data-login-version="20261022b"><div class="modal-content">
 <button class="close" onclick="closeModal('adminLoginModal')">×</button><h2>🔐 ورود مدیریت</h2>
-<p>ایمیلت را وارد کن تا لینک ورود برایت فرستاده شود.</p>
-<input id="adminEmail" class="field" type="email" value="Alighlichpoor@gmail.com" placeholder="ایمیل مدیر" autocomplete="email" dir="ltr">
+<p>لینک ورود فقط به ایمیل مدیر اصلی ارسال می‌شود.</p>
+<input id="adminEmail" class="field" type="email" value="Parsaalighlichpour@gmail.com" placeholder="ایمیل مدیر" autocomplete="email" dir="ltr" readonly>
 <button class="btn" onclick="adminLogin()">ارسال لینک ورود</button>
 </div></div>
 
@@ -320,10 +320,10 @@ function closeModal(id){$(id).style.display='none'}
 window.addEventListener('click',e=>{if(e.target.classList.contains('modal'))e.target.style.display='none'});
 window.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal').forEach(m=>m.style.display='none')});
 
-function openAdminLogin(){if(adminUnlocked){renderAdminProducts();renderAdminOrders();$('adminModal').style.display='block';return}$('adminEmail').value='Alighlichpoor@gmail.com';$('adminLoginModal').style.display='block'}
+function openAdminLogin(){if(adminUnlocked){renderAdminProducts();renderAdminOrders();$('adminModal').style.display='block';return}$('adminEmail').value='Parsaalighlichpour@gmail.com';$('adminLoginModal').style.display='block'}
 async function adminLogin(){
  const email=$('adminEmail').value.trim();
- if(!email){alert('ایمیل مدیر را وارد کن.');return}
+ if(email.toLowerCase()!=='parsaalighlichpour@gmail.com'){alert('لینک ورود فقط به ایمیل مدیر اصلی ارسال می‌شود.');return}
  if(!window.HeloServer){alert('اتصال سرور هنوز آماده نشده؛ صفحه را دوباره بارگذاری کن.');return}
  const result=await window.HeloServer.requestAdminLogin(email);
  if(result){alert('لینک ورود به ایمیلت فرستاده شد. ایمیلت را باز کن و روی لینک بزن.');closeModal('adminLoginModal')}
