@@ -345,6 +345,48 @@ body.dark .card{background:linear-gradient(155deg,#292019,#211a14)!important;bor
 body.dark .card:hover{border-color:rgba(210,177,115,.55)!important}
 </style>
 
+
+<style id="helo-motion-polish">
+/* Soft, elegant motion — never flashy */
+@keyframes helo-rise-in{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes helo-fade-in{from{opacity:0}to{opacity:1}}
+@keyframes helo-float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-8px) rotate(1deg)}}
+@keyframes helo-glow{0%,100%{box-shadow:0 8px 24px rgba(70,46,28,.055)}50%{box-shadow:0 12px 30px rgba(182,138,69,.13)}}
+@keyframes helo-sheen{0%{transform:translateX(130%);opacity:0}18%{opacity:.5}65%{opacity:.16}100%{transform:translateX(-180%);opacity:0}}
+header{animation:helo-fade-in .7s ease-out both}
+header h1{animation:helo-rise-in .65s .08s both}
+header p{animation:helo-rise-in .65s .18s both}
+.nav{animation:helo-rise-in .65s .25s both}
+.hero{animation:helo-rise-in .75s .08s both}
+.hero-art{animation:helo-float 5s ease-in-out 1s infinite;transform-origin:center}
+.hero .pill{position:relative;overflow:hidden}
+.hero .pill:after{content:"";position:absolute;inset:-30% auto -30% 0;width:45%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.65),transparent);transform:translateX(130%);animation:helo-sheen 4.8s ease-in-out 1.6s infinite}
+.tools{animation:helo-rise-in .7s .2s both}
+.section-head{animation:helo-fade-in .7s .15s both}
+.products .card{animation:helo-rise-in .65s both}
+.products .card:nth-child(3n+1){animation-delay:.08s}
+.products .card:nth-child(3n+2){animation-delay:.16s}
+.products .card:nth-child(3n){animation-delay:.24s}
+.card .image-wrap{position:relative}
+.card .image-wrap:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 25%,rgba(255,255,255,.24) 48%,transparent 70%);transform:translateX(130%);opacity:0;transition:transform .65s ease,opacity .3s ease}
+.card:hover .image-wrap:after{transform:translateX(-130%);opacity:1}
+.card .badge{transition:transform .25s ease,box-shadow .25s ease}
+.card:hover .badge{transform:translateY(-2px);box-shadow:0 6px 14px rgba(54,34,18,.12)}
+.btn,.nav-btn,.cat,.heart,.qty-btn{transition:transform .22s cubic-bezier(.2,.8,.2,1),box-shadow .22s ease,background-color .22s ease,filter .22s ease}
+.btn:hover,.nav-btn:hover{transform:translateY(-2px)}
+.cat:hover{transform:translateY(-2px)}
+.heart.active{animation:helo-heart-pop .32s ease-out}
+@keyframes helo-heart-pop{0%{transform:scale(.75)}65%{transform:scale(1.16)}100%{transform:scale(1)}}
+.modal{animation:helo-fade-in .22s ease-out both}
+.modal-content{animation:helo-rise-in .3s cubic-bezier(.2,.8,.2,1) both}
+.footer{animation:helo-fade-in .8s ease-out both}
+@media(prefers-reduced-motion:reduce){
+  header,header h1,header p,.nav,.hero,.hero-art,.tools,.section-head,.products .card,.modal,.modal-content,.footer{animation:none!important}
+  .hero .pill:after,.card .image-wrap:after{display:none!important}
+  *,*:before,*:after{scroll-behavior:auto!important;transition:none!important}
+}
+</style>
+
 </head>
 <body>
 <header>
