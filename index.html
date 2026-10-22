@@ -387,6 +387,54 @@ header p{animation:helo-rise-in .65s .18s both}
 }
 </style>
 
+
+<style id="helo-blue-elegance">
+:root{--blue:#258cf4;--deep:#0a397d;--navy:#061a38;--pale:#eaf4ff;--ink:#17365a;--line:#c9e2ff;--shadow:0 14px 34px rgba(3,35,83,.13)}
+body{color:#17365a;background:radial-gradient(ellipse at 8% 0%,rgba(70,155,255,.25),transparent 32%),radial-gradient(ellipse at 95% 22%,rgba(102,190,255,.17),transparent 28%),linear-gradient(135deg,#061a38 0%,#0b3470 48%,#061a38 100%)}
+header{position:relative;overflow:hidden;background:linear-gradient(115deg,#063477 0%,#147fe8 48%,#0750a6 100%);box-shadow:0 8px 30px rgba(0,20,55,.3)}
+header:before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 15% 20%,rgba(255,255,255,.16),transparent 22%),radial-gradient(circle at 88% 80%,rgba(120,203,255,.18),transparent 28%)}
+header:after{content:"✦  ✧  ✦";position:absolute;bottom:8px;left:18px;color:rgba(255,255,255,.38);font-size:13px;letter-spacing:8px;pointer-events:none}
+.nav-btn{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.4);box-shadow:0 4px 14px rgba(0,25,70,.12);backdrop-filter:blur(8px)}
+.nav-btn:hover{background:rgba(255,255,255,.25)}
+.hero{position:relative;overflow:hidden;background:linear-gradient(125deg,#fff 0%,#f0f7ff 52%,#dceeff 100%);border:1px solid rgba(116,178,245,.65);box-shadow:0 18px 45px rgba(1,28,70,.2)}
+.hero:before{content:"";position:absolute;inset:10px;border:1px solid rgba(46,132,223,.2);border-radius:17px;pointer-events:none}
+.hero:after{content:"✧";position:absolute;right:26px;top:14px;color:#5ba7f7;font-size:25px}
+.hero h2{color:#0b4a99}
+.hero p{color:#456482}
+.hero-art{filter:drop-shadow(0 10px 10px rgba(20,101,190,.15))}
+.pill{background:linear-gradient(120deg,#d9edff,#edf7ff);color:#0754a8;border:1px solid #b4d9ff}
+.tools{border:1px solid rgba(111,174,243,.42);background:linear-gradient(145deg,#fff,#f5faff);box-shadow:0 12px 30px rgba(1,30,75,.15)}
+.search{border-color:#a6d1ff;background:#fbfdff;color:#17365a}
+.search:focus{border-color:#258cf4;box-shadow:0 0 0 4px rgba(37,140,244,.15)}
+.cat{background:#e7f2ff;color:#1556a1;border:1px solid transparent;transition:all .22s ease}
+.cat.active,.cat:hover{background:linear-gradient(135deg,#258cf4,#0750a6);color:#fff;box-shadow:0 6px 16px rgba(22,105,208,.22);border-color:#7bbaff}
+.cat.utility{background:#eaf5ff;color:#0754a8;border:1px solid #c5e1ff}
+.cat.dark{background:#102a4d;color:#fff;border:1px solid #315a8b}
+.section-head{color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.18)}
+.section-head span{color:#d3e9ff}
+.products .card,.card{border:1px solid #d3e7ff;box-shadow:0 10px 26px rgba(0,25,70,.11);background:linear-gradient(155deg,#fff,#f5faff)}
+.card:hover{border-color:#83bdff;box-shadow:0 18px 35px rgba(0,70,150,.2)}
+.product-image{background:linear-gradient(135deg,#eaf4ff,#d7eaff)}
+.badge{background:linear-gradient(135deg,#278cf3,#0753a6);box-shadow:0 5px 13px rgba(0,68,150,.2)}
+.heart{box-shadow:0 4px 12px rgba(4,37,81,.12);border:1px solid #e1edff}
+.btn{background:linear-gradient(120deg,#319cff,#1264cb 58%,#08479b);box-shadow:0 6px 16px rgba(15,94,187,.22)}
+.btn:hover{box-shadow:0 10px 22px rgba(15,94,187,.3);filter:brightness(1.05)}
+input,select,textarea,.field{border-color:#c3ddfa}
+input:focus,select:focus,textarea:focus,.field:focus{border-color:#258cf4!important;box-shadow:0 0 0 3px rgba(37,140,244,.16)!important}
+.modal-content{border-color:#b7d8ff!important;box-shadow:0 28px 80px rgba(0,20,55,.3)!important}
+.footer{border-top-color:rgba(146,198,255,.25)}
+.footer:before{color:#91c9ff}
+body.dark{background:radial-gradient(ellipse at 8% 0%,rgba(70,155,255,.14),transparent 32%),linear-gradient(135deg,#06142b,#0a2c5c 48%,#06142b);color:#e6f2ff}
+body.dark .card,body.dark .tools{background:linear-gradient(145deg,#132b49,#0d223d)!important;border-color:#294e78!important;color:#e6f2ff}
+body.dark .hero{background:linear-gradient(125deg,#16385f,#10294a 70%,#173c68)}
+body.dark .hero h2,body.dark .hero p,body.dark .card h3{color:#e6f2ff}
+body.dark .search{background:#0a1e36;color:#e6f2ff;border-color:#2e5b8b}
+body.dark .cat{background:#17385d;color:#cfe6ff;border-color:#2d527d}
+body.dark .cat.active,body.dark .cat:hover{background:linear-gradient(135deg,#258cf4,#0750a6);color:white}
+@media(max-width:800px){.hero{box-shadow:0 12px 28px rgba(1,28,70,.16)}header:after{font-size:11px;letter-spacing:5px}}
+@media(prefers-reduced-motion:reduce){header:before,header:after{animation:none}}
+</style>
+
 </head>
 <body>
 <header>
