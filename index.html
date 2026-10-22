@@ -93,6 +93,113 @@ body.dark-mode .cart-item,body.dark-mode .invoice-line,body.dark-mode .summary-t
 @media(max-width:800px){.products{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{grid-template-columns:1fr}.hero-art{display:none}}
 @media(max-width:470px){.container{padding:0 10px}.products{gap:9px}.card{padding:9px;border-radius:15px}.product-image{height:145px}.card h3{font-size:14px}.price{font-size:15px}.card-actions .btn{font-size:12px;padding:9px 7px}.nav-btn{font-size:12px;padding:9px}.modal-content{padding:16px;margin:15px auto}.admin-grid{grid-template-columns:1fr}}
 
+/* === ارتقای سلطنتی، فروشگاهی و موبایلی هلو === */
+:root{
+ --blue:#7a4a2a;--deep:#3d281d;--navy:#241811;--pale:#f7eddb;--ink:#38291f;
+ --paper:#fffaf0;--muted:#847261;--line:#d9c39c;--shadow:0 10px 28px #3c25151b;
+}
+body{font-family:Tahoma,Arial,sans-serif;background-color:#f3eadb;background-image:radial-gradient(#a88a6230 .7px,transparent .7px);background-size:8px 8px}
+header{position:relative;overflow:hidden;padding:30px 14px 24px;background:linear-gradient(125deg,#261811,#513522 55%,#2b1b13);border-bottom:4px solid #c5a467}
+header:after{content:"";display:block;width:min(260px,55%);height:1px;background:linear-gradient(90deg,transparent,#d9bb7c,transparent);margin:17px auto 0}
+header h1{font-size:clamp(25px,4.5vw,38px);letter-spacing:.1px;text-shadow:0 2px 12px #0004}
+header p{color:#ead7b6;line-height:1.9}
+.nav{gap:8px;margin-top:20px}
+.nav-btn,.btn{border-radius:5px;background:linear-gradient(135deg,#8d6037,#654025);border:1px solid #c3a06a;color:#fff8e9;box-shadow:0 3px 8px #2b1a101a}
+.nav-btn{background:#ffffff0d;border-color:#bda071}
+.nav-btn:hover,.btn:hover{background:linear-gradient(135deg,#a47748,#74462c);transform:translateY(-2px)}
+.container{max-width:1240px;margin:30px auto;padding:0 18px}
+.hero{position:relative;overflow:hidden;grid-template-columns:1.45fr 1fr;gap:24px;padding:clamp(24px,4vw,48px);background:linear-gradient(125deg,#fffaf0,#f0dfc3);border:1px solid #d5bb8d;border-top:4px solid #b4935b;border-radius:7px;box-shadow:0 13px 30px #49311b15}
+.hero h2{color:#54341f;line-height:1.7;font-size:clamp(24px,4vw,36px)}
+.hero p{color:#75604b;line-height:2.1}
+.hero-art{padding:22px 8px;border:1px solid #dfc99f;background:#f8efdF;background:linear-gradient(135deg,#f9f0df,#e9d5b2);border-radius:5px;filter:saturate(.8)}
+.pill{background:#eee0c3;color:#684626;border:1px solid #d7bd8a;border-radius:3px}
+.tools{padding:17px;background:#fffaf0;border:1px solid #ddc9a5;border-top:3px solid #b4935b;border-radius:5px}
+.search{border:1px solid #cbb48b;border-radius:4px;background:#fffdf8;min-height:48px}
+.cat{border:1px solid #dfcba7;border-radius:4px;background:#f1e5d0;color:#694a30;padding:10px 13px}
+.cat.active,.cat:hover{background:#67432a;color:#fff8eb;border-color:#a88451}
+.cat.utility{background:#e7e4d2;color:#555437}
+.cat.dark{background:#30231b;color:#f7e9d2}
+.section-head{color:#4a2f20;border-bottom:1px solid #cdb58b;padding:0 2px 12px;margin-top:28px}
+.section-head h2{font-size:clamp(20px,3vw,26px)}
+.section-head span{color:#866e53}
+.products{grid-template-columns:repeat(3,minmax(0,1fr));gap:19px}
+.card{padding:14px;background:#fffaf0;border:1px solid #ddc9a5;border-radius:5px;box-shadow:0 7px 20px #3c251510;transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-4px);box-shadow:0 14px 26px #3c251523}
+.product-image{height:230px;border-radius:3px;background:#f0e4d0}
+.badge{background:#a47b42;color:#fff9ed;border:1px solid #d4b47b;border-radius:3px}
+.heart{border:1px solid #e0cba8;border-radius:4px;box-shadow:0 2px 8px #3c25151a}
+.card h3{font-size:17px;color:#654027;line-height:1.8}
+.price{color:#8a592f;font-size:19px}
+.muted{line-height:1.8}
+.card-actions{gap:8px}
+.card-actions .btn{min-height:42px}
+.btn.secondary{background:#f0e3ce;color:#5e3e27;border:1px solid #d9c29a}
+.btn.green{background:#536343;border-color:#87936b}
+.empty{border:1px solid #ddc9a5;border-radius:5px;background:#fffaf0}
+.modal{background:#21170fc2;backdrop-filter:blur(4px)}
+.modal-content{border:1px solid #c5a36d;border-top:4px solid #b4935b;border-radius:6px;background:#fffaf0;padding:25px}
+.modal-content h2,.modal-content h3{color:#654027}
+.close{color:#7a4a2a}
+.field{border:1px solid #d5c19c;border-radius:4px;background:#fffdf8}
+.cart-item,.invoice-line{background:#f1e5d0;border:1px solid #e0cba8;border-radius:4px;line-height:1.8}
+.qty-btn,.remove-btn{border-radius:3px}
+.summary-total{background:#efe0c3;border:1px solid #dcc293;border-radius:4px;color:#5c3a23}
+.rating-box,.comment-box{background:#f5ead7;border:1px solid #e1cfad;border-radius:4px}
+.comment-name{color:#654027}
+.admin-product{border:1px solid #ddc9a5;border-radius:4px;background:#fffdf8}
+.notice{border-radius:4px}
+.invoice-area{border-color:#b4935b}
+.footer{background:linear-gradient(120deg,#241710,#3b281d);color:#ead8b9;border-top:4px solid #b4935b;padding:32px 15px}
+body.dark-mode{--paper:#2d241d;--ink:#f3e7d4;--muted:#c8b7a0;--line:#665143;background:#1f1916;color:#f3e7d4}
+body.dark-mode .hero,body.dark-mode .tools,body.dark-mode .card,body.dark-mode .modal-content{background:#2d2520;color:#f3e7d4;border-color:#665143}
+body.dark-mode .hero p{color:#d7c5ac}
+body.dark-mode .hero-art{background:#392d23;border-color:#665143}
+body.dark-mode .card h3,body.dark-mode .modal-content h2,body.dark-mode .modal-content h3{color:#d7b77f}
+body.dark-mode .cat{background:#43352c;color:#f3e7d4;border-color:#665143}
+body.dark-mode .cat.active{background:#7b342d;color:white}
+body.dark-mode .field,body.dark-mode .search{background:#211b18;color:white;border-color:#665143}
+body.dark-mode .cart-item,body.dark-mode .invoice-line,body.dark-mode .summary-total,body.dark-mode .rating-box,body.dark-mode .comment-box,body.dark-mode .admin-product{background:#43352c;color:#f3e7d4;border-color:#665143}
+@media(max-width:800px){
+ .container{padding:0 13px;margin:22px auto}
+ .hero{grid-template-columns:1fr;gap:12px}
+ .hero-art{font-size:clamp(48px,11vw,82px);padding:12px}
+ .products{grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+ .product-image{height:clamp(145px,29vw,220px)}
+ .card{padding:11px}
+}
+@media(max-width:470px){
+ header{padding:22px 10px 17px}
+ header h1{font-size:25px;line-height:1.7}
+ header p{font-size:13px}
+ .nav{gap:6px;margin-top:15px}
+ .nav-btn{font-size:12px;padding:9px 10px}
+ .container{padding:0 10px;margin:15px auto}
+ .hero{padding:19px 15px;margin-bottom:13px}
+ .hero h2{font-size:23px;line-height:1.8}
+ .hero p{font-size:14px;line-height:2}
+ .hero-art{font-size:54px}
+ .tools{padding:11px}
+ .tools-row{gap:6px}
+ .cat{font-size:12px;padding:8px 9px}
+ .section-head{margin:20px 2px 11px}
+ .section-head h2{font-size:19px}
+ .products{gap:9px}
+ .card{padding:8px;border-radius:4px}
+ .product-image{height:clamp(125px,38vw,175px)}
+ .card h3{font-size:13px;line-height:1.8;margin:9px 0 4px}
+ .price{font-size:15px;margin:7px 0}
+ .muted{font-size:11px}
+ .card-actions{gap:5px}
+ .card-actions .btn{font-size:11px;padding:9px 5px;min-height:38px}
+ .badge{font-size:10px;padding:5px 6px}
+ .heart{width:32px;height:32px;font-size:18px}
+ .modal{padding:8px}
+ .modal-content{padding:16px;margin:10px auto}
+ .admin-grid{grid-template-columns:1fr}
+ .cart-item,.invoice-line{align-items:flex-start;flex-wrap:wrap}
+ .footer{font-size:13px;padding:25px 12px}
+}
+
 /* === بازطراحی کلاسیک فروشگاه بافتنی هلو === */
 :root{
  --blue:#7b342d;--deep:#43231f;--navy:#241b18;--pale:#f4ecdf;--ink:#352821;
