@@ -326,5 +326,122 @@ function toggleAdminProduct(id){if(!adminUnlocked)return;const p=products.find(x
 function renderAdminOrders(){if(!adminUnlocked)return;const orders=readJSON('heloOrdersLocal',[]);$('adminOrderList').innerHTML=orders.length?orders.map(o=>`<div class="admin-product"><strong>${esc(o.id)}</strong><p>👤 ${esc(o.name)} · 📱 ${esc(o.phone)}</p><p>تاریخ: ${esc(o.date)}</p><strong>${formatPrice(o.total)} تومان</strong></div>`).join(''):'<div class="empty">هنوز سفارشی در این مرورگر ثبت نشده است.</div>'}
 renderProducts();updateCartCount();updateUserUI();initTheme();
 </script>
+<!-- اتصال به Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+(() => {
+  const SUPABASE_URL =
+    "https://hqeuajaaxdgbelnbebfg.supabase.co";
+
+  const SUPABASE_KEY = "کلید_publishable_خودت";
+
+  if (!window.supabase) {
+    console.error("کتابخانه Supabase بارگذاری نشد.");
+    return;
+  }
+
+  const db = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+  // دریافت محصولات ذخیره‌شده روی سرور
+  async function getServerProducts() {
+    const { data, error } = await db
+      .from("products")
+      .select("*")
+      .eq("active", true)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("خطا در دریافت محصولات:", error.message);
+      throw error;
+    }
+
+    return data || [];
+  }
+
+  // ذخیره یا به‌روزرسانی محصول روی سرور
+  async function saveServerProduct(product) {
+    const { data, error } = await db
+      .from("products")
+      .upsert(product, { onConflict: "id" })
+      .select()
+      .single();
+
+    if (error) {
+      console.error("خطا در ذخیره محصول:", error.message);
+      throw error;
+    }
+
+    return data;
+  }
+
+  // ثبت سفارش روی سرور
+  async function saveServerOrder(order) {
+    const { data, error } = await db
+      .from("orders")
+      .insert(order)
+      .select()
+      .single();
+
+    if (error) {
+      console.error("خطا در ثبت سفارش:", error.message);
+      throw error;
+    }
+
+    return data;
+  }
+
+  // در دسترس قرار دادن توابع برای اتصال به امکانات قبلی
+  window.HeloServer = {
+    getProducts: getServerProducts,
+    saveProduct: saveServerProduct,
+    saveOrder: saveServerOrder
+  };
+
+  console.log("اتصال اولیه بافتنی هلو آماده است.");
+})();
+</script>
+<script>
+(() => {
+  // صبر می‌کنیم اتصال پیام اول آماده شود.
+  function waitForHeloServer() {
+    if (!window.HeloServer) {
+      console.warn("ابتدا کد پیام اول را بررسی کن.");
+      return;
+    }
+
+    console.log("توابع سرور آماده‌اند.");
+  }
+
+  waitForHeloServer();
+
+  // استفاده از این تابع برای دریافت محصولات
+  window.loadHeloProducts = async function () {
+    try {
+      const products = await window.HeloServer.getProducts();
+      console.log("محصولات سرور:", products);
+      return products;
+    } catch (error) {
+      alert("دریافت محصولات ناموفق بود. اتصال و مجوزهای سرور را بررسی کن.");
+      return [];
+    }
+  };
+
+  // استفاده از این تابع برای ثبت سفارش
+  window.submitHeloOrder = async function (order) {
+    try {
+      const savedOrder = await window.HeloServer.saveOrder(order);
+      alert("سفارش روی سرور ثبت شد.");
+      return savedOrder;
+    } catch (error) {
+      alert("سفارش ثبت نشد. لطفاً دوباره تلاش کن.");
+      return null;
+    }
+  };
+})();
+</script>
 </body>
 </html>
