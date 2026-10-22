@@ -92,6 +92,98 @@ body.dark-mode .field,body.dark-mode .search{background:#263238;color:white;bord
 body.dark-mode .cart-item,body.dark-mode .invoice-line,body.dark-mode .summary-total,body.dark-mode .rating-box,body.dark-mode .comment-box,body.dark-mode .admin-product{background:#263b4d;color:#edf6ff}
 @media(max-width:800px){.products{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{grid-template-columns:1fr}.hero-art{display:none}}
 @media(max-width:470px){.container{padding:0 10px}.products{gap:9px}.card{padding:9px;border-radius:15px}.product-image{height:145px}.card h3{font-size:14px}.price{font-size:15px}.card-actions .btn{font-size:12px;padding:9px 7px}.nav-btn{font-size:12px;padding:9px}.modal-content{padding:16px;margin:15px auto}.admin-grid{grid-template-columns:1fr}}
+
+/* === بازطراحی کلاسیک فروشگاه بافتنی هلو === */
+:root{
+ --blue:#7b342d;--deep:#43231f;--navy:#241b18;--pale:#f4ecdf;--ink:#352821;
+ --paper:#fffaf2;--muted:#817367;--line:#d9c6a8;--shadow:0 12px 30px #3b24151a;
+}
+body{
+ font-family:Georgia,"Times New Roman",Tahoma,serif;
+ color:var(--ink);
+ background:#eee4d4;
+ background-image:radial-gradient(#b89b7440 .7px,transparent .7px);
+ background-size:7px 7px;
+}
+header{
+ background:linear-gradient(135deg,#38231e,#684238 58%,#38231e);
+ color:#f8edda;padding:30px 14px 24px;
+ border-bottom:3px solid #b99a62;
+ box-shadow:0 7px 22px #29171130;
+}
+header h1{font-family:Georgia,"Times New Roman",Tahoma,serif;letter-spacing:.3px}
+header p{color:#e5d2b5}
+.nav{gap:10px}
+.nav-btn,.btn{
+ border-radius:3px;
+ background:linear-gradient(135deg,#88463a,#5d2d27);
+ color:#fff8eb;border:1px solid #a77e57;
+ box-shadow:0 3px 8px #2a17121a;
+ transition:background .18s,transform .18s;
+}
+.nav-btn{background:#ffffff0d;border:1px solid #c7aa7c;color:#f8edda}
+.nav-btn:hover,.btn:hover{background:#9b5b43;transform:translateY(-1px);opacity:1}
+.container{max-width:1220px;margin:30px auto}
+.hero{
+ background:linear-gradient(120deg,#fffaf2,#eee0c9);
+ border:1px solid #d6c09a;border-radius:4px;
+ box-shadow:0 8px 24px #3b24151a;padding:clamp(22px,4vw,42px);
+}
+.hero h2{color:#63342a;font-family:Georgia,"Times New Roman",Tahoma,serif}
+.hero p{color:#756052}
+.pill{background:#e5d3b2;color:#5e382b;border:1px solid #d1b887;border-radius:2px;letter-spacing:.2px}
+.tools{background:#fffaf2;border:1px solid #dfceb1;border-radius:4px;box-shadow:0 6px 18px #3b241512}
+.search{border:1px solid #cbb693;border-radius:3px;background:#fffdf8;color:#352821}
+.search:focus,.field:focus{border-color:#986746;box-shadow:0 0 0 2px #b99a6229}
+.cat{background:#eee2ce;color:#69483a;border:1px solid #ddc9a8;border-radius:3px}
+.cat.active,.cat:hover{background:#6a382e;color:#fff8eb}
+.cat.utility{background:#e6e1ce;color:#555333}
+.cat.dark{background:#302622;color:#f7e9d2}
+.section-head{color:#4c2e25;border-bottom:1px solid #c9b28e;padding:0 0 10px}
+.section-head span{color:#806b57}
+.card{background:#fffaf2;border:1px solid #dfceb1;border-radius:4px;padding:14px;box-shadow:0 6px 17px #3b241512}
+.card:hover{transform:translateY(-3px);box-shadow:0 12px 24px #3b241522}
+.product-image{border-radius:2px;background:#eee2ce}
+.badge{background:#a77b42;color:#fffaf2;border-radius:2px}
+.heart{border:1px solid #e4d3b8;border-radius:2px}
+.card h3{color:#6b382d}
+.price{color:#8a5632}
+.btn.secondary{background:#eee2ce;color:#59372b;border:1px solid #ddc9a8;box-shadow:none}
+.btn.danger{background:#8b3430}
+.btn.green{background:#536344;border-color:#71805d}
+.empty{background:#fffaf2;border:1px solid #dfceb1;border-radius:4px}
+.modal{background:#211713b8;backdrop-filter:blur(3px)}
+.modal-content{background:#fffaf2;border:1px solid #c7aa7c;border-radius:4px;box-shadow:0 20px 55px #160c0980}
+.modal-content h2,.modal-content h3{color:#6b382d}
+.close{color:#7b342d}
+.field{background:#fffdf8;border:1px solid #d8c6a8;border-radius:3px;color:#352821}
+.thumb{border-radius:2px}
+.thumb.selected{border-color:#8b5940}
+.cart-item,.invoice-line{background:#f0e5d2;border:1px solid #e0ceb0;border-radius:3px}
+.qty-btn{background:#7b342d;border-radius:2px}
+.remove-btn{background:#8b3430;border-radius:2px}
+.summary-total{background:#eee0c9;border:1px solid #dcc5a0;border-radius:3px;color:#60372b}
+.rating-box,.comment-box{background:#f2e8d8;border:1px solid #e1cfb3;border-radius:3px}
+.comment-name{color:#6b382d}
+.star.selected{color:#a77b42}
+.admin-product{border:1px solid #ddc9a8;border-radius:3px;background:#fffdf8}
+.notice{background:#f6edd8;border:1px solid #d9bd83;border-radius:3px}
+.invoice-area{border:2px dashed #a77b42;border-radius:3px}
+.footer{background:#2b1d19;color:#e9d8bd;border-top:3px solid #b99a62}
+body.dark-mode{--paper:#2d2520;--ink:#f3e7d4;--muted:#c8b7a0;--line:#665143;background:#1f1916;color:#f3e7d4}
+body.dark-mode .hero,body.dark-mode .tools,body.dark-mode .card,body.dark-mode .modal-content{background:#2d2520;color:#f3e7d4;border-color:#665143}
+body.dark-mode .hero p{color:#d7c5ac}
+body.dark-mode .card h3,body.dark-mode .modal-content h2,body.dark-mode .modal-content h3{color:#d7b77f}
+body.dark-mode .cat{background:#43352c;color:#f3e7d4;border-color:#665143}
+body.dark-mode .cat.active{background:#7b342d;color:white}
+body.dark-mode .field,body.dark-mode .search{background:#211b18;color:white;border-color:#665143}
+body.dark-mode .cart-item,body.dark-mode .invoice-line,body.dark-mode .summary-total,body.dark-mode .rating-box,body.dark-mode .comment-box,body.dark-mode .admin-product{background:#43352c;color:#f3e7d4;border-color:#665143}
+@media(max-width:470px){
+ header{padding:23px 10px 18px}
+ .container{margin:18px auto}
+ .card{padding:8px}
+}
+
 </style>
 </head>
 <body>
