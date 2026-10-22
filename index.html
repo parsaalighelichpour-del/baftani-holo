@@ -397,7 +397,7 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
   async function requestAdminLogin(email) {
     const { error } = await db.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: window.location.origin + window.location.pathname }
+      options: { shouldCreateUser: false, emailRedirectTo: window.location.origin + window.location.pathname }
     });
     if (error) { console.error("ارسال لینک ورود ناموفق بود:", error.message); alert("ارسال لینک ورود ناموفق بود: " + error.message); return false; }
     return true;
