@@ -292,6 +292,59 @@ body.dark-mode .cart-item,body.dark-mode .invoice-line,body.dark-mode .summary-t
 }
 
 </style>
+
+<style id="helo-luxury-polish">
+/* Elegant finishing touches for Baftani Helo */
+:root{--helo-ink:#39291f;--helo-coffee:#70472f;--helo-gold:#b68a45;--helo-cream:#fffaf0;--helo-line:rgba(151,111,57,.22)}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{background-color:#fcf8ef;background-image:radial-gradient(ellipse at 8% 4%,rgba(210,177,115,.13),transparent 30%),radial-gradient(ellipse at 92% 22%,rgba(133,91,58,.07),transparent 27%)}
+::selection{background:#d9bd83;color:#332217}
+.container{width:min(1160px,calc(100% - 34px))}
+.nav{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 8px 28px rgba(69,45,25,.07)}
+.nav-btn{transition:transform .2s ease,background .2s ease,box-shadow .2s ease}
+.nav-btn:hover{transform:translateY(-2px)}
+.hero{position:relative;isolation:isolate;overflow:hidden;border:1px solid rgba(182,138,69,.32);box-shadow:0 22px 60px rgba(77,49,26,.09)}
+.hero:before{content:"";position:absolute;z-index:-1;inset:12px;border:1px solid rgba(182,138,69,.25);border-radius:inherit;pointer-events:none}
+.hero:after{content:"✦";position:absolute;right:26px;top:20px;color:rgba(182,138,69,.45);font-size:24px}
+.hero h1,.hero h2{letter-spacing:-.035em;text-wrap:balance}
+.pill{box-shadow:0 4px 12px rgba(92,62,31,.05)}
+.section-head{position:relative;margin-bottom:22px}
+.section-head h2,.section-head h3{letter-spacing:-.025em;text-wrap:balance}
+.section-head:after{content:"✧　❦　✧";display:block;margin-top:9px;color:var(--helo-gold);font-size:14px;letter-spacing:3px;opacity:.85}
+.products{align-items:stretch}
+.card{position:relative;overflow:hidden;border:1px solid var(--helo-line)!important;border-radius:20px!important;background:linear-gradient(155deg,rgba(255,255,255,.98),rgba(255,250,240,.98))!important;box-shadow:0 8px 24px rgba(70,46,28,.055);transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
+.card:hover{transform:translateY(-5px);border-color:rgba(182,138,69,.55)!important;box-shadow:0 18px 36px rgba(70,46,28,.12)}
+.card .image-wrap{overflow:hidden;background:linear-gradient(135deg,#f8eedc,#eee0c8)}
+.card .image-wrap img,.product-image img{transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+.card:hover .image-wrap img{transform:scale(1.045)}
+.card .badge{border:1px solid rgba(182,138,69,.25);box-shadow:0 3px 10px rgba(54,34,18,.06)}
+.card .price,.price{font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.card-actions{gap:9px}
+.btn{box-shadow:0 5px 14px rgba(83,52,29,.09);transition:transform .18s ease,box-shadow .18s ease,filter .18s ease}
+.btn:hover{transform:translateY(-2px);filter:saturate(1.05);box-shadow:0 9px 20px rgba(83,52,29,.15)}
+.btn:active,.nav-btn:active{transform:scale(.98)}
+button,input,select,textarea{font:inherit}
+input,select,textarea,.field{transition:border-color .2s ease,box-shadow .2s ease}
+input:focus,select:focus,textarea:focus,.field:focus{outline:none;border-color:#b68a45!important;box-shadow:0 0 0 3px rgba(182,138,69,.15)!important}
+.modal{backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+.modal-content{border:1px solid rgba(182,138,69,.35)!important;border-radius:22px!important;box-shadow:0 28px 80px rgba(35,23,14,.25)!important}
+.close{transition:transform .2s ease,background .2s ease}
+.close:hover{transform:rotate(90deg)}
+.cart-item,.summary-line,.invoice-line,.admin-product{border-color:var(--helo-line)!important}
+.footer{position:relative;margin-top:45px;border-top:1px solid var(--helo-line)}
+.footer:before{content:"✧  با عشق بافته شده  ✧";display:block;padding-top:20px;color:var(--helo-gold);font-size:12px;letter-spacing:.08em}
+.heart{transition:transform .2s ease}
+.heart:hover{transform:scale(1.13)}
+:focus-visible{outline:2px solid #b68a45;outline-offset:3px}
+@media(min-width:801px){.products{gap:22px}.hero{padding:clamp(28px,4vw,52px)}}
+@media(max-width:800px){.container{width:min(100% - 24px,680px)}.hero:before{inset:8px}.card{border-radius:16px!important}.section-head:after{margin-top:6px}}
+@media(max-width:470px){.container{width:calc(100% - 20px)}.hero{border-radius:20px}.hero:before{inset:7px}.hero:after{right:15px;top:12px;font-size:18px}.card{border-radius:14px!important}.card-actions .btn{min-height:38px}.modal-content{border-radius:18px!important}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
+body.dark{background-color:#19140f;background-image:radial-gradient(ellipse at 8% 4%,rgba(210,177,115,.07),transparent 30%),radial-gradient(ellipse at 92% 22%,rgba(133,91,58,.05),transparent 27%)}
+body.dark .card{background:linear-gradient(155deg,#292019,#211a14)!important;border-color:rgba(182,138,69,.22)!important}
+body.dark .card:hover{border-color:rgba(210,177,115,.55)!important}
+</style>
+
 </head>
 <body>
 <header>
