@@ -1072,8 +1072,15 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
   async function refreshVisibleProducts() {
     try {
       const rows = await getServerProducts();
-      products = rows;
-      saveJSON('heloProductsV2', products);
+      // An empty server response must not erase the existing/default product list.
+      // Only replace the current list when the database actually contains products.
+      if (Array.isArray(rows) && rows.length > 0) {
+        products = rows;
+        saveJSON('heloProductsV2', products);
+      } else if (!Array.isArray(products) || products.length === 0) {
+        products = defaults.map(p => ({...p}));
+        saveJSON('heloProductsV2', products);
+      }
       renderProducts();
       if (adminUnlocked) renderAdminProducts();
       return true;
