@@ -675,6 +675,63 @@ header{background:linear-gradient(125deg,#052b67 0%,#0876df 48%,#073d91 100%)}
 @media(max-width:600px){.vip-welcome-banner{margin:14px 8px 8px;padding:12px 8px;gap:8px;border-radius:17px}.vip-welcome-banner strong{width:100%;text-align:center}.vip-role-chip{font-size:11px;padding:7px 9px}.vip-welcome-sparkles{display:none}}
 @media(prefers-reduced-motion:reduce){.vip-welcome-banner{animation:none}}
 </style>
+
+<style id="helo-admin-blue-glass-fix">
+/* پنل مدیریت آبی شیشه‌ای؛ فقط ظاهر پنل، بدون تغییر بقیه سایت */
+#adminLoginModal,#adminModal{
+  background:radial-gradient(ellipse at 50% 0%,rgba(37,139,255,.36),rgba(2,10,27,.88) 72%)!important;
+  backdrop-filter:blur(15px)!important;
+}
+#adminLoginModal .modal-content,#adminModal .modal-content{
+  background:linear-gradient(145deg,rgba(8,31,61,.98),rgba(9,55,96,.97) 55%,rgba(4,20,43,.99))!important;
+  color:#edf7ff!important;border:1px solid rgba(133,202,255,.8)!important;
+  box-shadow:0 0 0 1px rgba(75,167,255,.16),0 24px 75px rgba(0,0,0,.5),0 0 36px rgba(25,139,255,.2)!important;
+}
+#adminLoginModal .modal-content:before,#adminModal .modal-content:before{
+  z-index:0!important;pointer-events:none!important;
+  background:linear-gradient(90deg,#0b5e9e,#b5e7ff,#2489e8,#d7f4ff,#0b5e9e)!important;
+}
+#adminLoginModal .modal-content:after,#adminModal .modal-content:after{color:#8bd1ff!important;border-color:#6ebcff35!important;pointer-events:none!important}
+#adminLoginModal .modal-content h2,#adminModal .modal-content h2{color:#bfe8ff!important;text-shadow:0 2px 22px #42a5ff35!important}
+#adminLoginModal .modal-content>p,#adminModal .vip-subtitle{color:#c4ddf5!important}
+#adminModal .field,#adminModal input,#adminModal select,#adminModal textarea,
+#adminLoginModal .field{
+  background:rgba(2,15,34,.72)!important;color:#f3f9ff!important;
+  border:1px solid #477da9!important;border-radius:12px!important;
+}
+#adminModal select option{background:#0b2d50!important;color:#fff!important}
+#adminLoginModal .btn,#adminModal .btn{
+  min-height:44px!important;border:1px solid #7ecaff!important;border-radius:13px!important;
+  background:linear-gradient(135deg,#147fc5,#07518d 60%,#063765)!important;
+  color:#fff!important;font-weight:800!important;
+  box-shadow:0 5px 17px #007bd42b,inset 0 1px #ffffff25!important;
+}
+#adminModal .btn:hover,#adminLoginModal .btn:hover{filter:brightness(1.15)!important;transform:translateY(-1px)!important}
+#adminModal .btn.secondary{background:linear-gradient(135deg,#16466e,#0b2948)!important;color:#e7f5ff!important;border-color:#4e91c7!important}
+#adminModal .btn.danger{background:linear-gradient(135deg,#812f42,#501a2b)!important;color:#fff!important;border-color:#d06c85!important}
+#adminModal .tools-row{background:rgba(4,25,48,.72)!important;border:1px solid #4389bd77!important;border-radius:16px!important}
+#adminModal h3{color:#a9dfff!important;border-bottom-color:#5ea9dc77!important}
+#adminModal .admin-product,#adminModal .cart-item,#adminModal .summary-line{
+  background:linear-gradient(140deg,rgba(15,57,91,.96),rgba(5,27,51,.98))!important;
+  border:1px solid #3d75a0!important;color:#eef8ff!important;border-radius:14px!important;
+}
+#adminModal .muted,#adminModal small{color:#bdd5eb!important}
+#adminModal .close,#adminLoginModal .close{color:#e4f5ff!important;background:#0e4772!important;border:1px solid #72bfff!important}
+#adminModal .modal-content>*{position:relative;z-index:1}
+#adminModal .modal-content:after{position:relative;z-index:1}
+#adminModal button,#adminModal input,#adminModal select,#adminModal textarea{pointer-events:auto!important;touch-action:manipulation}
+#heloAddProductButton{width:100%;margin:12px 0 18px;font-size:16px!important}
+#heloAddProductButton:disabled{opacity:.72;cursor:progress!important;transform:none!important}
+#adminModal .tools-row button{flex:1;min-width:105px}
+@media(max-width:600px){
+ #adminModal .modal-content,#adminLoginModal .modal-content{max-height:88dvh!important;overflow-y:auto!important;overscroll-behavior:contain!important}
+ #adminModal .tools-row{display:flex;flex-wrap:wrap}
+ #adminModal .tools-row button{min-width:calc(50% - 8px);flex:1}
+ #adminModal .admin-grid{grid-template-columns:minmax(0,1fr)!important}
+ #adminModal .field,#adminModal input,#adminModal select,#adminModal textarea{max-width:100%;min-width:0}
+}
+@media(prefers-reduced-motion:reduce){#adminModal *,#adminLoginModal *{animation:none!important;transition:none!important}}
+</style>
 </head>
 <body>
 <header>
