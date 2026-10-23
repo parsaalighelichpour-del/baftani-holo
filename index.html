@@ -662,6 +662,14 @@ header{background:linear-gradient(125deg,#052b67 0%,#0876df 48%,#073d91 100%)}
 @media(max-width:600px){.vip-welcome-banner{margin:14px 8px 8px;padding:12px 8px;gap:8px;border-radius:17px}.vip-welcome-banner strong{width:100%;text-align:center}.vip-role-chip{font-size:11px;padding:7px 9px}.vip-welcome-sparkles{display:none}}
 @media(prefers-reduced-motion:reduce){.vip-welcome-banner{animation:none}}
 </style>
+<style>
+/* صفحهٔ جداگانهٔ مدیریت محصولات */
+#adminProductsPage.modal{z-index:1101;padding:8px;overflow-y:auto}
+#adminProductsPage .admin-products-page-content{width:min(100%,1000px);max-width:1000px;margin:8px auto;max-height:calc(100vh - 16px);max-height:calc(100dvh - 16px);overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:22px}
+#adminProductsPage #adminProductsTab{display:block!important}
+#adminProductsPage .admin-products-page-content h2{padding-left:38px}
+@media(max-width:600px){#adminProductsPage.modal{padding:0}#adminProductsPage .admin-products-page-content{width:100%;min-height:100dvh;max-height:100dvh;margin:0;border-radius:0;padding:18px 12px 28px}#adminProductsPage .admin-grid{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
 <header>
@@ -763,6 +771,7 @@ header{background:linear-gradient(125deg,#052b67 0%,#0876df 48%,#073d91 100%)}
 <div class="modal" id="adminModal"><div class="modal-content">
 <button class="close" onclick="adminLogout()">×</button><h2>پنل مدیریت هلو</h2><p>مدیریت محصولات و سفارش‌ها</p>
 <div class="tools-row"><button class="btn" onclick="showAdminTab('products')">مدیریت محصولات</button><button class="btn secondary" onclick="showAdminTab('orders')">سفارش‌ها</button><button class="btn danger" onclick="adminLogout()">خروج</button></div>
+<div id="adminProductsTabPlaceholder"></div>
 <section id="adminProductsTab">
 <h3>➕ افزودن محصول</h3>
 <div class="admin-grid">
@@ -782,6 +791,16 @@ header{background:linear-gradient(125deg,#052b67 0%,#0876df 48%,#073d91 100%)}
 </section>
 <section id="adminOrdersTab" class="hide"><h3>📦 سفارش‌های ثبت‌شده روی سرور</h3><div class="notice">سفارش‌ها از پایگاه داده مشترک خوانده می‌شوند؛ تغییر وضعیت اینجا برای پنل مدیریت روی دستگاه‌های دیگر هم ذخیره می‌شود.</div><button class="btn secondary small" onclick="renderAdminOrders()">🔄 تازه‌سازی سفارش‌ها</button><div id="adminOrderList"></div></section>
 </div></div>
+
+<div class="modal" id="adminProductsPage" aria-label="مدیریت محصولات">
+  <div class="modal-content admin-products-page-content">
+    <button class="close" onclick="closeAdminProductsPage()" aria-label="بازگشت">×</button>
+    <h2>🧶 مدیریت محصولات هلو</h2>
+    <p class="muted">این صفحه مخصوص افزودن، ویرایش و مدیریت محصولات است.</p>
+    <div class="tools-row"><button class="btn secondary" onclick="closeAdminProductsPage()">↩ بازگشت به پنل مدیریت</button><button class="btn danger" onclick="adminLogout()">خروج از حساب</button></div>
+    <div id="adminProductsPageBody"></div>
+  </div>
+</div>
 
 "<form id="orderForm" action="https://formsubmit.co/Parsaalighlichpour@gmail.com" method="POST" target="_blank" class="hide">
 <input type="hidden" name="_subject" value="سفارش جدید فروشگاه بافتنی هلو">
@@ -958,8 +977,8 @@ function rateProduct(id,n){const key='heloRatings_'+id,ratings=getRatings(id);ra
 function toggleDarkMode(){document.body.classList.toggle('dark-mode');localStorage.setItem('heloDark',document.body.classList.contains('dark-mode')?'1':'0')}
 function initTheme(){if(localStorage.getItem('heloDark')==='1')document.body.classList.add('dark-mode')}
 function closeModal(id){$(id).style.display='none'}
-window.addEventListener('click',e=>{if(e.target.classList.contains('modal'))e.target.style.display='none'});
-window.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal').forEach(m=>m.style.display='none')});
+window.addEventListener('click',e=>{if(e.target.classList.contains('modal')){if(e.target.id==='adminProductsPage'){closeAdminProductsPage();return}e.target.style.display='none'}});
+window.addEventListener('keydown',e=>{if(e.key==='Escape'){if($('adminProductsPage')&&$('adminProductsPage').style.display==='block'){closeAdminProductsPage();return}document.querySelectorAll('.modal').forEach(m=>m.style.display='none')}});
 
 async function openAdminLogin(){if(adminUnlocked){$('adminModal').style.display='block';await showAdminTab('products');return}$('adminEmail').value='parsaalighlichpour@gmail.com';$('adminLoginModal').style.display='block'}
 function updateVipWelcome(isVip){const banner=$('vipWelcomeBanner');if(!banner)return;const user=readJSON('heloUser',null);const normalizeName=v=>String(v||'').replace(/[ي]/g,'ی').replace(/[ك]/g,'ک').replace(/\s+/g,' ').trim();const ownerNameMatches=!!user&&normalizeName(user.name)==='پارسا قلیچ پور';const showVip=!!isVip&&!!adminUnlocked&&ownerNameMatches;banner.style.display=showVip?'flex':'none';document.body.classList.toggle('helo-vip-active',showVip)}
@@ -972,8 +991,30 @@ async function adminLogin(){
  const result=await window.HeloServer.signInAdminPassword(email,password);
  if(result){$('adminPassword').value='';closeModal('adminLoginModal');if(adminUnlocked){$('adminModal').style.display='block';await showAdminTab('products')}else{alert('حساب شما اجازه مدیریت ندارد.')}} 
 }
-async function adminLogout(){adminUnlocked=false;updateVipWelcome(false);closeModal('adminModal');if(window.HeloServer)await window.HeloServer.signOut();alert('از پنل مدیریت خارج شدی.')}
-async function showAdminTab(tab){if(!adminUnlocked){alert('اول وارد پنل مدیریت شو.');return}$('adminProductsTab').classList.toggle('hide',tab!=='products');$('adminOrdersTab').classList.toggle('hide',tab!=='orders');if(tab==='products'){const list=$('adminProductList');if(list)list.innerHTML='<div class="notice">در حال دریافت محصولات...</div>';try{if(window.HeloServer&&typeof window.HeloServer.getProducts==='function'){const rows=await window.HeloServer.getProducts();if(Array.isArray(rows)&&rows.length){products=rows;saveJSON('heloProductsV2',products)}else if(Array.isArray(rows)&&!rows.length&&products.length){console.warn('سرور فهرست خالی برگرداند؛ فهرست فعلی حفظ شد تا محصولات بی‌دلیل ناپدید نشوند.')}}renderAdminProducts();if(list&&!products.length)list.innerHTML='<div class="empty">محصولی پیدا نشد. اگر قبلاً محصول داشتی، خطای سرور را بررسی می‌کنیم.</div>'}catch(e){console.error('دریافت محصولات در پنل ناموفق بود:',e);if(list)list.innerHTML='<div class="notice">دریافت محصولات ناموفق بود: '+esc(e&&e.message?e.message:'خطای نامشخص')+'</div>'}}else if(tab==='orders'){try{await renderAdminOrders()}catch(e){console.error(e);$('adminOrderList').innerHTML='<div class="notice">دریافت سفارش‌ها ناموفق بود.</div>'}}}
+function openAdminProductsPage(){
+ if(!adminUnlocked){alert('اول وارد پنل مدیریت شو.');return}
+ const section=$('adminProductsTab'), body=$('adminProductsPageBody');
+ if(!section||!body)return;
+ if(section.parentElement!==body)body.appendChild(section);
+ section.classList.remove('hide');
+ $('adminModal').style.display='none';
+ $('adminProductsPage').style.display='block';
+}
+function closeAdminProductsPage(){
+ const section=$('adminProductsTab'), placeholder=$('adminProductsTabPlaceholder');
+ if(section&&placeholder&&placeholder.parentNode)placeholder.parentNode.insertBefore(section,placeholder.nextSibling);
+ $('adminProductsPage').style.display='none';
+ if(adminUnlocked)$('adminModal').style.display='block';
+}
+async function adminLogout(){
+ adminUnlocked=false;updateVipWelcome(false);
+ const section=$('adminProductsTab'), placeholder=$('adminProductsTabPlaceholder');
+ if(section&&placeholder&&placeholder.parentNode)placeholder.parentNode.insertBefore(section,placeholder.nextSibling);
+ closeModal('adminProductsPage');closeModal('adminModal');
+ if(window.HeloServer)await window.HeloServer.signOut();
+ alert('از پنل مدیریت خارج شدی.')
+}
+async function showAdminTab(tab){if(!adminUnlocked){alert('اول وارد پنل مدیریت شو.');return}if(tab==='products')openAdminProductsPage();$('adminProductsTab').classList.toggle('hide',tab!=='products');$('adminOrdersTab').classList.toggle('hide',tab!=='orders');if(tab==='products'){const list=$('adminProductList');if(list)list.innerHTML='<div class="notice">در حال دریافت محصولات...</div>';try{if(window.HeloServer&&typeof window.HeloServer.getProducts==='function'){const rows=await window.HeloServer.getProducts();if(Array.isArray(rows)&&rows.length){products=rows;saveJSON('heloProductsV2',products)}else if(Array.isArray(rows)&&!rows.length&&products.length){console.warn('سرور فهرست خالی برگرداند؛ فهرست فعلی حفظ شد تا محصولات بی‌دلیل ناپدید نشوند.')}}renderAdminProducts();if(list&&!products.length)list.innerHTML='<div class="empty">محصولی پیدا نشد. اگر قبلاً محصول داشتی، خطای سرور را بررسی می‌کنیم.</div>'}catch(e){console.error('دریافت محصولات در پنل ناموفق بود:',e);if(list)list.innerHTML='<div class="notice">دریافت محصولات ناموفق بود: '+esc(e&&e.message?e.message:'خطای نامشخص')+'</div>'}}else if(tab==='orders'){try{await renderAdminOrders()}catch(e){console.error(e);$('adminOrderList').innerHTML='<div class="notice">دریافت سفارش‌ها ناموفق بود.</div>'}}}
 function renderAdminProducts(){if(!adminUnlocked)return;$('adminProductList').innerHTML=products.map(p=>`<div class="admin-product"><strong>${esc(p.name)}</strong><div class="muted">${esc(p.category)} · ${formatPrice(p.price)} تومان · ${p.active===false?'غیرفعال':'فعال'} · ${p.stock_enabled?'موجودی: '+formatPrice(p.stock):'کنترل موجودی خاموش'}</div><div class="muted">📸 عکس‌های ثبت‌شده: ${(Array.isArray(p.images)?p.images.filter(url=>Boolean(url)&&!String(url).startsWith('data:image/svg+xml')):[]).length}</div><div class="tools-row"><button class="btn small" onclick="editAdminProduct('${esc(p.id)}')">✏️ ویرایش</button><button class="btn small secondary" onclick="setProductStock('${esc(p.id)}')">📦 تنظیم موجودی</button><button class="btn small secondary" onclick="toggleAdminProduct('${esc(p.id)}')">${p.active===false?'فعال‌کردن':'غیرفعال‌کردن'}</button></div><div class="admin-grid"><input class="field" type="file" accept="image/*" multiple id="imageFile-${esc(p.id)}"><button class="btn small" onclick="uploadProductImage('${esc(p.id)}')">📸 افزودن عکس‌ها</button></div><small class="muted">انتخاب چند عکس هم‌زمان؛ حداکثر ۶ عکس برای هر محصول، هر عکس حداکثر ۵ مگابایت.</small></div>`).join('')}
 async function addAdminProduct(){if(!adminUnlocked)return;const name=$('newName').value.trim(),price=Number($('newPrice').value),category=$('newCategory').value,badge=$('newBadge').value.trim()||'🧶 دست‌ساز',description=$('newDescription').value.trim(),stock=Math.max(0,Math.floor(Number($('newStock').value)||0)),stock_enabled=$('newStockEnabled').checked,files=Array.from($('newImage').files||[]);if(!name||!Number.isFinite(price)||price<0){alert('نام و قیمت معتبر وارد کن.');return}if(files.length>6){alert('برای هر محصول حداکثر ۶ عکس انتخاب کن.');return}if(files.some(file=>file.size>5*1024*1024||!file.type.startsWith('image/'))){alert('هر عکس باید تصویر و حداکثر ۵ مگابایت باشد.');return}const id=Math.max(0,...products.map(p=>Number(p.id)||0))+1;const emoji='🧶';let images=[svgEmoji(emoji),svgEmoji(emoji+' 💙','#f3f9ff')];if(files.length){const uploaded=[];for(const file of files){const url=await uploadImageFile(file,id);if(!url){alert('بارگذاری یکی از عکس‌ها ناموفق بود؛ محصول ساخته نشد.');return}uploaded.push(url)}images=uploaded}const product={id,name,price,category,badge,description,emoji,active:true,images,stock,stock_enabled};const ok=await window.HeloServer.saveProduct(product);if(!ok){alert('ذخیره محصول در سرور ناموفق بود؛ دوباره تلاش کن.');return}products.push(product);saveJSON('heloProductsV2',products);if(window.refreshHeloProducts)await window.refreshHeloProducts();['newName','newPrice','newBadge','newDescription'].forEach(k=>$(k).value='');$('newImage').value='';$('newStock').value='1';$('newStockEnabled').checked=true;renderAdminProducts();renderProducts();alert('محصول با '+(files.length||'تصاویر پیش‌فرض')+' تصویر روی سرور ذخیره شد 💙')}
 async function uploadImageFile(file,id){if(!adminUnlocked||!file)return null;if(!file.type.startsWith('image/')||file.size>5*1024*1024){alert('عکس باید از نوع تصویر و حداکثر ۵ مگابایت باشد.');return null}const ext=(file.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';const path=String(id)+'/'+Date.now()+'-'+Math.random().toString(36).slice(2,8)+'.'+ext;const result=await window.HeloServer.uploadImage(file,path);if(!result){alert('بارگذاری عکس ناموفق بود. دسترسی مدیر و اتصال اینترنت را بررسی کن.');return null}return result}
