@@ -953,6 +953,45 @@ async function editAdminProduct(id){if(!adminUnlocked)return;const p=products.fi
 async function toggleAdminProduct(id){if(!adminUnlocked)return;const p=products.find(x=>String(x.id)===String(id));if(!p)return;const updated={...p,active:p.active===false};const ok=await window.HeloServer.saveProduct(updated);if(!ok){alert('ذخیره در پایگاه داده ناموفق بود؛ وضعیت محصول تغییر نکرد.');return}Object.assign(p,updated);saveJSON('heloProductsV2',products);if(window.refreshHeloProducts)await window.refreshHeloProducts();renderAdminProducts();renderProducts()}
 async function renderAdminOrders(){if(!adminUnlocked)return;const orders=await window.HeloServer.getOrders();const labels={new:'جدید',preparing:'در حال آماده‌سازی',shipped:'ارسال‌شده',completed:'تکمیل‌شده',cancelled:'لغوشده'};$('adminOrderList').innerHTML=orders.length?orders.map(o=>`<div class="admin-product"><strong>${esc(o.order_code||o.id)}</strong><p>👤 ${esc(o.customer_name||o.name)} · 📱 ${esc(o.phone)}</p><p>تاریخ: ${esc(o.created_at||o.date||'')}</p><p>🧶 محصولات: ${(o.items||[]).map(it=>{const p=products.find(x=>String(x.id)===String(it.id));return esc(it.name||(p&&p.name)||it.id)+' × '+formatPrice(it.qty)}).join('، ')||'جزئیات محصول ثبت نشده'}</p><strong>${formatPrice(o.total)} تومان</strong><label class="field-label">وضعیت سفارش</label><select class="field" onchange="updateOrderStatus('${esc(o.id)}',this.value)">${Object.entries(labels).map(([v,l])=>`<option value="${v}" ${(o.status||'new')===v?'selected':''}>${l}</option>`).join('')}</select></div>`).join(''):'<div class="empty">هنوز سفارشی در سرور ثبت نشده است.</div>'}
 async function updateOrderStatus(id,status){if(!adminUnlocked)return;const labels={new:'جدید',preparing:'در حال آماده‌سازی',shipped:'ارسال‌شده',completed:'تکمیل‌شده',cancelled:'لغوشده'};const ok=await window.HeloServer.updateOrderStatus(id,status);if(!ok){alert('ذخیره وضعیت ناموفق بود؛ دسترسی مدیر و اتصال اینترنت را بررسی کن.');await renderAdminOrders();return}alert('وضعیت سفارش ذخیره شد: '+(labels[status]||status));await renderAdminOrders()}
+// Make admin actions explicitly available to inline buttons and surface unexpected failures.
+window.showAdminTab = showAdminTab;
+window.renderAdminProducts = renderAdminProducts;
+window.addAdminProduct = async function(){
+  try {
+    if (!window.HeloServer) { alert('اتصال سرور هنوز آماده نیست. صفحه را یک‌بار تازه‌سازی کن.'); return; }
+    if (!adminUnlocked) { alert('نشست مدیریت منقضی شده؛ از پنل خارج شو و دوباره وارد شو.'); return; }
+    await addAdminProduct();
+  } catch (error) {
+    console.error('افزودن محصول ناموفق بود:', error);
+    alert('افزودن محصول انجام نشد: ' + (error?.message || 'خطای ناشناخته') + '\nاتصال اینترنت و دسترسی مدیر را بررسی کن.');
+  }
+};
+window.editAdminProduct = async function(id){
+  try { await editAdminProduct(id); }
+  catch (error) { console.error('ویرایش محصول ناموفق بود:', error); alert('ویرایش محصول انجام نشد: ' + (error?.message || 'خطای ناشناخته')); }
+};
+window.setProductStock = async function(id){
+  try { await setProductStock(id); }
+  catch (error) { console.error('تغییر موجودی ناموفق بود:', error); alert('تغییر موجودی انجام نشد: ' + (error?.message || 'خطای ناشناخته')); }
+};
+window.toggleAdminProduct = async function(id){
+  try { await toggleAdminProduct(id); }
+  catch (error) { console.error('تغییر وضعیت محصول ناموفق بود:', error); alert('تغییر وضعیت انجام نشد: ' + (error?.message || 'خطای ناشناخته')); }
+};
+window.uploadProductImage = async function(id){
+  try { await uploadProductImage(id); }
+  catch (error) { console.error('بارگذاری عکس ناموفق بود:', error); alert('بارگذاری عکس انجام نشد: ' + (error?.message || 'خطای ناشناخته')); }
+};
+window.renderAdminOrders = async function(){
+  try {
+    if (!window.HeloServer) { alert('اتصال سرور آماده نیست. صفحه را تازه‌سازی کن.'); return; }
+    await renderAdminOrders();
+  } catch (error) { console.error('دریافت سفارش‌ها ناموفق بود:', error); alert('دریافت سفارش‌ها ناموفق بود: ' + (error?.message || 'خطای ناشناخته')); }
+};
+window.updateOrderStatus = async function(id,status){
+  try { await updateOrderStatus(id,status); }
+  catch (error) { console.error('تغییر وضعیت سفارش ناموفق بود:', error); alert('ذخیره وضعیت سفارش انجام نشد: ' + (error?.message || 'خطای ناشناخته')); }
+};
 renderProducts();updateCartCount();updateUserUI();initTheme();
 </script>
 <!-- اتصال به Supabase -->
