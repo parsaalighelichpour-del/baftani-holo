@@ -531,6 +531,26 @@ body.dark .empty,body.dark .notice{background:#112e4d;color:#d8ebff;border-color
 body.dark .btn.secondary,body.dark .qty-btn,body.dark .remove-btn{background:linear-gradient(130deg,#173e69,#102d50);color:#d8ebff;border-color:#315e8f}
 </style>
 
+
+<style id="helo-real-photo-upgrade">
+:root{--glass-line:rgba(145,197,255,.55);--glass-shadow:0 18px 48px rgba(0,30,82,.18)}
+header{background:linear-gradient(125deg,#052b67 0%,#0876df 48%,#073d91 100%)}
+.nav-btn{backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.hero{background:linear-gradient(125deg,rgba(255,255,255,.97),rgba(231,244,255,.92));border:1px solid var(--glass-line);box-shadow:var(--glass-shadow),inset 0 1px rgba(255,255,255,.9)}
+.hero-art{min-width:0;min-height:190px;padding:0;overflow:hidden;border-radius:22px;border:1px solid rgba(255,255,255,.85);background:linear-gradient(135deg,#e4f2ff,#b9dcff);box-shadow:0 14px 30px rgba(15,91,180,.16)}
+.hero-photo{display:block;width:100%;height:220px;object-fit:cover;border-radius:21px;filter:saturate(1.04);transition:transform .45s ease}
+.hero-art:hover .hero-photo{transform:scale(1.035)}
+.card .image-wrap{position:relative}
+.product-image{display:block;width:100%;object-fit:cover}
+.sample-photo-note{position:absolute;left:8px;bottom:8px;padding:5px 8px;border-radius:999px;background:rgba(4,35,78,.76);border:1px solid rgba(255,255,255,.48);color:#fff;font-size:10px;font-weight:700;backdrop-filter:blur(8px)}
+.card .badge{right:8px}
+.card{backdrop-filter:blur(8px)}
+.tools{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+@media(max-width:800px){.hero-art{min-height:150px}.hero-photo{height:170px}}
+@media(max-width:470px){.hero{grid-template-columns:minmax(0,1fr)}.hero-art{display:none}.products{gap:10px}.product-image{height:clamp(135px,38vw,175px)}.sample-photo-note{font-size:9px;padding:4px 6px}}
+@media(prefers-reduced-motion:reduce){.hero-photo{transition:none}}
+</style>
+
 </head>
 <body>
 <header>
@@ -553,7 +573,7 @@ body.dark .btn.secondary,body.dark .qty-btn,body.dark .remove-btn{background:lin
 <p>محصولات بافتنی خاص و دوست‌داشتنی را ببین، به علاقه‌مندی‌ها اضافه کن و با چند کلیک فاکتور خریدت را بساز.</p>
 <div style="margin-top:15px"><button class="btn" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">دیدن محصولات 🧶</button></div>
 </div>
-<div class="hero-art">🧶🧸💙</div>
+<div class="hero-art"><img class="hero-photo" src="https://images.pexels.com/photos/20269075/pexels-photo-20269075.jpeg?auto=compress&cs=tinysrgb&w=900" alt="گل‌های بافتنی دست‌ساز" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1700170447159-9d2d0da133a5?auto=format&fit=crop&w=900&q=80'"></div>
 </section>
 
 <section class="tools" id="shop">
@@ -665,6 +685,25 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 function readJSON(k,d){try{const v=JSON.parse(localStorage.getItem(k));return v??d}catch{return d}}
 function saveJSON(k,v){localStorage.setItem(k,JSON.stringify(v))}
 function svgEmoji(emoji,bg='#eaf5ff'){return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="100%" height="100%" rx="30" fill="${bg}"/><text x="50%" y="55%" text-anchor="middle" dominant-baseline="middle" font-size="150">${emoji}</text></svg>`)}
+const HELO_SAMPLE_PHOTOS = {
+  teddy: ['https://images.pexels.com/photos/11007818/pexels-photo-11007818.jpeg?auto=compress&cs=tinysrgb&w=900','https://images.pexels.com/photos/36619687/pexels-photo-36619687.jpeg?auto=compress&cs=tinysrgb&w=900'],
+  flowers: ['https://images.pexels.com/photos/20269075/pexels-photo-20269075.jpeg?auto=compress&cs=tinysrgb&w=900','https://images.unsplash.com/photo-1700170447159-9d2d0da133a5?auto=format&fit=crop&w=900&q=80'],
+  keychain: ['https://images.unsplash.com/photo-1753370474663-1b0ad622c5fc?auto=format&fit=crop&w=900&q=80','https://images.unsplash.com/photo-1753370241593-9cc8c17d7434?auto=format&fit=crop&w=900&q=80'],
+  bunny: ['https://images.unsplash.com/photo-1753370241593-9cc8c17d7434?auto=format&fit=crop&w=900&q=80','https://images.unsplash.com/photo-1753370474663-1b0ad622c5fc?auto=format&fit=crop&w=900&q=80'],
+  cat: ['https://images.pexels.com/photos/39972461/pexels-photo-39972461.jpeg?auto=compress&cs=tinysrgb&w=900','https://images.pexels.com/photos/38736390/pexels-photo-38736390.jpeg?auto=compress&cs=tinysrgb&w=900'],
+  turtle: ['https://images.pexels.com/photos/39972458/pexels-photo-39972458.jpeg?auto=compress&cs=tinysrgb&w=900','https://images.pexels.com/photos/39972462/pexels-photo-39972462.jpeg?auto=compress&cs=tinysrgb&w=900'],
+  basket: ['https://images.pexels.com/photos/38745722/pexels-photo-38745722.jpeg?auto=compress&cs=tinysrgb&w=900','https://images.pexels.com/photos/10585047/pexels-photo-10585047.jpeg?auto=compress&cs=tinysrgb&w=900'],
+  craft: ['https://images.pexels.com/photos/10585047/pexels-photo-10585047.jpeg?auto=compress&cs=tinysrgb&w=900','https://images.pexels.com/photos/11007818/pexels-photo-11007818.jpeg?auto=compress&cs=tinysrgb&w=900']
+};
+const HELO_PRODUCT_PHOTO_GROUP = {1:'keychain',2:'teddy',3:'flowers',4:'flowers',5:'keychain',6:'basket',7:'bunny',8:'keychain',9:'flowers',10:'cat',11:'keychain',12:'flowers',13:'basket',14:'craft',15:'keychain',16:'flowers',17:'craft',18:'flowers',19:'keychain',20:'flowers',21:'turtle',22:'craft'};
+function getProductImages(p) {
+  const saved = Array.isArray(p?.images) ? p.images.filter(x => typeof x === 'string' && x) : [];
+  const realSaved = saved.filter(x => !x.startsWith('data:image/svg+xml'));
+  if (realSaved.length) return realSaved;
+  return HELO_SAMPLE_PHOTOS[HELO_PRODUCT_PHOTO_GROUP[String(p?.id)] || 'craft'];
+}
+function getProductImage(p,index=0) { const photos=getProductImages(p); return photos[index]||photos[0]||svgEmoji(p?.emoji||'🧶'); }
+function imageLoadFallback(img,id) { img.onerror=null; const p=products.find(x=>String(x.id)===String(id)); img.src=svgEmoji(p?.emoji||'🧶'); }
 const defaults=[
 {id:1,name:'جاکلیدی قلبی',price:85000,category:'جاکلیدی',badge:'💙 دست‌ساز',description:'جاکلیدی قلبی بافتنی و دوست‌داشتنی.',emoji:'💙'},
 {id:2,name:'عروسک خرسی',price:280000,category:'عروسک',badge:'🧸 محبوب',description:'خرس کوچولوی بافتنی؛ مناسب هدیه.',emoji:'🧸'},
@@ -701,9 +740,9 @@ function renderProducts(){
 const q=$('searchInput').value.trim().toLowerCase();
 const list=products.filter(p=>p.active!==false&&(category==='همه'||(category==='علاقه‌مندی‌ها'?isFavorite(p.id):p.category===category))&&(`${p.name} ${p.category} ${p.description}`.toLowerCase().includes(q)));
 $('productCount').textContent=`${formatPrice(list.length)} محصول`;
-$('products').innerHTML=list.length?list.map(p=>`<article class="card"><div class="image-wrap"><img class="product-image" src="${p.images?.[0]||svgEmoji(p.emoji||'🧶')}" alt="${esc(p.name)}"><span class="badge">${esc(p.badge||'🧶 دست‌ساز')}</span><button class="heart ${isFavorite(p.id)?'active':''}" aria-label="علاقه‌مندی" onclick="toggleFavorite(${p.id})">${isFavorite(p.id)?'❤️':'🤍'}</button></div><h3>${esc(p.name)}</h3><div class="muted">${esc(p.category)}</div><div class="price">${formatPrice(p.price)} تومان</div>${p.stock_enabled?`<div class="muted">${Number(p.stock)>0?'📦 موجودی: '+formatPrice(p.stock):'❌ فعلاً ناموجود'}</div>`:''}<div class="card-actions"><button class="btn" ${p.stock_enabled&&Number(p.stock)<=0?'disabled':''} onclick="addToCart(${p.id})">${p.stock_enabled&&Number(p.stock)<=0?'ناموجود':'🛒 خرید'}</button><button class="btn secondary" onclick="openProduct(${p.id})">جزئیات</button></div></article>`).join(''):'<div class="empty">محصولی پیدا نشد 🧶</div>';
+$('products').innerHTML=list.length?list.map(p=>`<article class="card"><div class="image-wrap"><img class="product-image" src="${getProductImage(p,0)}" alt="${esc(p.name)}" loading="lazy" onerror="imageLoadFallback(this,${p.id})"><span class="badge">${esc(p.badge||'🧶 دست‌ساز')}</span>${(p.images||[]).some(x=>typeof x==='string'&&!x.startsWith('data:image/svg+xml'))?'':'<span class="sample-photo-note">عکس نمونه</span>'}<button class="heart ${isFavorite(p.id)?'active':''}" aria-label="علاقه‌مندی" onclick="toggleFavorite(${p.id})">${isFavorite(p.id)?'❤️':'🤍'}</button></div><h3>${esc(p.name)}</h3><div class="muted">${esc(p.category)}</div><div class="price">${formatPrice(p.price)} تومان</div>${p.stock_enabled?`<div class="muted">${Number(p.stock)>0?'📦 موجودی: '+formatPrice(p.stock):'❌ فعلاً ناموجود'}</div>`:''}<div class="card-actions"><button class="btn" ${p.stock_enabled&&Number(p.stock)<=0?'disabled':''} onclick="addToCart(${p.id})">${p.stock_enabled&&Number(p.stock)<=0?'ناموجود':'🛒 خرید'}</button><button class="btn secondary" onclick="openProduct(${p.id})">جزئیات</button></div></article>`).join(''):'<div class="empty">محصولی پیدا نشد 🧶</div>';
 }
-function openProduct(id){currentProduct=products.find(p=>p.id===id);if(!currentProduct)return;$('modalName').textContent=currentProduct.name;$('modalPrice').textContent=formatPrice(currentProduct.price)+' تومان';$('modalDescription').textContent=currentProduct.description||'';$('modalImage').src=currentProduct.images?.[0]||svgEmoji(currentProduct.emoji||'🧶');$('modalGallery').innerHTML=(currentProduct.images||[]).map((im,i)=>`<img class="thumb ${i===0?'selected':''}" src="${im}" alt="تصویر ${i+1}" onclick="selectImage('${im}',this)">`).join('');renderRating(id);renderComments(id);$('commentName').value=readJSON('heloUser',{})?.name||'';$('productModal').style.display='block'}
+function openProduct(id){currentProduct=products.find(p=>p.id===id);if(!currentProduct)return;$('modalName').textContent=currentProduct.name;$('modalPrice').textContent=formatPrice(currentProduct.price)+' تومان';$('modalDescription').textContent=currentProduct.description||'';$('modalImage').src=getProductImage(currentProduct,0);$('modalImage').onerror=()=>imageLoadFallback($('modalImage'),currentProduct.id);$('modalGallery').innerHTML=getProductImages(currentProduct).map((im,i)=>`<img class="thumb ${i===0?'selected':''}" src="${im}" alt="تصویر نمونه ${i+1}" loading="lazy" onerror="imageLoadFallback(this,${currentProduct.id})" onclick="selectImage('${im}',this)">`).join('');renderRating(id);renderComments(id);$('commentName').value=readJSON('heloUser',{})?.name||'';$('productModal').style.display='block'}
 function selectImage(src,el){$('modalImage').src=src;document.querySelectorAll('.thumb').forEach(x=>x.classList.remove('selected'));el.classList.add('selected')}
 function addToCart(id){const p=products.find(x=>String(x.id)===String(id));if(!p||p.active===false)return;if(p.stock_enabled&&Number(p.stock)<=0){alert('این محصول فعلاً ناموجود است.');return}const item=cart.find(x=>String(x.id)===String(id));if(item&&p.stock_enabled&&item.qty>=Number(p.stock)){alert('تعداد موجودی همین‌قدر است.');return}if(item)item.qty++;else cart.push({id:p.id,qty:1});saveCart();alert('به سبد خرید اضافه شد 💙');if($('productModal').style.display==='block')closeModal('productModal')}
 function openCart(){$('cartModal').style.display='block';renderCart()}
