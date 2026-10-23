@@ -582,6 +582,19 @@ header{background:linear-gradient(125deg,#052b67 0%,#0876df 48%,#073d91 100%)}
 @media(max-width:470px){.vip-crown{font-size:11px;padding:7px 12px}}
 </style>
 
+<style id="helo-admin-click-safety">
+#adminModal .modal-content > * { position:relative; z-index:1; }
+#adminModal .modal-content button,
+#adminModal .modal-content input,
+#adminModal .modal-content select,
+#adminModal .modal-content textarea { pointer-events:auto!important; }
+#adminModal .modal-content:before,
+#adminModal .modal-content:after { pointer-events:none!important; }
+#adminModal .modal-content,
+#adminModal .modal-content * { pointer-events:auto; }
+#adminModal .modal-content button { touch-action:manipulation; cursor:pointer; }
+</style>
+
 <style id="helo-vip-premium-v2">
 /* Holo VIP: high-contrast luxury owner dashboard */
 :root{--vip-gold:#f6d889;--vip-gold2:#b88732;--vip-ink:#07172e;--vip-blue:#0b2c56}
@@ -777,7 +790,7 @@ header{background:linear-gradient(125deg,#052b67 0%,#0876df 48%,#073d91 100%)}
 <div><label class="field-label">عکس‌های واقعی محصول (حداکثر ۶ عکس)</label><input id="newImage" class="field" type="file" accept="image/*" multiple><small class="muted">می‌توانی هم‌زمان ۳ عکس یا بیشتر انتخاب کنی؛ هر عکس حداکثر ۵ مگابایت.</small></div>
 </div>
 <label class="field-label"><input id="newStockEnabled" type="checkbox" checked> کنترل موجودی این محصول فعال باشد</label>
-<button class="btn" onclick="addAdminProduct()">افزودن محصول</button>
+<button id="heloAddProductButton" type="button" class="btn" onclick="return false">افزودن محصول</button>
 <h3>محصولات فعلی</h3><div id="adminProductList"></div>
 </section>
 <section id="adminOrdersTab" class="hide"><h3>📦 سفارش‌های ثبت‌شده روی سرور</h3><div class="notice">سفارش‌ها از پایگاه داده مشترک خوانده می‌شوند؛ تغییر وضعیت اینجا برای پنل مدیریت روی دستگاه‌های دیگر هم ذخیره می‌شود.</div><button class="btn secondary small" onclick="renderAdminOrders()">🔄 تازه‌سازی سفارش‌ها</button><div id="adminOrderList"></div></section>
@@ -983,6 +996,33 @@ async function editAdminProduct(id){if(!adminUnlocked)return;const p=products.fi
 async function toggleAdminProduct(id){if(!adminUnlocked)return;const p=products.find(x=>String(x.id)===String(id));if(!p)return;const updated={...p,active:p.active===false};const ok=await window.HeloServer.saveProduct(updated);if(!ok){alert('ذخیره در پایگاه داده ناموفق بود؛ وضعیت محصول تغییر نکرد.');return}Object.assign(p,updated);saveJSON('heloProductsV2',products);if(window.refreshHeloProducts)await window.refreshHeloProducts();renderAdminProducts();renderProducts()}
 async function renderAdminOrders(){if(!adminUnlocked)return;const orders=await window.HeloServer.getOrders();const labels={new:'جدید',preparing:'در حال آماده‌سازی',shipped:'ارسال‌شده',completed:'تکمیل‌شده',cancelled:'لغوشده'};$('adminOrderList').innerHTML=orders.length?orders.map(o=>`<div class="admin-product"><strong>${esc(o.order_code||o.id)}</strong><p>👤 ${esc(o.customer_name||o.name)} · 📱 ${esc(o.phone)}</p><p>تاریخ: ${esc(o.created_at||o.date||'')}</p><p>🧶 محصولات: ${(o.items||[]).map(it=>{const p=products.find(x=>String(x.id)===String(it.id));return esc(it.name||(p&&p.name)||it.id)+' × '+formatPrice(it.qty)}).join('، ')||'جزئیات محصول ثبت نشده'}</p><strong>${formatPrice(o.total)} تومان</strong><label class="field-label">وضعیت سفارش</label><select class="field" onchange="updateOrderStatus('${esc(o.id)}',this.value)">${Object.entries(labels).map(([v,l])=>`<option value="${v}" ${(o.status||'new')===v?'selected':''}>${l}</option>`).join('')}</select></div>`).join(''):'<div class="empty">هنوز سفارشی در سرور ثبت نشده است.</div>'}
 async function updateOrderStatus(id,status){if(!adminUnlocked)return;const labels={new:'جدید',preparing:'در حال آماده‌سازی',shipped:'ارسال‌شده',completed:'تکمیل‌شده',cancelled:'لغوشده'};const ok=await window.HeloServer.updateOrderStatus(id,status);if(!ok){alert('ذخیره وضعیت ناموفق بود؛ دسترسی مدیر و اتصال اینترنت را بررسی کن.');await renderAdminOrders();return}alert('وضعیت سفارش ذخیره شد: '+(labels[status]||status));await renderAdminOrders()}
+(function bindHeloAddProductButton(){
+  const button = document.getElementById('heloAddProductButton');
+  if (!button || button.dataset.bound === '1') return;
+  button.dataset.bound = '1';
+  button.addEventListener('click', async function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (button.dataset.busy === '1') return;
+    button.dataset.busy = '1';
+    const oldText = button.textContent;
+    button.disabled = true;
+    button.textContent = 'در حال افزودن محصول…';
+    try {
+      if (typeof window.addAdminProduct !== 'function') {
+        throw new Error('تابع مدیریت محصول بارگذاری نشده است؛ صفحه را تازه‌سازی کن.');
+      }
+      await window.addAdminProduct();
+    } catch (error) {
+      console.error('افزودن محصول از دکمهٔ مستقیم ناموفق بود:', error);
+      alert('افزودن محصول انجام نشد: ' + (error && error.message ? error.message : 'خطای ناشناخته'));
+    } finally {
+      button.dataset.busy = '0';
+      button.disabled = false;
+      button.textContent = oldText;
+    }
+  }, true);
+})();
 renderProducts();updateCartCount();updateUserUI();initTheme();
 </script>
 <!-- اتصال به Supabase -->
