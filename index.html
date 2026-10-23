@@ -915,7 +915,38 @@ closeModal('cartModal');$('invoiceModal').style.display='block';
 }
 function downloadInvoice(){
 const area=$('invoiceArea');
-const html=`<!DOCTYPE html><html lang="fa" dir="rtl"><meta charset="UTF-8"><title>فاکتور فروشگاه بافتنی هلو</title><style>body{font-family:Tahoma;padding:20px;background:#eef7ff}.invoice{max-width:650px;margin:auto;background:white;padding:20px;border:3px dashed #2196f3;border-radius:18px}h2{color:#1565c0;text-align:center}.invoice-line{display:flex;justify-content:space-between;padding:12px;margin:7px 0;background:#eaf5ff;border-radius:10px}</style><body><div class="invoice">${area.innerHTML}</div><script>window.print()<\/script></body></html>`;
+const html=`<!DOCTYPE html><html lang="fa" dir="rtl"><meta charset="UTF-8"><title>فاکتور فروشگاه بافتنی هلو</title><style>body{font-family:Tahoma;padding:20px;background:#eef7ff}.invoice{max-width:650px;margin:auto;background:white;padding:20px;border:3px dashed #2196f3;border-radius:18px}h2{color:#1565c0;text-align:center}.invoice-line{display:flex;justify-content:space-between;padding:12px;margin:7px 0;background:#eaf5ff;border-radius:10px}</style><body><div class="invoice">${area.innerHTML}</div><script>window.print()<\/script>
+<style id="helo-admin-scroll-fix">
+/* Fix: allow the admin panel to scroll on mobile, without changing its design. */
+#adminModal.modal{
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  -webkit-overflow-scrolling:touch!important;
+  overscroll-behavior-y:contain;
+  touch-action:pan-y;
+}
+#adminModal.modal > .modal-content{
+  height:auto!important;
+  max-height:calc(100vh - 24px)!important;
+  max-height:calc(100dvh - 24px)!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  -webkit-overflow-scrolling:touch!important;
+  overscroll-behavior-y:contain;
+  touch-action:pan-y;
+}
+#adminModal .modal-content *{touch-action:pan-y pinch-zoom;}
+@media(max-width:600px){
+  #adminModal.modal{padding:8px!important;}
+  #adminModal.modal > .modal-content{
+    margin:0 auto 8px!important;
+    max-height:calc(100vh - 16px)!important;
+    max-height:calc(100dvh - 16px)!important;
+  }
+}
+</style>
+
+</body></html>`;
 const url=URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'}));
 const a=document.createElement('a');a.href=url;a.download='فاکتور-بافتنی-هلو.html';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)
 }
