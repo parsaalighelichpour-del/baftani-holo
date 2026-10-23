@@ -790,7 +790,7 @@ header{background:linear-gradient(125deg,#052b67 0%,#0876df 48%,#073d91 100%)}
 <div><label class="field-label">عکس‌های واقعی محصول (حداکثر ۶ عکس)</label><input id="newImage" class="field" type="file" accept="image/*" multiple><small class="muted">می‌توانی هم‌زمان ۳ عکس یا بیشتر انتخاب کنی؛ هر عکس حداکثر ۵ مگابایت.</small></div>
 </div>
 <label class="field-label"><input id="newStockEnabled" type="checkbox" checked> کنترل موجودی این محصول فعال باشد</label>
-<button class="btn" onclick="addAdminProduct()">افزودن محصول</button>
+<button id="heloAddProductButton" type="button" class="btn" onclick="return false">افزودن محصول</button>
 <h3>محصولات فعلی</h3><div id="adminProductList"></div>
 </section>
 <section id="adminOrdersTab" class="hide"><h3>📦 سفارش‌های ثبت‌شده روی سرور</h3><div class="notice">سفارش‌ها از پایگاه داده مشترک خوانده می‌شوند؛ تغییر وضعیت اینجا برای پنل مدیریت روی دستگاه‌های دیگر هم ذخیره می‌شود.</div><button class="btn secondary small" onclick="renderAdminOrders()">🔄 تازه‌سازی سفارش‌ها</button><div id="adminOrderList"></div></section>
@@ -1039,6 +1039,33 @@ window.updateOrderStatus = async function(id,status){
       console.error('خطای دکمه پنل مدیریت:', error);
       alert('عملیات پنل مدیریت ناموفق بود: ' + (error && error.message ? error.message : 'خطای نامشخص'));
     });
+  }, true);
+})();
+(function bindHeloAddProductButton(){
+  const button = document.getElementById('heloAddProductButton');
+  if (!button || button.dataset.bound === '1') return;
+  button.dataset.bound = '1';
+  button.addEventListener('click', async function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (button.dataset.busy === '1') return;
+    button.dataset.busy = '1';
+    const oldText = button.textContent;
+    button.disabled = true;
+    button.textContent = 'در حال افزودن محصول…';
+    try {
+      if (typeof window.addAdminProduct !== 'function') {
+        throw new Error('تابع مدیریت محصول بارگذاری نشده است؛ صفحه را تازه‌سازی کن.');
+      }
+      await window.addAdminProduct();
+    } catch (error) {
+      console.error('افزودن محصول از دکمهٔ مستقیم ناموفق بود:', error);
+      alert('افزودن محصول انجام نشد: ' + (error && error.message ? error.message : 'خطای ناشناخته'));
+    } finally {
+      button.dataset.busy = '0';
+      button.disabled = false;
+      button.textContent = oldText;
+    }
   }, true);
 })();
 renderProducts();updateCartCount();updateUserUI();initTheme();
