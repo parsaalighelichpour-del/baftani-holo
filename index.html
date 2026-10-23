@@ -638,10 +638,15 @@ body.dark .btn.secondary,body.dark .qty-btn,body.dark .remove-btn{background:lin
 <div><label class="field-label">برچسب</label><input id="newBadge" class="field" placeholder="مثلاً پرفروش"></div>
 </div>
 <label class="field-label">توضیحات</label><textarea id="newDescription" class="field" rows="2"></textarea>
+<div class="admin-grid">
+<div><label class="field-label">موجودی اولیه</label><input id="newStock" class="field" type="number" min="0" value="1"></div>
+<div><label class="field-label">عکس واقعی محصول</label><input id="newImage" class="field" type="file" accept="image/*"></div>
+</div>
+<label class="field-label"><input id="newStockEnabled" type="checkbox" checked> کنترل موجودی این محصول فعال باشد</label>
 <button class="btn" onclick="addAdminProduct()">افزودن محصول</button>
 <h3>محصولات فعلی</h3><div id="adminProductList"></div>
 </section>
-<section id="adminOrdersTab" class="hide"><h3>📦 سفارش‌های ثبت‌شده در این مرورگر</h3><div class="notice">این فهرست فقط روی همین مرورگر ذخیره می‌شود؛ برای مدیریت سفارش‌ها از دستگاه‌های مختلف به سرور نیاز است.</div><div id="adminOrderList"></div></section>
+<section id="adminOrdersTab" class="hide"><h3>📦 سفارش‌های ثبت‌شده روی سرور</h3><div class="notice">سفارش‌ها از پایگاه داده مشترک خوانده می‌شوند؛ تغییر وضعیت اینجا برای پنل مدیریت روی دستگاه‌های دیگر هم ذخیره می‌شود.</div><button class="btn secondary small" onclick="renderAdminOrders()">🔄 تازه‌سازی سفارش‌ها</button><div id="adminOrderList"></div></section>
 </div></div>
 
 "<form id="orderForm" action="https://formsubmit.co/Parsaalighlichpour@gmail.com" method="POST" target="_blank" class="hide">
@@ -696,11 +701,11 @@ function renderProducts(){
 const q=$('searchInput').value.trim().toLowerCase();
 const list=products.filter(p=>p.active!==false&&(category==='همه'||(category==='علاقه‌مندی‌ها'?isFavorite(p.id):p.category===category))&&(`${p.name} ${p.category} ${p.description}`.toLowerCase().includes(q)));
 $('productCount').textContent=`${formatPrice(list.length)} محصول`;
-$('products').innerHTML=list.length?list.map(p=>`<article class="card"><div class="image-wrap"><img class="product-image" src="${p.images?.[0]||svgEmoji(p.emoji||'🧶')}" alt="${esc(p.name)}"><span class="badge">${esc(p.badge||'🧶 دست‌ساز')}</span><button class="heart ${isFavorite(p.id)?'active':''}" aria-label="علاقه‌مندی" onclick="toggleFavorite(${p.id})">${isFavorite(p.id)?'❤️':'🤍'}</button></div><h3>${esc(p.name)}</h3><div class="muted">${esc(p.category)}</div><div class="price">${formatPrice(p.price)} تومان</div><div class="card-actions"><button class="btn" onclick="addToCart(${p.id})">🛒 خرید</button><button class="btn secondary" onclick="openProduct(${p.id})">جزئیات</button></div></article>`).join(''):'<div class="empty">محصولی پیدا نشد 🧶</div>';
+$('products').innerHTML=list.length?list.map(p=>`<article class="card"><div class="image-wrap"><img class="product-image" src="${p.images?.[0]||svgEmoji(p.emoji||'🧶')}" alt="${esc(p.name)}"><span class="badge">${esc(p.badge||'🧶 دست‌ساز')}</span><button class="heart ${isFavorite(p.id)?'active':''}" aria-label="علاقه‌مندی" onclick="toggleFavorite(${p.id})">${isFavorite(p.id)?'❤️':'🤍'}</button></div><h3>${esc(p.name)}</h3><div class="muted">${esc(p.category)}</div><div class="price">${formatPrice(p.price)} تومان</div>${p.stock_enabled?`<div class="muted">${Number(p.stock)>0?'📦 موجودی: '+formatPrice(p.stock):'❌ فعلاً ناموجود'}</div>`:''}<div class="card-actions"><button class="btn" ${p.stock_enabled&&Number(p.stock)<=0?'disabled':''} onclick="addToCart(${p.id})">${p.stock_enabled&&Number(p.stock)<=0?'ناموجود':'🛒 خرید'}</button><button class="btn secondary" onclick="openProduct(${p.id})">جزئیات</button></div></article>`).join(''):'<div class="empty">محصولی پیدا نشد 🧶</div>';
 }
 function openProduct(id){currentProduct=products.find(p=>p.id===id);if(!currentProduct)return;$('modalName').textContent=currentProduct.name;$('modalPrice').textContent=formatPrice(currentProduct.price)+' تومان';$('modalDescription').textContent=currentProduct.description||'';$('modalImage').src=currentProduct.images?.[0]||svgEmoji(currentProduct.emoji||'🧶');$('modalGallery').innerHTML=(currentProduct.images||[]).map((im,i)=>`<img class="thumb ${i===0?'selected':''}" src="${im}" alt="تصویر ${i+1}" onclick="selectImage('${im}',this)">`).join('');renderRating(id);renderComments(id);$('commentName').value=readJSON('heloUser',{})?.name||'';$('productModal').style.display='block'}
 function selectImage(src,el){$('modalImage').src=src;document.querySelectorAll('.thumb').forEach(x=>x.classList.remove('selected'));el.classList.add('selected')}
-function addToCart(id){const p=products.find(x=>x.id===id);if(!p||p.active===false)return;const item=cart.find(x=>x.id===id);if(item)item.qty++;else cart.push({id,qty:1});saveCart();alert('به سبد خرید اضافه شد 💙');if($('productModal').style.display==='block')closeModal('productModal')}
+function addToCart(id){const p=products.find(x=>String(x.id)===String(id));if(!p||p.active===false)return;if(p.stock_enabled&&Number(p.stock)<=0){alert('این محصول فعلاً ناموجود است.');return}const item=cart.find(x=>String(x.id)===String(id));if(item&&p.stock_enabled&&item.qty>=Number(p.stock)){alert('تعداد موجودی همین‌قدر است.');return}if(item)item.qty++;else cart.push({id:p.id,qty:1});saveCart();alert('به سبد خرید اضافه شد 💙');if($('productModal').style.display==='block')closeModal('productModal')}
 function openCart(){$('cartModal').style.display='block';renderCart()}
 function renderCart(){
 const items=cart.map(i=>({...i,product:products.find(p=>p.id===i.id)})).filter(i=>i.product);
@@ -711,7 +716,7 @@ $('cartTotal').textContent=formatPrice(finalTotal())+' تومان';
 }
 function discountAmount(){const subtotal=cart.reduce((s,i)=>{const p=products.find(x=>x.id===i.id);return s+(p?p.price*i.qty:0)},0);return Math.round(subtotal*appliedDiscount/100)}
 function finalTotal(){return Math.max(0,cart.reduce((s,i)=>{const p=products.find(x=>x.id===i.id);return s+(p?p.price*i.qty:0)},0)-discountAmount())}
-function changeQty(id,d){const item=cart.find(x=>x.id===id);if(!item)return;item.qty+=d;if(item.qty<=0)cart=cart.filter(x=>x.id!==id);saveCart();renderCart()}
+function changeQty(id,d){const item=cart.find(x=>String(x.id)===String(id));if(!item)return;const p=products.find(x=>String(x.id)===String(id));if(d>0&&p&&p.stock_enabled&&item.qty>=Number(p.stock)){alert('تعداد بیشتر از موجودی قابل انتخاب نیست.');return}item.qty+=d;if(item.qty<=0)cart=cart.filter(x=>String(x.id)!==String(id));saveCart();renderCart()}
 function removeFromCart(id){cart=cart.filter(x=>x.id!==id);saveCart();renderCart()}
 function applyDiscount(){const code=$('discountCode').value.trim().toUpperCase();if(code==='HELO10'||code==='HELO20'){appliedDiscount=Number(code.slice(4));appliedCode=code;alert(`🎁 تخفیف ${appliedDiscount}٪ اعمال شد`)}else{appliedDiscount=0;appliedCode='';alert('❌ کد تخفیف معتبر نیست')}renderCart()}
 function openAccount(){updateUserUI();$('accountModal').style.display='block'}
@@ -772,11 +777,16 @@ async function adminLogin(){
 }
 async function adminLogout(){adminUnlocked=false;closeModal('adminModal');if(window.HeloServer)await window.HeloServer.signOut();alert('از پنل مدیریت خارج شدی.')}
 function showAdminTab(tab){$('adminProductsTab').classList.toggle('hide',tab!=='products');$('adminOrdersTab').classList.toggle('hide',tab!=='orders')}
-function renderAdminProducts(){if(!adminUnlocked)return;$('adminProductList').innerHTML=products.map(p=>`<div class="admin-product"><strong>${esc(p.name)}</strong><div class="muted">${esc(p.category)} · ${formatPrice(p.price)} تومان · ${p.active===false?'غیرفعال':'فعال'}</div><div class="tools-row"><button class="btn small" onclick="editAdminProduct(${p.id})">✏️ ویرایش</button><button class="btn small secondary" onclick="toggleAdminProduct(${p.id})">${p.active===false?'فعال‌کردن':'غیرفعال‌کردن'}</button></div></div>`).join('')}
-async function addAdminProduct(){if(!adminUnlocked)return;const name=$('newName').value.trim(),price=Number($('newPrice').value),category=$('newCategory').value,badge=$('newBadge').value.trim()||'🧶 دست‌ساز',description=$('newDescription').value.trim();if(!name||!Number.isFinite(price)||price<0){alert('نام و قیمت معتبر وارد کن.');return}const id=Math.max(0,...products.map(p=>Number(p.id)||0))+1;const emoji='🧶';const product={id,name,price,category,badge,description,emoji,active:true,images:[svgEmoji(emoji),svgEmoji(emoji+' 💙','#f3f9ff')]};const ok=await window.HeloServer.saveProduct(product);if(!ok){alert('ذخیره در پایگاه داده ناموفق بود؛ هیچ تغییر محلی ثبت نشد. صفحه را تازه کن و دوباره امتحان کن.');return}products.push(product);saveJSON('heloProductsV2',products);if(window.refreshHeloProducts)await window.refreshHeloProducts();['newName','newPrice','newBadge','newDescription'].forEach(k=>$(k).value='');renderAdminProducts();renderProducts();alert('محصول در سرور ذخیره شد و روی دستگاه‌های دیگر هم نمایش داده می‌شود 💙')}
+function renderAdminProducts(){if(!adminUnlocked)return;$('adminProductList').innerHTML=products.map(p=>`<div class="admin-product"><strong>${esc(p.name)}</strong><div class="muted">${esc(p.category)} · ${formatPrice(p.price)} تومان · ${p.active===false?'غیرفعال':'فعال'} · ${p.stock_enabled?'موجودی: '+formatPrice(p.stock):'کنترل موجودی خاموش'}</div><div class="tools-row"><button class="btn small" onclick="editAdminProduct('${esc(p.id)}')">✏️ ویرایش</button><button class="btn small secondary" onclick="setProductStock('${esc(p.id)}')">📦 تنظیم موجودی</button><button class="btn small secondary" onclick="toggleAdminProduct('${esc(p.id)}')">${p.active===false?'فعال‌کردن':'غیرفعال‌کردن'}</button></div><div class="admin-grid"><input class="field" type="file" accept="image/*" id="imageFile-${esc(p.id)}"><button class="btn small" onclick="uploadProductImage('${esc(p.id)}')">📸 بارگذاری عکس</button></div></div>`).join('')}
+async function addAdminProduct(){if(!adminUnlocked)return;const name=$('newName').value.trim(),price=Number($('newPrice').value),category=$('newCategory').value,badge=$('newBadge').value.trim()||'🧶 دست‌ساز',description=$('newDescription').value.trim(),stock=Math.max(0,Math.floor(Number($('newStock').value)||0)),stock_enabled=$('newStockEnabled').checked,file=$('newImage').files[0];if(!name||!Number.isFinite(price)||price<0){alert('نام و قیمت معتبر وارد کن.');return}if(file&&(file.size>5*1024*1024||!file.type.startsWith('image/'))){alert('عکس باید از نوع تصویر و حداکثر ۵ مگابایت باشد.');return}const id=Math.max(0,...products.map(p=>Number(p.id)||0))+1;const emoji='🧶';let images=[svgEmoji(emoji),svgEmoji(emoji+' 💙','#f3f9ff')];if(file){const url=await uploadImageFile(file,id);if(!url){alert('بارگذاری عکس انجام نشد؛ محصول ساخته نشد.');return}images=[url]}const product={id,name,price,category,badge,description,emoji,active:true,images,stock,stock_enabled};const ok=await window.HeloServer.saveProduct(product);if(!ok){alert('ذخیره محصول در سرور ناموفق بود؛ دوباره تلاش کن.');return}products.push(product);saveJSON('heloProductsV2',products);if(window.refreshHeloProducts)await window.refreshHeloProducts();['newName','newPrice','newBadge','newDescription'].forEach(k=>$(k).value='');$('newImage').value='';$('newStock').value='1';$('newStockEnabled').checked=true;renderAdminProducts();renderProducts();alert('محصول روی سرور ذخیره شد و در دستگاه‌های دیگر هم به‌روز می‌شود 💙')}
+async function uploadImageFile(file,id){if(!adminUnlocked||!file)return null;if(!file.type.startsWith('image/')||file.size>5*1024*1024){alert('عکس باید از نوع تصویر و حداکثر ۵ مگابایت باشد.');return null}const ext=(file.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';const path=String(id)+'/'+Date.now()+'-'+Math.random().toString(36).slice(2,8)+'.'+ext;const result=await window.HeloServer.uploadImage(file,path);if(!result){alert('بارگذاری عکس ناموفق بود. دسترسی مدیر و اتصال اینترنت را بررسی کن.');return null}return result}
+async function uploadProductImage(id){if(!adminUnlocked)return;const p=products.find(x=>String(x.id)===String(id)),input=$('imageFile-'+id),file=input&&input.files[0];if(!p||!file){alert('اول عکس محصول را انتخاب کن.');return}const url=await uploadImageFile(file,id);if(!url)return;const updated={...p,images:[url,...(p.images||[]).filter(x=>x!==url)]};const ok=await window.HeloServer.saveProduct(updated);if(!ok){alert('عکس آپلود شد اما ذخیره محصول ناموفق بود؛ دوباره تلاش کن.');return}Object.assign(p,updated);if(window.refreshHeloProducts)await window.refreshHeloProducts();renderAdminProducts();renderProducts();alert('عکس محصول در سرور ذخیره شد و همه دستگاه‌ها آن را می‌بینند 📸')}
+async function setProductStock(id){if(!adminUnlocked)return;const p=products.find(x=>String(x.id)===String(id));if(!p)return;const value=prompt('تعداد موجودی برای '+p.name+' (عدد صفر یعنی ناموجود):',p.stock_enabled?Number(p.stock):'');if(value===null)return;if(value.trim()===''||!Number.isInteger(Number(value))||Number(value)<0){alert('موجودی باید عدد صحیح صفر یا بیشتر باشد.');return}const updated={...p,stock:Number(value),stock_enabled:true};const ok=await window.HeloServer.saveProduct(updated);if(!ok){alert('ذخیره موجودی ناموفق بود.');return}Object.assign(p,updated);if(window.refreshHeloProducts)await window.refreshHeloProducts();renderAdminProducts();renderProducts();alert(Number(value)===0?'محصول ناموجود شد و در همه دستگاه‌ها همین وضعیت را نشان می‌دهد.':'موجودی در سرور ذخیره شد و در همه دستگاه‌ها به‌روز می‌شود.')}
+async function editAdminProduct(id){if(!adminUnlocked)return;const p=products.find(x=>String(x.id)===String(id));if(!p)return;const name=prompt('نام محصول:',p.name);if(name===null)return;const price=prompt('قیمت به تومان:',p.price);if(price===null)return;if(!name.trim()||!Number.isFinite(Number(price))||Number(price)<0){alert('نام یا قیمت معتبر نیست.');return}const description=prompt('توضیحات محصول:',p.description||'');if(description===null)return;const stock=prompt('موجودی عددی (خالی = کنترل موجودی خاموش، صفر = ناموجود):',p.stock_enabled?String(p.stock):'');if(stock===null)return;if(stock.trim()!==''&&(!Number.isInteger(Number(stock))||Number(stock)<0)){alert('موجودی باید عدد صحیح صفر یا بیشتر باشد.');return}const updated={...p,name:name.trim(),price:Number(price),description:description.trim(),stock:stock.trim()===''?Number(p.stock||0):Number(stock),stock_enabled:stock.trim()!==''};const ok=await window.HeloServer.saveProduct(updated);if(!ok){alert('ذخیره در پایگاه داده ناموفق بود؛ تغییر اعمال نشد.');return}Object.assign(p,updated);saveJSON('heloProductsV2',products);if(window.refreshHeloProducts)await window.refreshHeloProducts();renderAdminProducts();renderProducts();alert('تغییرات در سرور ذخیره شد و بین دستگاه‌ها هماهنگ می‌شود.')}
 async function editAdminProduct(id){if(!adminUnlocked)return;const p=products.find(x=>String(x.id)===String(id));if(!p)return;const name=prompt('نام محصول:',p.name);if(name===null)return;const price=prompt('قیمت به تومان:',p.price);if(price===null)return;if(!name.trim()||!Number.isFinite(Number(price))||Number(price)<0){alert('نام یا قیمت معتبر نیست.');return}const description=prompt('توضیحات محصول:',p.description||'');if(description===null)return;const updated={...p,name:name.trim(),price:Number(price),description:description.trim()};const ok=await window.HeloServer.saveProduct(updated);if(!ok){alert('ذخیره در پایگاه داده ناموفق بود؛ تغییر اعمال نشد.');return}Object.assign(p,updated);saveJSON('heloProductsV2',products);if(window.refreshHeloProducts)await window.refreshHeloProducts();renderAdminProducts();renderProducts();alert('تغییرات در سرور ذخیره شد و بین دستگاه‌ها هماهنگ می‌شود.')}
 async function toggleAdminProduct(id){if(!adminUnlocked)return;const p=products.find(x=>String(x.id)===String(id));if(!p)return;const updated={...p,active:p.active===false};const ok=await window.HeloServer.saveProduct(updated);if(!ok){alert('ذخیره در پایگاه داده ناموفق بود؛ وضعیت محصول تغییر نکرد.');return}Object.assign(p,updated);saveJSON('heloProductsV2',products);if(window.refreshHeloProducts)await window.refreshHeloProducts();renderAdminProducts();renderProducts()}
-async function renderAdminOrders(){if(!adminUnlocked)return;const orders=await window.HeloServer.getOrders();$('adminOrderList').innerHTML=orders.length?orders.map(o=>`<div class="admin-product"><strong>${esc(o.order_code||o.id)}</strong><p>👤 ${esc(o.customer_name||o.name)} · 📱 ${esc(o.phone)}</p><p>تاریخ: ${esc(o.created_at||o.date||'')}</p><strong>${formatPrice(o.total)} تومان</strong><div class="muted">وضعیت: ${esc(o.status||'new')}</div></div>`).join(''):'<div class="empty">هنوز سفارشی در سرور ثبت نشده است.</div>'}
+async function renderAdminOrders(){if(!adminUnlocked)return;const orders=await window.HeloServer.getOrders();const labels={new:'جدید',preparing:'در حال آماده‌سازی',shipped:'ارسال‌شده',completed:'تکمیل‌شده',cancelled:'لغوشده'};$('adminOrderList').innerHTML=orders.length?orders.map(o=>`<div class="admin-product"><strong>${esc(o.order_code||o.id)}</strong><p>👤 ${esc(o.customer_name||o.name)} · 📱 ${esc(o.phone)}</p><p>تاریخ: ${esc(o.created_at||o.date||'')}</p><strong>${formatPrice(o.total)} تومان</strong><label class="field-label">وضعیت سفارش</label><select class="field" onchange="updateOrderStatus('${esc(o.id)}',this.value)">${Object.entries(labels).map(([v,l])=>`<option value="${v}" ${(o.status||'new')===v?'selected':''}>${l}</option>`).join('')}</select></div>`).join(''):'<div class="empty">هنوز سفارشی در سرور ثبت نشده است.</div>'}
+async function updateOrderStatus(id,status){if(!adminUnlocked)return;const labels={new:'جدید',preparing:'در حال آماده‌سازی',shipped:'ارسال‌شده',completed:'تکمیل‌شده',cancelled:'لغوشده'};const ok=await window.HeloServer.updateOrderStatus(id,status);if(!ok){alert('ذخیره وضعیت ناموفق بود؛ دسترسی مدیر و اتصال اینترنت را بررسی کن.');await renderAdminOrders();return}alert('وضعیت سفارش ذخیره شد: '+(labels[status]||status));await renderAdminOrders()}
 renderProducts();updateCartCount();updateUserUI();initTheme();
 </script>
 <!-- اتصال به Supabase -->
@@ -796,7 +806,8 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
       name: row.name, price: Number(row.price || 0), category: row.category || '',
       badge: row.badge || '🧶 دست‌ساز', description: row.description || '',
       emoji: '🧶', active: row.active !== false,
-      images: Array.isArray(row.images) && row.images.length ? row.images : (row.image ? [row.image] : [])
+      images: Array.isArray(row.images) && row.images.length ? row.images : (row.image ? [row.image] : []),
+      stock: Number(row.stock || 0), stock_enabled: row.stock_enabled === true
     };
   }
   function serverProduct(p) {
@@ -805,7 +816,7 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
       category: p.category || '', badge: p.badge || '', description: p.description || '',
       image: p.images && p.images[0] ? p.images[0] : '',
       images: Array.isArray(p.images) ? p.images : [], active: p.active !== false,
-      stock: Number(p.stock || 0), updated_at: new Date().toISOString()
+      stock: Number(p.stock || 0), stock_enabled: p.stock_enabled === true, updated_at: new Date().toISOString()
     };
   }
   async function getServerProducts() {
@@ -839,6 +850,21 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
     if (error) { console.error("دریافت سفارش‌ها ناموفق بود:", error.message); return []; }
     return data || [];
   }
+  async function updateOrderStatus(id, status) {
+    const allowed = ['new','preparing','shipped','completed','cancelled'];
+    if (!allowed.includes(status)) return false;
+    const { error } = await db.from("orders").update({status, updated_at:new Date().toISOString()}).eq("id",id);
+    if (error) { console.error("تغییر وضعیت سفارش ناموفق بود:", error.message); return false; }
+    return true;
+  }
+  async function uploadProductImage(file, path) {
+    try {
+      const { data, error } = await db.storage.from("product-images").upload(path, file, {upsert:false, contentType:file.type, cacheControl:"3600"});
+      if (error) throw error;
+      const { data: urlData } = db.storage.from("product-images").getPublicUrl(data.path);
+      return urlData && urlData.publicUrl ? urlData.publicUrl : null;
+    } catch (e) { console.error("بارگذاری عکس محصول ناموفق بود:", e.message); return null; }
+  }
   async function signInAdminPassword(email, password) {
     const { data, error } = await db.auth.signInWithPassword({ email, password });
     if (error) {
@@ -866,7 +892,7 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
   }
   window.HeloServer = {
     getProducts: getServerProducts, saveProduct: saveServerProduct,
-    saveOrder: saveServerOrder, getOrders, signInAdminPassword,
+    saveOrder: saveServerOrder, getOrders, updateOrderStatus, uploadImage: uploadProductImage, signInAdminPassword,
     signOut: async function(){const {error}=await db.auth.signOut();if(error)console.error("خروج ناموفق بود:",error.message)}
   };
   db.auth.getSession().then(({data}) => checkAdminSession(data.session));
@@ -894,10 +920,14 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
   try {
     db.channel('helo-products-sync')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, () => refreshVisibleProducts())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => { if (adminUnlocked && $('adminModal').style.display === 'block') renderAdminOrders(); })
       .subscribe();
   } catch (e) { console.warn('Realtime در دسترس نیست؛ همگام‌سازی با تازه‌سازی انجام می‌شود.'); }
   window.setInterval(() => {
-    if (document.visibilityState === 'visible') refreshVisibleProducts();
+    if (document.visibilityState === 'visible') {
+      refreshVisibleProducts();
+      if (adminUnlocked && $('adminModal').style.display === 'block') renderAdminOrders();
+    }
   }, 30000);
   console.log('اتصال Supabase پیکربندی شد؛ همگام‌سازی محصولات فعال است.');
 })();
