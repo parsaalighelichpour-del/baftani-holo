@@ -573,7 +573,7 @@ header{background:linear-gradient(125deg,#052b67 0%,#0876df 48%,#073d91 100%)}
 <p>محصولات بافتنی خاص و دوست‌داشتنی را ببین، به علاقه‌مندی‌ها اضافه کن و با چند کلیک فاکتور خریدت را بساز.</p>
 <div style="margin-top:15px"><button class="btn" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">دیدن محصولات 🧶</button></div>
 </div>
-<div class="hero-art"><img class="hero-photo" src="https://images.pexels.com/photos/20269075/pexels-photo-20269075.jpeg?auto=compress&cs=tinysrgb&w=900" alt="گل‌های بافتنی دست‌ساز" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1700170447159-9d2d0da133a5?auto=format&fit=crop&w=900&q=80'"></div>
+<div class="hero-art">🧶🧸💙</div>
 </section>
 
 <section class="tools" id="shop">
@@ -685,22 +685,9 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 function readJSON(k,d){try{const v=JSON.parse(localStorage.getItem(k));return v??d}catch{return d}}
 function saveJSON(k,v){localStorage.setItem(k,JSON.stringify(v))}
 function svgEmoji(emoji,bg='#eaf5ff'){return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="100%" height="100%" rx="30" fill="${bg}"/><text x="50%" y="55%" text-anchor="middle" dominant-baseline="middle" font-size="150">${emoji}</text></svg>`)}
-const HELO_SAMPLE_PHOTOS = {
-  teddy: ['https://images.pexels.com/photos/11007818/pexels-photo-11007818.jpeg?auto=compress&cs=tinysrgb&w=900','https://images.pexels.com/photos/36619687/pexels-photo-36619687.jpeg?auto=compress&cs=tinysrgb&w=900'],
-  flowers: ['https://images.pexels.com/photos/20269075/pexels-photo-20269075.jpeg?auto=compress&cs=tinysrgb&w=900','https://images.unsplash.com/photo-1700170447159-9d2d0da133a5?auto=format&fit=crop&w=900&q=80'],
-  keychain: ['https://images.unsplash.com/photo-1753370474663-1b0ad622c5fc?auto=format&fit=crop&w=900&q=80','https://images.unsplash.com/photo-1753370241593-9cc8c17d7434?auto=format&fit=crop&w=900&q=80'],
-  bunny: ['https://images.unsplash.com/photo-1753370241593-9cc8c17d7434?auto=format&fit=crop&w=900&q=80','https://images.unsplash.com/photo-1753370474663-1b0ad622c5fc?auto=format&fit=crop&w=900&q=80'],
-  cat: ['https://images.pexels.com/photos/39972461/pexels-photo-39972461.jpeg?auto=compress&cs=tinysrgb&w=900','https://images.pexels.com/photos/38736390/pexels-photo-38736390.jpeg?auto=compress&cs=tinysrgb&w=900'],
-  turtle: ['https://images.pexels.com/photos/39972458/pexels-photo-39972458.jpeg?auto=compress&cs=tinysrgb&w=900','https://images.pexels.com/photos/39972462/pexels-photo-39972462.jpeg?auto=compress&cs=tinysrgb&w=900'],
-  basket: ['https://images.pexels.com/photos/38745722/pexels-photo-38745722.jpeg?auto=compress&cs=tinysrgb&w=900','https://images.pexels.com/photos/10585047/pexels-photo-10585047.jpeg?auto=compress&cs=tinysrgb&w=900'],
-  craft: ['https://images.pexels.com/photos/10585047/pexels-photo-10585047.jpeg?auto=compress&cs=tinysrgb&w=900','https://images.pexels.com/photos/11007818/pexels-photo-11007818.jpeg?auto=compress&cs=tinysrgb&w=900']
-};
-const HELO_PRODUCT_PHOTO_GROUP = {1:'keychain',2:'teddy',3:'flowers',4:'flowers',5:'keychain',6:'basket',7:'bunny',8:'keychain',9:'flowers',10:'cat',11:'keychain',12:'flowers',13:'basket',14:'craft',15:'keychain',16:'flowers',17:'craft',18:'flowers',19:'keychain',20:'flowers',21:'turtle',22:'craft'};
 function getProductImages(p) {
   const saved = Array.isArray(p?.images) ? p.images.filter(x => typeof x === 'string' && x) : [];
-  const realSaved = saved.filter(x => !x.startsWith('data:image/svg+xml'));
-  if (realSaved.length) return realSaved;
-  return HELO_SAMPLE_PHOTOS[HELO_PRODUCT_PHOTO_GROUP[String(p?.id)] || 'craft'];
+  return saved.length ? saved : [svgEmoji(p?.emoji || '🧶')];
 }
 function getProductImage(p,index=0) { const photos=getProductImages(p); return photos[index]||photos[0]||svgEmoji(p?.emoji||'🧶'); }
 function imageLoadFallback(img,id) { img.onerror=null; const p=products.find(x=>String(x.id)===String(id)); img.src=svgEmoji(p?.emoji||'🧶'); }
@@ -740,7 +727,7 @@ function renderProducts(){
 const q=$('searchInput').value.trim().toLowerCase();
 const list=products.filter(p=>p.active!==false&&(category==='همه'||(category==='علاقه‌مندی‌ها'?isFavorite(p.id):p.category===category))&&(`${p.name} ${p.category} ${p.description}`.toLowerCase().includes(q)));
 $('productCount').textContent=`${formatPrice(list.length)} محصول`;
-$('products').innerHTML=list.length?list.map(p=>`<article class="card"><div class="image-wrap"><img class="product-image" src="${getProductImage(p,0)}" alt="${esc(p.name)}" loading="lazy" onerror="imageLoadFallback(this,${p.id})"><span class="badge">${esc(p.badge||'🧶 دست‌ساز')}</span>${(p.images||[]).some(x=>typeof x==='string'&&!x.startsWith('data:image/svg+xml'))?'':'<span class="sample-photo-note">عکس نمونه</span>'}<button class="heart ${isFavorite(p.id)?'active':''}" aria-label="علاقه‌مندی" onclick="toggleFavorite(${p.id})">${isFavorite(p.id)?'❤️':'🤍'}</button></div><h3>${esc(p.name)}</h3><div class="muted">${esc(p.category)}</div><div class="price">${formatPrice(p.price)} تومان</div>${p.stock_enabled?`<div class="muted">${Number(p.stock)>0?'📦 موجودی: '+formatPrice(p.stock):'❌ فعلاً ناموجود'}</div>`:''}<div class="card-actions"><button class="btn" ${p.stock_enabled&&Number(p.stock)<=0?'disabled':''} onclick="addToCart(${p.id})">${p.stock_enabled&&Number(p.stock)<=0?'ناموجود':'🛒 خرید'}</button><button class="btn secondary" onclick="openProduct(${p.id})">جزئیات</button></div></article>`).join(''):'<div class="empty">محصولی پیدا نشد 🧶</div>';
+$('products').innerHTML=list.length?list.map(p=>`<article class="card"><div class="image-wrap"><img class="product-image" src="${getProductImage(p,0)}" alt="${esc(p.name)}" loading="lazy" onerror="imageLoadFallback(this,${p.id})"><span class="badge">${esc(p.badge||'🧶 دست‌ساز')}</span><button class="heart ${isFavorite(p.id)?'active':''}" aria-label="علاقه‌مندی" onclick="toggleFavorite(${p.id})">${isFavorite(p.id)?'❤️':'🤍'}</button></div><h3>${esc(p.name)}</h3><div class="muted">${esc(p.category)}</div><div class="price">${formatPrice(p.price)} تومان</div>${p.stock_enabled?`<div class="muted">${Number(p.stock)>0?'📦 موجودی: '+formatPrice(p.stock):'❌ فعلاً ناموجود'}</div>`:''}<div class="card-actions"><button class="btn" ${p.stock_enabled&&Number(p.stock)<=0?'disabled':''} onclick="addToCart(${p.id})">${p.stock_enabled&&Number(p.stock)<=0?'ناموجود':'🛒 خرید'}</button><button class="btn secondary" onclick="openProduct(${p.id})">جزئیات</button></div></article>`).join(''):'<div class="empty">محصولی پیدا نشد 🧶</div>';
 }
 function openProduct(id){currentProduct=products.find(p=>p.id===id);if(!currentProduct)return;$('modalName').textContent=currentProduct.name;$('modalPrice').textContent=formatPrice(currentProduct.price)+' تومان';$('modalDescription').textContent=currentProduct.description||'';$('modalImage').src=getProductImage(currentProduct,0);$('modalImage').onerror=()=>imageLoadFallback($('modalImage'),currentProduct.id);$('modalGallery').innerHTML=getProductImages(currentProduct).map((im,i)=>`<img class="thumb ${i===0?'selected':''}" src="${im}" alt="تصویر نمونه ${i+1}" loading="lazy" onerror="imageLoadFallback(this,${currentProduct.id})" onclick="selectImage('${im}',this)">`).join('');renderRating(id);renderComments(id);$('commentName').value=readJSON('heloUser',{})?.name||'';$('productModal').style.display='block'}
 function selectImage(src,el){$('modalImage').src=src;document.querySelectorAll('.thumb').forEach(x=>x.classList.remove('selected'));el.classList.add('selected')}
