@@ -617,11 +617,13 @@ body.dark .btn.secondary,body.dark .qty-btn,body.dark .remove-btn{background:lin
 <div class="tools-row"><button class="btn" onclick="downloadInvoice()">⬇️ دانلود فاکتور</button><button class="btn secondary" onclick="window.print()">🖨️ چاپ فاکتور</button></div>
 </div></div>
 
-<div class="modal" id="adminLoginModal" data-login-version="20261022b"><div class="modal-content">
-<button class="close" onclick="closeModal('adminLoginModal')">×</button><h2>🔐 ورود مدیریت</h2>
-<p>لینک ورود فقط به ایمیل مدیر اصلی ارسال می‌شود.</p>
-<input id="adminEmail" class="field" type="email" value="Parsaalighlichpour@gmail.com" placeholder="ایمیل مدیر" autocomplete="email" dir="ltr" readonly>
-<button class="btn" onclick="adminLogin()">ارسال لینک ورود</button>
+<div class="modal" id="adminLoginModal" data-login-version="20261023-password"><div class="modal-content">
+<button class="close" onclick="closeModal('adminLoginModal')">×</button><h2>🔐 ورود امن مدیریت</h2>
+<p>فقط با حساب مدیر اصلی وارد شو.</p>
+<input id="adminEmail" class="field" type="email" value="parsaalighlichpour@gmail.com" placeholder="ایمیل مدیر" autocomplete="username" dir="ltr" readonly>
+<input id="adminPassword" class="field" type="password" placeholder="رمز عبور حساب مدیر" autocomplete="current-password" dir="ltr>
+<button class="btn" onclick="adminLogin()">ورود به پنل</button>
+<p class="muted" style="font-size:12px">رمز عبور فقط به‌صورت امن در Supabase بررسی می‌شود و داخل سایت ذخیره نمی‌شود.</p>
 </div></div>
 
 <div class="modal" id="adminModal"><div class="modal-content">
@@ -760,11 +762,13 @@ window.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelector
 
 function openAdminLogin(){if(adminUnlocked){renderAdminProducts();renderAdminOrders();$('adminModal').style.display='block';return}$('adminEmail').value='Parsaalighlichpour@gmail.com';$('adminLoginModal').style.display='block'}
 async function adminLogin(){
- const email=$('adminEmail').value.trim();
- if(email.toLowerCase()!=='parsaalighlichpour@gmail.com'){alert('لینک ورود فقط به ایمیل مدیر اصلی ارسال می‌شود.');return}
+ const email=$('adminEmail').value.trim().toLowerCase();
+ const password=$('adminPassword').value;
+ if(email!=='parsaalighlichpour@gmail.com'){alert('فقط حساب مدیر اصلی مجاز است.');return}
+ if(!password){alert('رمز عبور را وارد کن.');return}
  if(!window.HeloServer){alert('اتصال سرور هنوز آماده نشده؛ صفحه را دوباره بارگذاری کن.');return}
- const result=await window.HeloServer.requestAdminLogin(email);
- if(result){alert('لینک ورود به ایمیلت فرستاده شد. ایمیلت را باز کن و روی لینک بزن.');closeModal('adminLoginModal')}
+ const result=await window.HeloServer.signInAdminPassword(email,password);
+ if(result){$('adminPassword').value='';closeModal('adminLoginModal');if(adminUnlocked){renderAdminProducts();await renderAdminOrders();$('adminModal').style.display='block'}else{alert('حساب شما اجازه مدیریت ندارد.')}} 
 }
 async function adminLogout(){adminUnlocked=false;closeModal('adminModal');if(window.HeloServer)await window.HeloServer.signOut();alert('از پنل مدیریت خارج شدی.')}
 function showAdminTab(tab){$('adminProductsTab').classList.toggle('hide',tab!=='products');$('adminOrdersTab').classList.toggle('hide',tab!=='orders')}
@@ -835,12 +839,14 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
     if (error) { console.error("دریافت سفارش‌ها ناموفق بود:", error.message); return []; }
     return data || [];
   }
-  async function requestAdminLogin(email) {
-    const { error } = await db.auth.signInWithOtp({
-      email,
-      options: { shouldCreateUser: false, emailRedirectTo: window.location.origin + window.location.pathname }
-    });
-    if (error) { console.error("ارسال لینک ورود ناموفق بود:", error.message); alert("ارسال لینک ورود ناموفق بود: " + error.message); return false; }
+  async function signInAdminPassword(email, password) {
+    const { data, error } = await db.auth.signInWithPassword({ email, password });
+    if (error) {
+      console.error("ورود مدیر ناموفق بود:", error.message);
+      alert("ورود انجام نشد. ایمیل یا رمز عبور اشتباه است، یا برای حساب هنوز رمز تعیین نشده. اگر اولین بار است، باید برای همین حساب در پنل Supabase رمز تعیین شود.");
+      return false;
+    }
+    await checkAdminSession(data.session);
     return true;
   }
   async function checkAdminSession(session) {
@@ -860,7 +866,7 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
   }
   window.HeloServer = {
     getProducts: getServerProducts, saveProduct: saveServerProduct,
-    saveOrder: saveServerOrder, getOrders, requestAdminLogin,
+    saveOrder: saveServerOrder, getOrders, signInAdminPassword,
     signOut: async function(){const {error}=await db.auth.signOut();if(error)console.error("خروج ناموفق بود:",error.message)}
   };
   db.auth.getSession().then(({data}) => checkAdminSession(data.session));
