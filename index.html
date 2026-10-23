@@ -731,9 +731,12 @@ const user=readJSON('heloUser',null);
 if(!user){alert('ابتدا وارد حساب شو.');openAccount();return}
 if(!cart.length){alert('سبد خرید خالی است.');return}
 const order={id:'HELO-'+Date.now().toString().slice(-8),date:new Date().toLocaleString('fa-IR'),name:user.name,phone:user.phone,items:cart.map(i=>({id:i.id,qty:i.qty})),total:finalTotal(),discount:appliedDiscount};
-let orders=readJSON('heloOrdersLocal',[]);orders.unshift(order);saveJSON('heloOrdersLocal',orders.slice(0,50));
 const cloudOrder=await window.HeloServer.saveOrder(order);
-if(!cloudOrder) alert('⚠️ سفارش روی سرور ذخیره نشد؛ فاکتور محلی ساخته می‌شود.');
+if(!cloudOrder){alert('❌ سفارش ثبت نشد. موجودی محصول یا اتصال اینترنت را بررسی کن؛ هیچ سفارش تأییدنشده‌ای ساخته نشد.');return}
+order.id=cloudOrder.order_code||order.id;
+order.total=Number(cloudOrder.total??order.total);
+order.items=cloudOrder.items||order.items;
+let orders=readJSON('heloOrdersLocal',[]);orders.unshift(order);saveJSON('heloOrdersLocal',orders.slice(0,50));
 $('invoiceCustomer').innerHTML=`<div class="invoice-line"><span>شماره سفارش</span><strong>${esc(order.id)}</strong></div><div class="invoice-line"><span>مشتری</span><strong>${esc(user.name)}</strong></div><div class="invoice-line"><span>شماره</span><strong>${esc(user.phone)}</strong></div><div class="invoice-line"><span>تاریخ</span><strong>${esc(order.date)}</strong></div>`;
 $('invoiceProducts').innerHTML=cart.map(i=>{const p=products.find(x=>x.id===i.id);return p?`<div class="invoice-line"><span>${esc(p.name)} × ${formatPrice(i.qty)}</span><strong>${formatPrice(p.price*i.qty)} تومان</strong></div>`:''}).join('')+(discountAmount()?`<div class="invoice-line"><span>تخفیف ${appliedDiscount}٪</span><strong>− ${formatPrice(discountAmount())} تومان</strong></div>`:'');
 $('invoiceTotal').textContent=formatPrice(order.total)+' تومان';alert(
@@ -785,7 +788,7 @@ async function setProductStock(id){if(!adminUnlocked)return;const p=products.fin
 async function editAdminProduct(id){if(!adminUnlocked)return;const p=products.find(x=>String(x.id)===String(id));if(!p)return;const name=prompt('نام محصول:',p.name);if(name===null)return;const price=prompt('قیمت به تومان:',p.price);if(price===null)return;if(!name.trim()||!Number.isFinite(Number(price))||Number(price)<0){alert('نام یا قیمت معتبر نیست.');return}const description=prompt('توضیحات محصول:',p.description||'');if(description===null)return;const stock=prompt('موجودی عددی (خالی = کنترل موجودی خاموش، صفر = ناموجود):',p.stock_enabled?String(p.stock):'');if(stock===null)return;if(stock.trim()!==''&&(!Number.isInteger(Number(stock))||Number(stock)<0)){alert('موجودی باید عدد صحیح صفر یا بیشتر باشد.');return}const updated={...p,name:name.trim(),price:Number(price),description:description.trim(),stock:stock.trim()===''?Number(p.stock||0):Number(stock),stock_enabled:stock.trim()!==''};const ok=await window.HeloServer.saveProduct(updated);if(!ok){alert('ذخیره در پایگاه داده ناموفق بود؛ تغییر اعمال نشد.');return}Object.assign(p,updated);saveJSON('heloProductsV2',products);if(window.refreshHeloProducts)await window.refreshHeloProducts();renderAdminProducts();renderProducts();alert('تغییرات در سرور ذخیره شد و بین دستگاه‌ها هماهنگ می‌شود.')}
 async function editAdminProduct(id){if(!adminUnlocked)return;const p=products.find(x=>String(x.id)===String(id));if(!p)return;const name=prompt('نام محصول:',p.name);if(name===null)return;const price=prompt('قیمت به تومان:',p.price);if(price===null)return;if(!name.trim()||!Number.isFinite(Number(price))||Number(price)<0){alert('نام یا قیمت معتبر نیست.');return}const description=prompt('توضیحات محصول:',p.description||'');if(description===null)return;const updated={...p,name:name.trim(),price:Number(price),description:description.trim()};const ok=await window.HeloServer.saveProduct(updated);if(!ok){alert('ذخیره در پایگاه داده ناموفق بود؛ تغییر اعمال نشد.');return}Object.assign(p,updated);saveJSON('heloProductsV2',products);if(window.refreshHeloProducts)await window.refreshHeloProducts();renderAdminProducts();renderProducts();alert('تغییرات در سرور ذخیره شد و بین دستگاه‌ها هماهنگ می‌شود.')}
 async function toggleAdminProduct(id){if(!adminUnlocked)return;const p=products.find(x=>String(x.id)===String(id));if(!p)return;const updated={...p,active:p.active===false};const ok=await window.HeloServer.saveProduct(updated);if(!ok){alert('ذخیره در پایگاه داده ناموفق بود؛ وضعیت محصول تغییر نکرد.');return}Object.assign(p,updated);saveJSON('heloProductsV2',products);if(window.refreshHeloProducts)await window.refreshHeloProducts();renderAdminProducts();renderProducts()}
-async function renderAdminOrders(){if(!adminUnlocked)return;const orders=await window.HeloServer.getOrders();const labels={new:'جدید',preparing:'در حال آماده‌سازی',shipped:'ارسال‌شده',completed:'تکمیل‌شده',cancelled:'لغوشده'};$('adminOrderList').innerHTML=orders.length?orders.map(o=>`<div class="admin-product"><strong>${esc(o.order_code||o.id)}</strong><p>👤 ${esc(o.customer_name||o.name)} · 📱 ${esc(o.phone)}</p><p>تاریخ: ${esc(o.created_at||o.date||'')}</p><strong>${formatPrice(o.total)} تومان</strong><label class="field-label">وضعیت سفارش</label><select class="field" onchange="updateOrderStatus('${esc(o.id)}',this.value)">${Object.entries(labels).map(([v,l])=>`<option value="${v}" ${(o.status||'new')===v?'selected':''}>${l}</option>`).join('')}</select></div>`).join(''):'<div class="empty">هنوز سفارشی در سرور ثبت نشده است.</div>'}
+async function renderAdminOrders(){if(!adminUnlocked)return;const orders=await window.HeloServer.getOrders();const labels={new:'جدید',preparing:'در حال آماده‌سازی',shipped:'ارسال‌شده',completed:'تکمیل‌شده',cancelled:'لغوشده'};$('adminOrderList').innerHTML=orders.length?orders.map(o=>`<div class="admin-product"><strong>${esc(o.order_code||o.id)}</strong><p>👤 ${esc(o.customer_name||o.name)} · 📱 ${esc(o.phone)}</p><p>تاریخ: ${esc(o.created_at||o.date||'')}</p><p>🧶 محصولات: ${(o.items||[]).map(it=>{const p=products.find(x=>String(x.id)===String(it.id));return esc(it.name||(p&&p.name)||it.id)+' × '+formatPrice(it.qty)}).join('، ')||'جزئیات محصول ثبت نشده'}</p><strong>${formatPrice(o.total)} تومان</strong><label class="field-label">وضعیت سفارش</label><select class="field" onchange="updateOrderStatus('${esc(o.id)}',this.value)">${Object.entries(labels).map(([v,l])=>`<option value="${v}" ${(o.status||'new')===v?'selected':''}>${l}</option>`).join('')}</select></div>`).join(''):'<div class="empty">هنوز سفارشی در سرور ثبت نشده است.</div>'}
 async function updateOrderStatus(id,status){if(!adminUnlocked)return;const labels={new:'جدید',preparing:'در حال آماده‌سازی',shipped:'ارسال‌شده',completed:'تکمیل‌شده',cancelled:'لغوشده'};const ok=await window.HeloServer.updateOrderStatus(id,status);if(!ok){alert('ذخیره وضعیت ناموفق بود؛ دسترسی مدیر و اتصال اینترنت را بررسی کن.');await renderAdminOrders();return}alert('وضعیت سفارش ذخیره شد: '+(labels[status]||status));await renderAdminOrders()}
 renderProducts();updateCartCount();updateUserUI();initTheme();
 </script>
@@ -833,17 +836,15 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
   }
   async function saveServerOrder(order) {
     try {
-      const payload = {
-        customer_name: String(order.name || '').slice(0,100),
-        phone: String(order.phone || '').slice(0,30),
-        items: order.items || [], total: Number(order.total || 0),
-        status: 'new', order_code: String(order.id || ''),
-        discount_percent: Number(order.discount || 0)
-      };
-      const { data, error } = await db.from("orders").insert(payload).select().single();
+      const { data, error } = await db.rpc("place_store_order", {
+        p_customer_name: String(order.name || '').slice(0,100),
+        p_phone: String(order.phone || '').slice(0,30),
+        p_items: order.items || [],
+        p_discount_percent: Number(order.discount || 0)
+      });
       if (error) throw error;
       return data;
-    } catch (e) { console.error("ثبت سفارش ناموفق بود:", e.message); return null; }
+    } catch (e) { console.error("ثبت سفارش ناموفق بود:", e.message); alert("ثبت سفارش انجام نشد: " + (e.message || "خطای سرور")); return null; }
   }
   async function getOrders() {
     const { data, error } = await db.from("orders").select("*").order("created_at", {ascending:false});
@@ -853,8 +854,8 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
   async function updateOrderStatus(id, status) {
     const allowed = ['new','preparing','shipped','completed','cancelled'];
     if (!allowed.includes(status)) return false;
-    const { error } = await db.from("orders").update({status, updated_at:new Date().toISOString()}).eq("id",id);
-    if (error) { console.error("تغییر وضعیت سفارش ناموفق بود:", error.message); return false; }
+    const { data, error } = await db.from("orders").update({status, updated_at:new Date().toISOString()}).eq("id",id).select("id").maybeSingle();
+    if (error || !data) { console.error("تغییر وضعیت سفارش ناموفق بود:", error && error.message); return false; }
     return true;
   }
   async function uploadProductImage(file, path) {
