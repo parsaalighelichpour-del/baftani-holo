@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://parsaalighelichpour-del.github.io/baftani-holo/sitemap.xml
