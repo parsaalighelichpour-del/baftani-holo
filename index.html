@@ -1053,7 +1053,7 @@ function closeModal(id){$(id).style.display='none'}
 window.addEventListener('click',e=>{if(e.target.classList.contains('modal'))e.target.style.display='none'});
 window.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal').forEach(m=>m.style.display='none')});
 
-async function openAdminLogin(){if(adminUnlocked){$('adminModal').style.display='block';await showAdminTab('products');return}$('adminEmail').value='parsaalighlichpour@gmail.com';$('adminLoginModal').style.display='block'}
+async function openAdminLogin(){$('adminEmail').value='parsaalighlichpour@gmail.com';$('adminPassword').value='';$('adminLoginModal').style.display='block'}
 function updateVipWelcome(isVip){const banner=$('vipWelcomeBanner');if(!banner)return;const user=readJSON('heloUser',null);const normalizeName=v=>String(v||'').replace(/[ي]/g,'ی').replace(/[ك]/g,'ک').replace(/\s+/g,' ').trim();const ownerNameMatches=!!user&&normalizeName(user.name)==='پارسا قلیچ پور';const showVip=!!isVip&&!!adminUnlocked&&ownerNameMatches;banner.style.display=showVip?'flex':'none';document.body.classList.toggle('helo-vip-active',showVip)}
 async function adminLogin(){
  const email=$('adminEmail').value.trim().toLowerCase();
@@ -1112,7 +1112,11 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
   const SUPABASE_URL = "https://hqeuajaaxdgbelnbebfg.supabase.co";
   const SUPABASE_KEY = "sb_publishable_C0u8yhHSMUTbiUOzFJjicA_zJ1A0nlW";
   if (!window.supabase) { console.error("کتابخانه Supabase بارگذاری نشد."); return; }
-  const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  // Do not persist the admin authentication session in this public website.
+  // A fresh password is required again after reloading the page.
+  const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
+  });
 
   function localProduct(row) {
     const idNum = Number(row.id);
