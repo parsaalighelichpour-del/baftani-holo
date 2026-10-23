@@ -582,6 +582,14 @@ header{background:linear-gradient(125deg,#052b67 0%,#0876df 48%,#073d91 100%)}
 @media(max-width:470px){.vip-crown{font-size:11px;padding:7px 12px}}
 </style>
 
+<style id="helo-admin-click-safety">
+#adminModal .modal-content > * { position:relative; z-index:1; }
+#adminModal .modal-content button,
+#adminModal .modal-content input,
+#adminModal .modal-content select,
+#adminModal .modal-content textarea { pointer-events:auto!important; }
+#adminModal .modal-content:before { pointer-events:none!important; }
+</style>
 <style id="helo-vip-premium-v2">
 /* Holo VIP: high-contrast luxury owner dashboard */
 :root{--vip-gold:#f6d889;--vip-gold2:#b88732;--vip-ink:#07172e;--vip-blue:#0b2c56}
@@ -999,6 +1007,31 @@ window.updateOrderStatus = async function(id,status){
   try { await _heloUpdateOrderStatus(id,status); }
   catch (error) { console.error('تغییر وضعیت سفارش ناموفق بود:', error); alert('ذخیره وضعیت سفارش انجام نشد: ' + (error?.message || 'خطای ناشناخته')); }
 };
+// Extra delegated click handling for admin buttons; prevents silent failures on mobile browsers.
+(function installAdminClickSafety(){
+  const modal = $('adminModal');
+  if (!modal || modal.dataset.clickSafetyInstalled === '1') return;
+  modal.dataset.clickSafetyInstalled = '1';
+  modal.addEventListener('click', function(event) {
+    const button = event.target.closest('button');
+    if (!button || !modal.contains(button)) return;
+    const code = button.getAttribute('onclick') || '';
+    const actions = [
+      ["addAdminProduct()", () => window.addAdminProduct()],
+      ["showAdminTab('products')", () => window.showAdminTab('products')],
+      ["showAdminTab('orders')", () => window.showAdminTab('orders')],
+      ["renderAdminOrders()", () => window.renderAdminOrders()]
+    ];
+    const action = actions.find(([signature]) => code.includes(signature));
+    if (!action) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    Promise.resolve().then(action[1]).catch(error => {
+      console.error('خطای دکمه پنل مدیریت:', error);
+      alert('دکمه اجرا شد اما عملیات ناموفق بود: ' + (error && error.message ? error.message : 'خطای نامشخص'));
+    });
+  }, true);
+})();
 renderProducts();updateCartCount();updateUserUI();initTheme();
 </script>
 <!-- اتصال به Supabase -->
