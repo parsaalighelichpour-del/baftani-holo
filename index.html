@@ -932,7 +932,7 @@ window.addEventListener('click',e=>{if(e.target.classList.contains('modal'))e.ta
 window.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal').forEach(m=>m.style.display='none')});
 
 async function openAdminLogin(){if(adminUnlocked){try{products=await window.HeloServer.getProducts();saveJSON('heloProductsV2',products);renderProducts()}catch(e){console.warn('تازه‌سازی محصولات انجام نشد:',e.message)}renderAdminProducts();await renderAdminOrders();$('adminModal').style.display='block';return}$('adminEmail').value='parsaalighlichpour@gmail.com';$('adminLoginModal').style.display='block'}
-function updateVipWelcome(isVip){const banner=$('vipWelcomeBanner');if(!banner)return;const user=readJSON('heloUser',null);const normalizeName=v=>String(v||'').replace(/[ي]/g,'ی').replace(/[ك]/g,'ک').replace(/\s+/g,' ').trim();const ownerNameMatches=!!user&&normalizeName(user.name)==='پارسا قلیچ پور';const showVip=!!isVip&&!!adminUnlocked&&ownerNameMatches;banner.style.display=showVip?'flex':'none';document.body.classList.toggle('helo-vip-active',showVip)}
+function updateVipWelcome(isVip){const banner=$('vipWelcomeBanner');if(!banner)return;const showVip=!!isVip&&!!adminUnlocked;banner.style.display=showVip?'flex':'none';document.body.classList.toggle('helo-vip-active',showVip)}
 async function adminLogin(){
  const email=$('adminEmail').value.trim().toLowerCase();
  const password=$('adminPassword').value;
