@@ -732,6 +732,28 @@ header{background:linear-gradient(125deg,#052b67 0%,#0876df 48%,#073d91 100%)}
 }
 @media(prefers-reduced-motion:reduce){#adminModal *,#adminLoginModal *{animation:none!important;transition:none!important}}
 </style>
+
+<style id="helo-admin-scroll-final-fix">
+/* Prevent nested scrolling: the whole admin modal scrolls as one page on touch devices. */
+#adminModal.modal{
+ position:fixed!important;inset:0!important;overflow-x:hidden!important;overflow-y:auto!important;
+ -webkit-overflow-scrolling:touch!important;overscroll-behavior-y:auto!important;touch-action:pan-y!important;
+ padding:12px!important;align-items:flex-start!important;
+}
+#adminModal.modal > .modal-content{
+ height:auto!important;min-height:0!important;max-height:none!important;
+ overflow:visible!important;overflow-y:visible!important;overscroll-behavior:initial!important;
+ touch-action:pan-y!important;margin:0 auto 12px!important;flex:none!important;
+}
+#adminModal .modal-content *{touch-action:pan-y pinch-zoom}
+@media(max-width:600px){
+ #adminModal.modal{padding:8px 8px 20px!important}
+ #adminModal.modal > .modal-content{
+  width:100%!important;max-width:560px!important;max-height:none!important;
+  overflow:visible!important;margin:0 auto 12px!important;padding:18px 13px!important;
+ }
+}
+</style>
 </head>
 <body>
 <header>
