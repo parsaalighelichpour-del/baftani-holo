@@ -588,7 +588,11 @@ header{background:linear-gradient(125deg,#052b67 0%,#0876df 48%,#073d91 100%)}
 #adminModal .modal-content input,
 #adminModal .modal-content select,
 #adminModal .modal-content textarea { pointer-events:auto!important; }
-#adminModal .modal-content:before { pointer-events:none!important; }
+#adminModal .modal-content:before,
+#adminModal .modal-content:after { pointer-events:none!important; }
+#adminModal .modal-content,
+#adminModal .modal-content * { pointer-events:auto; }
+#adminModal .modal-content button { touch-action:manipulation; cursor:pointer; }
 </style>
 <style id="helo-vip-premium-v2">
 /* Holo VIP: high-contrast luxury owner dashboard */
@@ -1007,14 +1011,14 @@ window.updateOrderStatus = async function(id,status){
   try { await _heloUpdateOrderStatus(id,status); }
   catch (error) { console.error('تغییر وضعیت سفارش ناموفق بود:', error); alert('ذخیره وضعیت سفارش انجام نشد: ' + (error?.message || 'خطای ناشناخته')); }
 };
-// Route every admin product/order button explicitly; show errors instead of silent no-ops.
+// Reliable admin click routing: use document capture so visual layers cannot swallow admin actions.
 (function installAdminClickSafety(){
-  const modal = $('adminModal');
-  if (!modal || modal.dataset.clickSafetyInstalled === '2') return;
-  modal.dataset.clickSafetyInstalled = '2';
-  modal.addEventListener('click', function(event) {
-    const button = event.target && event.target.closest ? event.target.closest('button') : null;
-    if (!button || !modal.contains(button)) return;
+  if (document.documentElement.dataset.heloAdminClickSafety === '3') return;
+  document.documentElement.dataset.heloAdminClickSafety = '3';
+  document.addEventListener('click', function(event) {
+    const target = event.target;
+    const button = target && target.closest ? target.closest('#adminModal button') : null;
+    if (!button) return;
     const code = (button.getAttribute('onclick') || '').trim();
     let run = null;
     if (/^addAdminProduct\s*\(/.test(code)) run = () => window.addAdminProduct();
@@ -1026,7 +1030,7 @@ window.updateOrderStatus = async function(id,status){
       m = code.match(/^setProductStock\(['"]([^'"]+)['"]\)/); if (!run && m) run = () => window.setProductStock(m[1]);
       m = code.match(/^toggleAdminProduct\(['"]([^'"]+)['"]\)/); if (!run && m) run = () => window.toggleAdminProduct(m[1]);
       m = code.match(/^uploadProductImage\(['"]([^'"]+)['"]\)/); if (!run && m) run = () => window.uploadProductImage(m[1]);
-      m = code.match(/^adminLogout\s*\(/); if (!run && m) run = () => adminLogout();
+      m = code.match(/^adminLogout\s*\(/); if (!run && m) run = () => window.adminLogout ? window.adminLogout() : adminLogout();
     }
     if (!run) return;
     event.preventDefault();
