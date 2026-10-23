@@ -1007,28 +1007,33 @@ window.updateOrderStatus = async function(id,status){
   try { await _heloUpdateOrderStatus(id,status); }
   catch (error) { console.error('تغییر وضعیت سفارش ناموفق بود:', error); alert('ذخیره وضعیت سفارش انجام نشد: ' + (error?.message || 'خطای ناشناخته')); }
 };
-// Extra delegated click handling for admin buttons; prevents silent failures on mobile browsers.
+// Route every admin product/order button explicitly; show errors instead of silent no-ops.
 (function installAdminClickSafety(){
   const modal = $('adminModal');
-  if (!modal || modal.dataset.clickSafetyInstalled === '1') return;
-  modal.dataset.clickSafetyInstalled = '1';
+  if (!modal || modal.dataset.clickSafetyInstalled === '2') return;
+  modal.dataset.clickSafetyInstalled = '2';
   modal.addEventListener('click', function(event) {
-    const button = event.target.closest('button');
+    const button = event.target && event.target.closest ? event.target.closest('button') : null;
     if (!button || !modal.contains(button)) return;
-    const code = button.getAttribute('onclick') || '';
-    const actions = [
-      ["addAdminProduct()", () => window.addAdminProduct()],
-      ["showAdminTab('products')", () => window.showAdminTab('products')],
-      ["showAdminTab('orders')", () => window.showAdminTab('orders')],
-      ["renderAdminOrders()", () => window.renderAdminOrders()]
-    ];
-    const action = actions.find(([signature]) => code.includes(signature));
-    if (!action) return;
+    const code = (button.getAttribute('onclick') || '').trim();
+    let run = null;
+    if (/^addAdminProduct\s*\(/.test(code)) run = () => window.addAdminProduct();
+    else if (/^showAdminTab\(['"]products['"]\)/.test(code)) run = () => window.showAdminTab('products');
+    else if (/^showAdminTab\(['"]orders['"]\)/.test(code)) run = () => window.showAdminTab('orders');
+    else if (/^renderAdminOrders\s*\(/.test(code)) run = () => window.renderAdminOrders();
+    else {
+      let m = code.match(/^editAdminProduct\(['"]([^'"]+)['"]\)/); if (m) run = () => window.editAdminProduct(m[1]);
+      m = code.match(/^setProductStock\(['"]([^'"]+)['"]\)/); if (!run && m) run = () => window.setProductStock(m[1]);
+      m = code.match(/^toggleAdminProduct\(['"]([^'"]+)['"]\)/); if (!run && m) run = () => window.toggleAdminProduct(m[1]);
+      m = code.match(/^uploadProductImage\(['"]([^'"]+)['"]\)/); if (!run && m) run = () => window.uploadProductImage(m[1]);
+      m = code.match(/^adminLogout\s*\(/); if (!run && m) run = () => adminLogout();
+    }
+    if (!run) return;
     event.preventDefault();
     event.stopImmediatePropagation();
-    Promise.resolve().then(action[1]).catch(error => {
+    Promise.resolve().then(run).catch(error => {
       console.error('خطای دکمه پنل مدیریت:', error);
-      alert('دکمه اجرا شد اما عملیات ناموفق بود: ' + (error && error.message ? error.message : 'خطای نامشخص'));
+      alert('عملیات پنل مدیریت ناموفق بود: ' + (error && error.message ? error.message : 'خطای نامشخص'));
     });
   }, true);
 })();
