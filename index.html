@@ -572,6 +572,96 @@ header{background:linear-gradient(125deg,#052b67 0%,#0876df 48%,#073d91 100%)}
 @media(prefers-reduced-motion:reduce){.hero-photo{transition:none}}
 </style>
 
+
+<style id="helo-vip-owner-style">
+.vip-crown{display:inline-block;margin:4px 0 12px;padding:8px 16px;border:1px solid #d6b66f;border-radius:999px;background:linear-gradient(135deg,#fff3cf,#e8c879,#fff1bd);color:#50371a;font-size:12px;font-weight:900;letter-spacing:1px;box-shadow:0 4px 16px #b58b3c2b}
+#adminLoginModal .modal-content,#adminModal .modal-content{border:1px solid #d7bb7c;background:linear-gradient(145deg,#fffdf7,#f6ead0);box-shadow:0 24px 70px #09060466}
+#adminLoginModal .modal-content h2,#adminModal .modal-content h2{color:#4a2d17}
+#adminLoginModal .btn,#adminModal .btn{background:linear-gradient(135deg,#6d4827,#332116);border:1px solid #c9a65d;color:#fff5dc}
+.vip-subtitle{color:#86663a;font-size:13px;margin-top:-4px}
+@media(max-width:470px){.vip-crown{font-size:11px;padding:7px 12px}}
+</style>
+
+<style id="helo-vip-premium-v2">
+/* Holo VIP: high-contrast luxury owner dashboard */
+:root{--vip-gold:#f6d889;--vip-gold2:#b88732;--vip-ink:#07172e;--vip-blue:#0b2c56}
+.vip-crown{
+  display:flex!important;width:max-content;max-width:100%;align-items:center;justify-content:center;gap:8px;
+  margin:8px auto 18px!important;padding:10px 20px!important;border:1px solid #ffe9a6!important;
+  border-radius:999px!important;background:linear-gradient(115deg,#6d4818,#f9df91 32%,#a97722 62%,#ffedb4)!important;
+  color:#211607!important;font-size:13px!important;font-weight:1000!important;letter-spacing:2px!important;
+  box-shadow:0 0 0 4px #e9bd5a1c,0 0 26px #e9bd5a70,inset 0 1px #fff8d9!important;
+  animation:heloVipPulse 3s ease-in-out infinite
+}
+#adminLoginModal,#adminModal{background:radial-gradient(ellipse at top,rgba(23,76,139,.62),rgba(2,8,22,.92))!important;backdrop-filter:blur(12px)!important}
+#adminLoginModal .modal-content,#adminModal .modal-content{
+  position:relative;overflow:hidden!important;isolation:isolate;
+  border:1px solid #e9c66f!important;border-radius:26px!important;
+  background:linear-gradient(145deg,#07182f 0%,#0b2d54 48%,#061327 100%)!important;
+  color:#edf5ff!important;box-shadow:0 0 0 1px #f8db8b33,0 25px 90px #000b,0 0 48px #c99b3c30!important
+}
+#adminLoginModal .modal-content:before,#adminModal .modal-content:before{
+  content:"";position:absolute;inset:0 0 auto;height:5px;z-index:-1;
+  background:linear-gradient(90deg,#76501d,#fff0b3,#c28c2d,#fff3c4,#76501d);background-size:220% 100%;
+  animation:heloVipShimmer 5s linear infinite
+}
+#adminLoginModal .modal-content:after,#adminModal .modal-content:after{
+  content:"✦  H O L O   P R I V A T E   C L U B  ✦";display:block;text-align:center;
+  margin:18px 0 0;padding-top:14px;border-top:1px solid #e8c87838;
+  color:#d7b766;font-size:9px;font-weight:900;letter-spacing:2px
+}
+#adminLoginModal .modal-content h2,#adminModal .modal-content h2{
+  text-align:center!important;color:#ffe7a0!important;font-weight:1000!important;
+  text-shadow:0 2px 22px #e4b95230;letter-spacing:.2px
+}
+#adminLoginModal .modal-content>p,#adminModal .vip-subtitle{
+  text-align:center!important;color:#b9cde7!important
+}
+#adminLoginModal .field,#adminModal .field,#adminModal input,#adminModal select,#adminModal textarea{
+  background:rgba(2,13,30,.72)!important;color:#f4f8ff!important;border:1px solid #41618a!important;
+  border-radius:13px!important;box-shadow:inset 0 1px 8px #0003;transition:border-color .2s,box-shadow .2s
+}
+#adminLoginModal .field:focus,#adminModal .field:focus,#adminModal input:focus,#adminModal select:focus,#adminModal textarea:focus{
+  outline:none!important;border-color:#f1cf79!important;box-shadow:0 0 0 3px #eac66d25,0 0 20px #eac66d18!important
+}
+#adminLoginModal .btn,#adminModal .btn{
+  min-height:45px!important;border:1px solid #ffe7a0!important;border-radius:14px!important;
+  background:linear-gradient(115deg,#76501d,#f0d17a 45%,#a97827 76%,#ffe9a6)!important;
+  color:#1c160b!important;font-weight:1000!important;box-shadow:0 7px 20px #d7a84728,inset 0 1px #fff7d4!important;
+  transition:transform .2s,filter .2s,box-shadow .2s!important
+}
+#adminLoginModal .btn:hover,#adminModal .btn:hover{transform:translateY(-2px)!important;filter:brightness(1.08);box-shadow:0 10px 28px #d7a8474a!important}
+#adminModal .btn.secondary{background:linear-gradient(135deg,#153d68,#0a2342)!important;color:#e4f1ff!important;border-color:#4779ac!important}
+#adminModal .btn.danger{background:linear-gradient(135deg,#6e2630,#35131b)!important;color:#ffe8e8!important;border-color:#b95a66!important}
+#adminModal .tools-row{padding:12px!important;margin:18px 0!important;border:1px solid #cda84e55!important;border-radius:18px!important;background:linear-gradient(120deg,#102b4b,#091a30)!important;box-shadow:inset 0 1px #ffffff0c}
+#adminModal h3{color:#f4d88b!important;border-bottom:1px solid #d3ad5d55;padding-bottom:10px}
+#adminModal .admin-product,#adminModal .cart-item,#adminModal .summary-line{
+  background:linear-gradient(140deg,#102b4b,#081a30)!important;border:1px solid #385575!important;border-radius:15px!important;color:#eaf3ff!important
+}
+#adminModal .close,#adminLoginModal .close{color:#f6d889!important;background:#f5d47c17!important;border:1px solid #d5b05b66!important;border-radius:50%!important}
+@keyframes heloVipPulse{0%,100%{box-shadow:0 0 0 4px #e9bd5a1c,0 0 22px #e9bd5a40,inset 0 1px #fff8d9}50%{box-shadow:0 0 0 5px #e9bd5a22,0 0 34px #e9bd5a80,inset 0 1px #fff8d9}}
+@keyframes heloVipShimmer{to{background-position:220% 0}}
+@media(max-width:600px){
+ #adminLoginModal .modal-content,#adminModal .modal-content{width:min(96vw,560px)!important;padding:20px 15px!important;border-radius:21px!important}
+ .vip-crown{font-size:11px!important;letter-spacing:1.2px!important;padding:9px 12px!important}
+ #adminModal .tools-row{gap:8px!important}
+}
+@media(prefers-reduced-motion:reduce){.vip-crown,#adminLoginModal .modal-content:before,#adminModal .modal-content:before{animation:none!important}}
+</style>
+
+<style id="helo-vip-welcome-banner">
+.vip-welcome-banner{position:relative;isolation:isolate;max-width:900px;margin:20px auto 8px;padding:16px 20px;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;border:1px solid #ffe8a0;border-radius:22px;background:linear-gradient(115deg,#07172d 0%,#102f55 22%,#f4d67e 40%,#fff3bf 51%,#b8862a 70%,#08172c 100%);color:#201707;font-weight:1000;box-shadow:0 0 0 3px #f2ce7424,0 0 38px #ffdc7b85,inset 0 1px #fffbdc;animation:vipWelcomeGlow 2.8s ease-in-out infinite}
+.vip-welcome-crown{padding:8px 13px;border-radius:999px;background:linear-gradient(135deg,#172b4b,#071629);color:#ffe59a;border:1px solid #fff0b3;font-size:14px;letter-spacing:1.4px;box-shadow:0 3px 15px #0005,0 0 14px #f8d98255}
+.vip-welcome-banner strong{font-size:clamp(16px,3.5vw,22px);text-shadow:0 1px #fff7}
+.vip-role-chip{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:8px 12px;border-radius:999px;font-size:12px;font-weight:1000;white-space:nowrap;box-shadow:0 4px 14px #0003;transition:transform .2s,filter .2s}
+.vip-role-chip:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.vip-role-chip.admin{color:#eaf4ff;background:linear-gradient(135deg,#143d70,#07182e);border:1px solid #91c7ff}
+.vip-role-chip.creator{color:#2b1b06;background:linear-gradient(135deg,#fff0b3,#d7a742,#fff0b3);border:1px solid #fff0b3}
+.vip-welcome-sparkles{letter-spacing:3px;color:#5c3d0a}
+@keyframes vipWelcomeGlow{0%,100%{box-shadow:0 0 0 3px #f2ce7424,0 0 26px #ffdc7b55,inset 0 1px #fffbdc}50%{box-shadow:0 0 0 5px #f2ce7440,0 0 42px #ffdc7bcc,inset 0 1px #fffbdc}}
+@media(max-width:600px){.vip-welcome-banner{margin:14px 8px 8px;padding:12px 8px;gap:8px;border-radius:17px}.vip-welcome-banner strong{width:100%;text-align:center}.vip-role-chip{font-size:11px;padding:7px 9px}.vip-welcome-sparkles{display:none}}
+@media(prefers-reduced-motion:reduce){.vip-welcome-banner{animation:none}}
+</style>
 </head>
 <body>
 <header>
@@ -662,8 +752,8 @@ header{background:linear-gradient(125deg,#052b67 0%,#0876df 48%,#073d91 100%)}
 </div></div>
 
 <div class="modal" id="adminLoginModal" data-login-version="20261023-password"><div class="modal-content">
-<button class="close" onclick="closeModal('adminLoginModal')">×</button><h2>🔐 ورود امن مدیریت</h2>
-<p>فقط با حساب مدیر اصلی وارد شو.</p>
+<button class="close" onclick="closeModal('adminLoginModal')">×</button><h2>ورود مدیر فروشگاه هلو</h2>
+<p>این بخش مخصوص مدیر اصلی فروشگاه بافتنی هلو است.</p>
 <input id="adminEmail" class="field" type="email" value="parsaalighlichpour@gmail.com" placeholder="ایمیل مدیر" autocomplete="username" dir="ltr" readonly>
 <input id="adminPassword" class="field" type="password" placeholder="رمز عبور حساب مدیر" autocomplete="current-password" dir="ltr">
 <button class="btn" onclick="adminLogin()">ورود به پنل</button>
@@ -671,7 +761,7 @@ header{background:linear-gradient(125deg,#052b67 0%,#0876df 48%,#073d91 100%)}
 </div></div>
 
 <div class="modal" id="adminModal"><div class="modal-content">
-<button class="close" onclick="adminLogout()">×</button><h2>⚙️ پنل مدیریت</h2>
+<button class="close" onclick="adminLogout()">×</button><h2>پنل مدیریت هلو</h2><p>مدیریت محصولات و سفارش‌ها</p>
 <div class="tools-row"><button class="btn" onclick="showAdminTab('products')">مدیریت محصولات</button><button class="btn secondary" onclick="showAdminTab('orders')">سفارش‌ها</button><button class="btn danger" onclick="adminLogout()">خروج</button></div>
 <section id="adminProductsTab">
 <h3>➕ افزودن محصول</h3>
@@ -779,9 +869,9 @@ function changeQty(id,d){const item=cart.find(x=>String(x.id)===String(id));if(!
 function removeFromCart(id){cart=cart.filter(x=>x.id!==id);saveCart();renderCart()}
 function applyDiscount(){const code=$('discountCode').value.trim().toUpperCase();if(code==='HELO10'||code==='HELO20'){appliedDiscount=Number(code.slice(4));appliedCode=code;alert(`🎁 تخفیف ${appliedDiscount}٪ اعمال شد`)}else{appliedDiscount=0;appliedCode='';alert('❌ کد تخفیف معتبر نیست')}renderCart()}
 function openAccount(){updateUserUI();$('accountModal').style.display='block'}
-function updateUserUI(){const box=$('accountContent');const user=readJSON('heloUser',null);if(user){box.innerHTML=`<h3>سلام ${esc(user.name)} 👋</h3><p>📱 شماره: ${esc(user.phone)}</p><button class="btn danger" onclick="logout()">🚪 خروج از حساب</button>`}else{box.innerHTML=`<label class="field-label" for="loginName">نام و نام خانوادگی</label><input id="loginName" class="field" placeholder="نام شما" autocomplete="name"><label class="field-label" for="loginPhone">شماره موبایل</label><input id="loginPhone" class="field" placeholder="شماره موبایل" inputmode="tel" autocomplete="tel"><p class="muted">حساب این نسخه روی همین مرورگر ذخیره می‌شود؛ ورود امن چندکاربره به سرور نیاز دارد.</p><button class="btn" onclick="login()">✅ ورود / ثبت‌نام</button>`}}
-function login(){const name=$('loginName').value.trim(),phone=$('loginPhone').value.trim();if(!name||!phone){alert('نام و شماره موبایل را وارد کن.');return}saveJSON('heloUser',{name,phone});updateUserUI();alert('✅ حساب محلی ساخته شد!')}
-function logout(){localStorage.removeItem('heloUser');updateUserUI();alert('از حساب خارج شدی.')}
+function updateUserUI(){const box=$('accountContent');const user=readJSON('heloUser',null);if(user){box.innerHTML=`<h3>سلام ${esc(user.name)} 👋</h3><p>📱 شماره: ${esc(user.phone)}</p><button class="btn danger" onclick="logout()">🚪 خروج از حساب</button>`}else{box.innerHTML=`<label class="field-label" for="loginName">نام و نام خانوادگی</label><input id="loginName" class="field" placeholder="نام شما" value="پارسا قلیچ پور" autocomplete="name"><label class="field-label" for="loginPhone">شماره موبایل</label><input id="loginPhone" class="field" placeholder="شماره موبایل" value="۰۹۹۱۵۰۲۳۶۳۲" inputmode="tel" autocomplete="tel"><p class="muted">حساب این نسخه روی همین مرورگر ذخیره می‌شود؛ ورود امن چندکاربره به سرور نیاز دارد.</p><button class="btn" onclick="login()">✅ ورود / ثبت‌نام</button>`}}
+function login(){const name=$('loginName').value.trim(),phone=$('loginPhone').value.trim();if(!name||!phone){alert('نام و شماره موبایل را وارد کن.');return}saveJSON('heloUser',{name,phone});updateUserUI();updateVipWelcome(!!adminUnlocked);alert('✅ حساب محلی ساخته شد!')}
+function logout(){localStorage.removeItem('heloUser');updateUserUI();updateVipWelcome(!!adminUnlocked);alert('از حساب خارج شدی.')}
 function openTracking(){$('trackingModal').style.display='block';$('trackingResults').innerHTML=''}
 async function trackOrders(){
  const code=$('trackingCode').value.trim().toUpperCase();
@@ -825,7 +915,37 @@ closeModal('cartModal');$('invoiceModal').style.display='block';
 }
 function downloadInvoice(){
 const area=$('invoiceArea');
-const html=`<!DOCTYPE html><html lang="fa" dir="rtl"><meta charset="UTF-8"><title>فاکتور فروشگاه بافتنی هلو</title><style>body{font-family:Tahoma;padding:20px;background:#eef7ff}.invoice{max-width:650px;margin:auto;background:white;padding:20px;border:3px dashed #2196f3;border-radius:18px}h2{color:#1565c0;text-align:center}.invoice-line{display:flex;justify-content:space-between;padding:12px;margin:7px 0;background:#eaf5ff;border-radius:10px}</style><body><div class="invoice">${area.innerHTML}</div><script>window.print()<\/script><script src="reviews-sync.js"></script>
+const html=`<!DOCTYPE html><html lang="fa" dir="rtl"><meta charset="UTF-8"><title>فاکتور فروشگاه بافتنی هلو</title><style>body{font-family:Tahoma;padding:20px;background:#eef7ff}.invoice{max-width:650px;margin:auto;background:white;padding:20px;border:3px dashed #2196f3;border-radius:18px}h2{color:#1565c0;text-align:center}.invoice-line{display:flex;justify-content:space-between;padding:12px;margin:7px 0;background:#eaf5ff;border-radius:10px}</style><body><div class="invoice">${area.innerHTML}</div><script>window.print()<\/script>
+<style id="helo-admin-scroll-fix">
+/* Fix: allow the admin panel to scroll on mobile, without changing its design. */
+#adminModal.modal{
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  -webkit-overflow-scrolling:touch!important;
+  overscroll-behavior-y:contain;
+  touch-action:pan-y;
+}
+#adminModal.modal > .modal-content{
+  height:auto!important;
+  max-height:calc(100vh - 24px)!important;
+  max-height:calc(100dvh - 24px)!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  -webkit-overflow-scrolling:touch!important;
+  overscroll-behavior-y:contain;
+  touch-action:pan-y;
+}
+#adminModal .modal-content *{touch-action:pan-y pinch-zoom;}
+@media(max-width:600px){
+  #adminModal.modal{padding:8px!important;}
+  #adminModal.modal > .modal-content{
+    margin:0 auto 8px!important;
+    max-height:calc(100vh - 16px)!important;
+    max-height:calc(100dvh - 16px)!important;
+  }
+}
+</style>
+
 </body></html>`;
 const url=URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'}));
 const a=document.createElement('a');a.href=url;a.download='فاکتور-بافتنی-هلو.html';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)
@@ -841,7 +961,8 @@ function closeModal(id){$(id).style.display='none'}
 window.addEventListener('click',e=>{if(e.target.classList.contains('modal'))e.target.style.display='none'});
 window.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal').forEach(m=>m.style.display='none')});
 
-async function openAdminLogin(){if(adminUnlocked){try{products=await window.HeloServer.getProducts();saveJSON('heloProductsV2',products);renderProducts()}catch(e){console.warn('تازه‌سازی محصولات انجام نشد:',e.message)}renderAdminProducts();await renderAdminOrders();$('adminModal').style.display='block';return}$('adminEmail').value='parsaalighlichpour@gmail.com';$('adminLoginModal').style.display='block'}
+async function openAdminLogin(){if(adminUnlocked){$('adminModal').style.display='block';await showAdminTab('products');return}$('adminEmail').value='parsaalighlichpour@gmail.com';$('adminLoginModal').style.display='block'}
+function updateVipWelcome(isVip){const banner=$('vipWelcomeBanner');if(!banner)return;const user=readJSON('heloUser',null);const normalizeName=v=>String(v||'').replace(/[ي]/g,'ی').replace(/[ك]/g,'ک').replace(/\s+/g,' ').trim();const ownerNameMatches=!!user&&normalizeName(user.name)==='پارسا قلیچ پور';const showVip=!!isVip&&!!adminUnlocked&&ownerNameMatches;banner.style.display=showVip?'flex':'none';document.body.classList.toggle('helo-vip-active',showVip)}
 async function adminLogin(){
  const email=$('adminEmail').value.trim().toLowerCase();
  const password=$('adminPassword').value;
@@ -849,10 +970,10 @@ async function adminLogin(){
  if(!password){alert('رمز عبور را وارد کن.');return}
  if(!window.HeloServer){alert('اتصال سرور هنوز آماده نشده؛ صفحه را دوباره بارگذاری کن.');return}
  const result=await window.HeloServer.signInAdminPassword(email,password);
- if(result){$('adminPassword').value='';closeModal('adminLoginModal');if(adminUnlocked){renderAdminProducts();await renderAdminOrders();$('adminModal').style.display='block'}else{alert('حساب شما اجازه مدیریت ندارد.')}} 
+ if(result){$('adminPassword').value='';closeModal('adminLoginModal');if(adminUnlocked){$('adminModal').style.display='block';await showAdminTab('products')}else{alert('حساب شما اجازه مدیریت ندارد.')}} 
 }
-async function adminLogout(){adminUnlocked=false;closeModal('adminModal');if(window.HeloServer)await window.HeloServer.signOut();alert('از پنل مدیریت خارج شدی.')}
-function showAdminTab(tab){$('adminProductsTab').classList.toggle('hide',tab!=='products');$('adminOrdersTab').classList.toggle('hide',tab!=='orders')}
+async function adminLogout(){adminUnlocked=false;updateVipWelcome(false);closeModal('adminModal');if(window.HeloServer)await window.HeloServer.signOut();alert('از پنل مدیریت خارج شدی.')}
+async function showAdminTab(tab){if(!adminUnlocked){alert('اول وارد پنل مدیریت شو.');return}$('adminProductsTab').classList.toggle('hide',tab!=='products');$('adminOrdersTab').classList.toggle('hide',tab!=='orders');if(tab==='products'){const list=$('adminProductList');if(list)list.innerHTML='<div class="notice">در حال دریافت محصولات...</div>';try{if(window.HeloServer&&typeof window.HeloServer.getProducts==='function'){const rows=await window.HeloServer.getProducts();if(Array.isArray(rows)&&rows.length){products=rows;saveJSON('heloProductsV2',products)}else if(Array.isArray(rows)&&!rows.length&&products.length){console.warn('سرور فهرست خالی برگرداند؛ فهرست فعلی حفظ شد تا محصولات بی‌دلیل ناپدید نشوند.')}}renderAdminProducts();if(list&&!products.length)list.innerHTML='<div class="empty">محصولی پیدا نشد. اگر قبلاً محصول داشتی، خطای سرور را بررسی می‌کنیم.</div>'}catch(e){console.error('دریافت محصولات در پنل ناموفق بود:',e);if(list)list.innerHTML='<div class="notice">دریافت محصولات ناموفق بود: '+esc(e&&e.message?e.message:'خطای نامشخص')+'</div>'}}else if(tab==='orders'){try{await renderAdminOrders()}catch(e){console.error(e);$('adminOrderList').innerHTML='<div class="notice">دریافت سفارش‌ها ناموفق بود.</div>'}}}
 function renderAdminProducts(){if(!adminUnlocked)return;$('adminProductList').innerHTML=products.map(p=>`<div class="admin-product"><strong>${esc(p.name)}</strong><div class="muted">${esc(p.category)} · ${formatPrice(p.price)} تومان · ${p.active===false?'غیرفعال':'فعال'} · ${p.stock_enabled?'موجودی: '+formatPrice(p.stock):'کنترل موجودی خاموش'}</div><div class="muted">📸 عکس‌های ثبت‌شده: ${(Array.isArray(p.images)?p.images.filter(url=>Boolean(url)&&!String(url).startsWith('data:image/svg+xml')):[]).length}</div><div class="tools-row"><button class="btn small" onclick="editAdminProduct('${esc(p.id)}')">✏️ ویرایش</button><button class="btn small secondary" onclick="setProductStock('${esc(p.id)}')">📦 تنظیم موجودی</button><button class="btn small secondary" onclick="toggleAdminProduct('${esc(p.id)}')">${p.active===false?'فعال‌کردن':'غیرفعال‌کردن'}</button></div><div class="admin-grid"><input class="field" type="file" accept="image/*" multiple id="imageFile-${esc(p.id)}"><button class="btn small" onclick="uploadProductImage('${esc(p.id)}')">📸 افزودن عکس‌ها</button></div><small class="muted">انتخاب چند عکس هم‌زمان؛ حداکثر ۶ عکس برای هر محصول، هر عکس حداکثر ۵ مگابایت.</small></div>`).join('')}
 async function addAdminProduct(){if(!adminUnlocked)return;const name=$('newName').value.trim(),price=Number($('newPrice').value),category=$('newCategory').value,badge=$('newBadge').value.trim()||'🧶 دست‌ساز',description=$('newDescription').value.trim(),stock=Math.max(0,Math.floor(Number($('newStock').value)||0)),stock_enabled=$('newStockEnabled').checked,files=Array.from($('newImage').files||[]);if(!name||!Number.isFinite(price)||price<0){alert('نام و قیمت معتبر وارد کن.');return}if(files.length>6){alert('برای هر محصول حداکثر ۶ عکس انتخاب کن.');return}if(files.some(file=>file.size>5*1024*1024||!file.type.startsWith('image/'))){alert('هر عکس باید تصویر و حداکثر ۵ مگابایت باشد.');return}const id=Math.max(0,...products.map(p=>Number(p.id)||0))+1;const emoji='🧶';let images=[svgEmoji(emoji),svgEmoji(emoji+' 💙','#f3f9ff')];if(files.length){const uploaded=[];for(const file of files){const url=await uploadImageFile(file,id);if(!url){alert('بارگذاری یکی از عکس‌ها ناموفق بود؛ محصول ساخته نشد.');return}uploaded.push(url)}images=uploaded}const product={id,name,price,category,badge,description,emoji,active:true,images,stock,stock_enabled};const ok=await window.HeloServer.saveProduct(product);if(!ok){alert('ذخیره محصول در سرور ناموفق بود؛ دوباره تلاش کن.');return}products.push(product);saveJSON('heloProductsV2',products);if(window.refreshHeloProducts)await window.refreshHeloProducts();['newName','newPrice','newBadge','newDescription'].forEach(k=>$(k).value='');$('newImage').value='';$('newStock').value='1';$('newStockEnabled').checked=true;renderAdminProducts();renderProducts();alert('محصول با '+(files.length||'تصاویر پیش‌فرض')+' تصویر روی سرور ذخیره شد 💙')}
 async function uploadImageFile(file,id){if(!adminUnlocked||!file)return null;if(!file.type.startsWith('image/')||file.size>5*1024*1024){alert('عکس باید از نوع تصویر و حداکثر ۵ مگابایت باشد.');return null}const ext=(file.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';const path=String(id)+'/'+Date.now()+'-'+Math.random().toString(36).slice(2,8)+'.'+ext;const result=await window.HeloServer.uploadImage(file,path);if(!result){alert('بارگذاری عکس ناموفق بود. دسترسی مدیر و اتصال اینترنت را بررسی کن.');return null}return result}
@@ -957,10 +1078,11 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
     return true;
   }
   async function checkAdminSession(session) {
-    if (!session || !session.user) { adminUnlocked = false; return; }
+    if (!session || !session.user) { adminUnlocked = false; updateVipWelcome(false); return; }
     const { data, error } = await db.from("admin_users").select("user_id").eq("user_id", session.user.id).maybeSingle();
-    if (error || !data) { adminUnlocked = false; await db.auth.signOut(); return; }
+    if (error || !data) { adminUnlocked = false; updateVipWelcome(false); await db.auth.signOut(); return; }
     adminUnlocked = true;
+    updateVipWelcome(true);
     const { data: rows, error: pError } = await db.from("products").select("*").order("created_at", {ascending:false});
     if (!pError && rows && rows.length) {
       products = rows.map(localProduct);
@@ -981,8 +1103,15 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
   async function refreshVisibleProducts() {
     try {
       const rows = await getServerProducts();
-      products = rows;
-      saveJSON('heloProductsV2', products);
+      // An empty server response must not erase the existing/default product list.
+      // Only replace the current list when the database actually contains products.
+      if (Array.isArray(rows) && rows.length > 0) {
+        products = rows;
+        saveJSON('heloProductsV2', products);
+      } else if (!Array.isArray(products) || products.length === 0) {
+        products = defaults.map(p => ({...p}));
+        saveJSON('heloProductsV2', products);
+      }
       renderProducts();
       if (adminUnlocked) renderAdminProducts();
       return true;
@@ -1024,5 +1153,6 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
   };
 })();
 </script>
+<script src="reviews-sync.js"></script>
 </body>
 </html>
