@@ -45,3 +45,37 @@ with check (true);
 -- No public product INSERT/UPDATE/DELETE policy and no public order SELECT policy.
 -- Admin authentication and ownership checks must be added before enabling
 -- cross-device management of products/orders.
+
+
+-- Shared product reviews and ratings (applied to the live project)
+create table if not exists public.product_reviews (
+  id uuid primary key default gen_random_uuid(),
+  product_id text not null,
+  customer_name text not null default 'مهمان',
+  review_text text,
+  rating integer,
+  created_at timestamptz not null default now(),
+  constraint product_reviews_rating_range check (rating is null or rating between 1 and 5),
+  constraint product_reviews_content_present check (
+    (review_text is not null and length(trim(review_text)) between 1 and 1000)
+    or rating is not null
+  ),
+  constraint product_reviews_name_length check (length(trim(customer_name)) between 1 and 80)
+);
+alter table public.product_reviews enable row level security;
+grant select, insert on public.product_reviews to anon, authenticated;
+drop policy if exists "Public can read product reviews" on public.product_reviews;
+create policy "Public can read product reviews"
+on public.product_reviews for select to anon, authenticated using (true);
+drop policy if exists "Public can submit product reviews" on public.product_reviews;
+create policy "Public can submit product reviews"
+on public.product_reviews for insert to anon, authenticated
+with check (
+  length(trim(customer_name)) between 1 and 80
+  and (rating is null or rating between 1 and 5)
+  and (
+    (review_text is not null and length(trim(review_text)) between 1 and 1000)
+    or rating is not null
+  )
+  and exists (select 1 from public.products p where p.id = product_id and p.active = true)
+);
