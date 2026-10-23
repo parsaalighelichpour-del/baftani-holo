@@ -714,7 +714,16 @@ const defaults=[
 {id:20,name:'دستبند رنگی',price:60000,category:'دستبند',badge:'🌈 رنگی',description:'دستبند بافتنی رنگارنگ و سبک.',emoji:'🌈'},
 {id:21,name:'عروسک قورباغه',price:270000,category:'عروسک',badge:'🐸 بامزه',description:'قورباغه بافتنی با چهره بانمک.',emoji:'🐸'},
 {id:22,name:'جاکلیدی آووکادو',price:100000,category:'جاکلیدی',badge:'🥑 خاص',description:'آووکادوی کوچولو برای کلید یا کیف.',emoji:'🥑'}
-].map(p=>({...p,active:true,images:[svgEmoji(p.emoji),svgEmoji(p.emoji+' 💙','#f3f9ff')]}));
+
+,{id:23,name:'جاکلیدی قلب قرمز',price:70000,category:'جاکلیدی',badge:'❤️ عاشقانه',description:'قلب قرمز بافتنی؛ هدیه‌ای کوچک و دوست‌داشتنی.',emoji:'❤️'}
+,{id:24,name:'لاک‌پشت بافتنی',price:180000,category:'عروسک',badge:'🐢 بامزه',description:'لاک‌پشت کوچولوی بافتنی با لاک رنگی؛ مناسب هدیه.',emoji:'🐢'}
+,{id:25,name:'وال بافتنی',price:190000,category:'عروسک',badge:'🐳 دوست‌داشتنی',description:'وال کوچولوی بافتنی و نرم برای هدیه و دکور.',emoji:'🐳'}
+,{id:26,name:'انبه بافتنی',price:85000,category:'طرح میوه',badge:'🥭 میوه‌ای',description:'انبه بافتنی رنگی و بانمک؛ مناسب جاکلیدی یا آویز کیف.',emoji:'🥭'}
+,{id:27,name:'سیب بافتنی',price:80000,category:'طرح میوه',badge:'🍎 میوه‌ای',description:'سیب بافتنی قرمز و جذاب برای آویز کیف یا جاکلیدی.',emoji:'🍎'}
+,{id:28,name:'پرتقال بافتنی',price:80000,category:'طرح میوه',badge:'🍊 میوه‌ای',description:'پرتقال بافتنی کوچولو با رنگ شاد.',emoji:'🍊'}
+,{id:29,name:'موز بافتنی',price:80000,category:'طرح میوه',badge:'🍌 میوه‌ای',description:'موز بافتنی زرد و بامزه برای مجموعه میوه‌ها.',emoji:'🍌'}
+,{id:30,name:'گیلاس بافتنی',price:90000,category:'طرح میوه',badge:'🍒 خاص',description:'گیلاس بافتنی خوش‌رنگ و دوست‌داشتنی.',emoji:'🍒'}
+,{id:31,name:'آناناس بافتنی',price:90000,category:'طرح میوه',badge:'🍍 خاص',description:'آناناس بافتنی با ظاهر تابستونی و شاد.',emoji:'🍍'}].map(p=>({...p,active:true,images:[svgEmoji(p.emoji),svgEmoji(p.emoji+' 💙','#f3f9ff')]}));
 let products=readJSON('heloProductsV2',null);
 if(!Array.isArray(products)||!products.length){products=defaults;saveJSON('heloProductsV2',products)}
 let cart=readJSON('heloCart',[]),favorites=readJSON('heloFavorites',[]),category='همه',currentProduct=null,appliedDiscount=0,appliedCode='',adminUnlocked=false;
