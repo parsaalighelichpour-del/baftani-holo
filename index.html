@@ -581,6 +581,74 @@ header{background:linear-gradient(125deg,#052b67 0%,#0876df 48%,#073d91 100%)}
 .vip-subtitle{color:#86663a;font-size:13px;margin-top:-4px}
 @media(max-width:470px){.vip-crown{font-size:11px;padding:7px 12px}}
 </style>
+
+<style id="helo-vip-premium-v2">
+/* Holo VIP: high-contrast luxury owner dashboard */
+:root{--vip-gold:#f6d889;--vip-gold2:#b88732;--vip-ink:#07172e;--vip-blue:#0b2c56}
+.vip-crown{
+  display:flex!important;width:max-content;max-width:100%;align-items:center;justify-content:center;gap:8px;
+  margin:8px auto 18px!important;padding:10px 20px!important;border:1px solid #ffe9a6!important;
+  border-radius:999px!important;background:linear-gradient(115deg,#6d4818,#f9df91 32%,#a97722 62%,#ffedb4)!important;
+  color:#211607!important;font-size:13px!important;font-weight:1000!important;letter-spacing:2px!important;
+  box-shadow:0 0 0 4px #e9bd5a1c,0 0 26px #e9bd5a70,inset 0 1px #fff8d9!important;
+  animation:heloVipPulse 3s ease-in-out infinite
+}
+#adminLoginModal,#adminModal{background:radial-gradient(ellipse at top,rgba(23,76,139,.62),rgba(2,8,22,.92))!important;backdrop-filter:blur(12px)!important}
+#adminLoginModal .modal-content,#adminModal .modal-content{
+  position:relative;overflow:hidden!important;isolation:isolate;
+  border:1px solid #e9c66f!important;border-radius:26px!important;
+  background:linear-gradient(145deg,#07182f 0%,#0b2d54 48%,#061327 100%)!important;
+  color:#edf5ff!important;box-shadow:0 0 0 1px #f8db8b33,0 25px 90px #000b,0 0 48px #c99b3c30!important
+}
+#adminLoginModal .modal-content:before,#adminModal .modal-content:before{
+  content:"";position:absolute;inset:0 0 auto;height:5px;z-index:-1;
+  background:linear-gradient(90deg,#76501d,#fff0b3,#c28c2d,#fff3c4,#76501d);background-size:220% 100%;
+  animation:heloVipShimmer 5s linear infinite
+}
+#adminLoginModal .modal-content:after,#adminModal .modal-content:after{
+  content:"✦  H O L O   P R I V A T E   C L U B  ✦";display:block;text-align:center;
+  margin:18px 0 0;padding-top:14px;border-top:1px solid #e8c87838;
+  color:#d7b766;font-size:9px;font-weight:900;letter-spacing:2px
+}
+#adminLoginModal .modal-content h2,#adminModal .modal-content h2{
+  text-align:center!important;color:#ffe7a0!important;font-weight:1000!important;
+  text-shadow:0 2px 22px #e4b95230;letter-spacing:.2px
+}
+#adminLoginModal .modal-content>p,#adminModal .vip-subtitle{
+  text-align:center!important;color:#b9cde7!important
+}
+#adminLoginModal .field,#adminModal .field,#adminModal input,#adminModal select,#adminModal textarea{
+  background:rgba(2,13,30,.72)!important;color:#f4f8ff!important;border:1px solid #41618a!important;
+  border-radius:13px!important;box-shadow:inset 0 1px 8px #0003;transition:border-color .2s,box-shadow .2s
+}
+#adminLoginModal .field:focus,#adminModal .field:focus,#adminModal input:focus,#adminModal select:focus,#adminModal textarea:focus{
+  outline:none!important;border-color:#f1cf79!important;box-shadow:0 0 0 3px #eac66d25,0 0 20px #eac66d18!important
+}
+#adminLoginModal .btn,#adminModal .btn{
+  min-height:45px!important;border:1px solid #ffe7a0!important;border-radius:14px!important;
+  background:linear-gradient(115deg,#76501d,#f0d17a 45%,#a97827 76%,#ffe9a6)!important;
+  color:#1c160b!important;font-weight:1000!important;box-shadow:0 7px 20px #d7a84728,inset 0 1px #fff7d4!important;
+  transition:transform .2s,filter .2s,box-shadow .2s!important
+}
+#adminLoginModal .btn:hover,#adminModal .btn:hover{transform:translateY(-2px)!important;filter:brightness(1.08);box-shadow:0 10px 28px #d7a8474a!important}
+#adminModal .btn.secondary{background:linear-gradient(135deg,#153d68,#0a2342)!important;color:#e4f1ff!important;border-color:#4779ac!important}
+#adminModal .btn.danger{background:linear-gradient(135deg,#6e2630,#35131b)!important;color:#ffe8e8!important;border-color:#b95a66!important}
+#adminModal .tools-row{padding:12px!important;margin:18px 0!important;border:1px solid #cda84e55!important;border-radius:18px!important;background:linear-gradient(120deg,#102b4b,#091a30)!important;box-shadow:inset 0 1px #ffffff0c}
+#adminModal h3{color:#f4d88b!important;border-bottom:1px solid #d3ad5d55;padding-bottom:10px}
+#adminModal .admin-product,#adminModal .cart-item,#adminModal .summary-line{
+  background:linear-gradient(140deg,#102b4b,#081a30)!important;border:1px solid #385575!important;border-radius:15px!important;color:#eaf3ff!important
+}
+#adminModal .close,#adminLoginModal .close{color:#f6d889!important;background:#f5d47c17!important;border:1px solid #d5b05b66!important;border-radius:50%!important}
+@keyframes heloVipPulse{0%,100%{box-shadow:0 0 0 4px #e9bd5a1c,0 0 22px #e9bd5a40,inset 0 1px #fff8d9}50%{box-shadow:0 0 0 5px #e9bd5a22,0 0 34px #e9bd5a80,inset 0 1px #fff8d9}}
+@keyframes heloVipShimmer{to{background-position:220% 0}}
+@media(max-width:600px){
+ #adminLoginModal .modal-content,#adminModal .modal-content{width:min(96vw,560px)!important;padding:20px 15px!important;border-radius:21px!important}
+ .vip-crown{font-size:11px!important;letter-spacing:1.2px!important;padding:9px 12px!important}
+ #adminModal .tools-row{gap:8px!important}
+}
+@media(prefers-reduced-motion:reduce){.vip-crown,#adminLoginModal .modal-content:before,#adminModal .modal-content:before{animation:none!important}}
+</style>
+
 </head>
 <body>
 <header>
