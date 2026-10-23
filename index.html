@@ -650,19 +650,23 @@ header{background:linear-gradient(125deg,#052b67 0%,#0876df 48%,#073d91 100%)}
 </style>
 
 <style id="helo-vip-welcome-banner">
-.vip-welcome-banner{max-width:620px;margin:17px auto 2px;padding:13px 18px;display:flex;align-items:center;justify-content:center;gap:11px;flex-wrap:wrap;border:1px solid #ffe8a0;border-radius:18px;background:linear-gradient(115deg,#251b0a,#f4d67e 30%,#fff0b1 52%,#b8862a 78%,#2b1d08);color:#201707;font-weight:1000;box-shadow:0 0 0 3px #f2ce7424,0 0 30px #ffdc7b7a,inset 0 1px #fffbdc;animation:vipWelcomeGlow 2.8s ease-in-out infinite}
-.vip-welcome-crown{padding:5px 10px;border-radius:999px;background:linear-gradient(135deg,#172b4b,#071629);color:#ffe59a;border:1px solid #fff0b3;font-size:12px;letter-spacing:1px;box-shadow:0 3px 12px #0003}
-.vip-welcome-banner strong{font-size:clamp(15px,3.4vw,20px);text-shadow:0 1px #fff7}
+.vip-welcome-banner{position:relative;isolation:isolate;max-width:900px;margin:20px auto 8px;padding:16px 20px;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;border:1px solid #ffe8a0;border-radius:22px;background:linear-gradient(115deg,#07172d 0%,#102f55 22%,#f4d67e 40%,#fff3bf 51%,#b8862a 70%,#08172c 100%);color:#201707;font-weight:1000;box-shadow:0 0 0 3px #f2ce7424,0 0 38px #ffdc7b85,inset 0 1px #fffbdc;animation:vipWelcomeGlow 2.8s ease-in-out infinite}
+.vip-welcome-crown{padding:8px 13px;border-radius:999px;background:linear-gradient(135deg,#172b4b,#071629);color:#ffe59a;border:1px solid #fff0b3;font-size:14px;letter-spacing:1.4px;box-shadow:0 3px 15px #0005,0 0 14px #f8d98255}
+.vip-welcome-banner strong{font-size:clamp(16px,3.5vw,22px);text-shadow:0 1px #fff7}
+.vip-role-chip{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:8px 12px;border-radius:999px;font-size:12px;font-weight:1000;white-space:nowrap;box-shadow:0 4px 14px #0003;transition:transform .2s,filter .2s}
+.vip-role-chip:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.vip-role-chip.admin{color:#eaf4ff;background:linear-gradient(135deg,#143d70,#07182e);border:1px solid #91c7ff}
+.vip-role-chip.creator{color:#2b1b06;background:linear-gradient(135deg,#fff0b3,#d7a742,#fff0b3);border:1px solid #fff0b3}
 .vip-welcome-sparkles{letter-spacing:3px;color:#5c3d0a}
-@keyframes vipWelcomeGlow{0%,100%{box-shadow:0 0 0 3px #f2ce7424,0 0 24px #ffdc7b50,inset 0 1px #fffbdc}50%{box-shadow:0 0 0 4px #f2ce7440,0 0 36px #ffdc7b99,inset 0 1px #fffbdc}}
-@media(max-width:480px){.vip-welcome-banner{margin:14px 8px 0;padding:11px 8px;gap:7px;border-radius:15px}.vip-welcome-sparkles{display:none}}
+@keyframes vipWelcomeGlow{0%,100%{box-shadow:0 0 0 3px #f2ce7424,0 0 26px #ffdc7b55,inset 0 1px #fffbdc}50%{box-shadow:0 0 0 5px #f2ce7440,0 0 42px #ffdc7bcc,inset 0 1px #fffbdc}}
+@media(max-width:600px){.vip-welcome-banner{margin:14px 8px 8px;padding:12px 8px;gap:8px;border-radius:17px}.vip-welcome-banner strong{width:100%;text-align:center}.vip-role-chip{font-size:11px;padding:7px 9px}.vip-welcome-sparkles{display:none}}
 @media(prefers-reduced-motion:reduce){.vip-welcome-banner{animation:none}}
 </style>
 </head>
 <body>
 <header>
 <h1>🍑 فروشگاه بافتنی هلو</h1>
-<div id="vipWelcomeBanner" class="vip-welcome-banner" style="display:none" role="status" aria-live="polite"><span class="vip-welcome-crown">👑 VIP</span><strong>سلام پارسا، خوش اومدی VIP!</strong><span class="vip-welcome-sparkles">✦ ✨ ✦</span></div>
+<div id="vipWelcomeBanner" class="vip-welcome-banner" style="display:none" role="status" aria-live="polite"><span class="vip-welcome-crown">👑 VIP</span><strong>سلام پارسا، خوش اومدی VIP!</strong><span class="vip-role-chip admin">🛡️ ادمین</span><span class="vip-role-chip creator">💎 سازندهٔ سایت</span><span class="vip-welcome-sparkles">✦ ✨ ✦</span></div>
 <p>محصولات بافتنی دست‌ساز و دوست‌داشتنی 💙</p>
 <nav class="nav">
 <button class="nav-btn" onclick="openCart()">🛒 سبد خرید (<span id="cartCount">۰</span>)</button>
