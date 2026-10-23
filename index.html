@@ -723,7 +723,7 @@ const defaults=[
 ,{id:28,name:'پرتقال بافتنی',price:80000,category:'طرح میوه',badge:'🍊 میوه‌ای',description:'پرتقال بافتنی کوچولو با رنگ شاد.',emoji:'🍊'}
 ,{id:29,name:'موز بافتنی',price:80000,category:'طرح میوه',badge:'🍌 میوه‌ای',description:'موز بافتنی زرد و بامزه برای مجموعه میوه‌ها.',emoji:'🍌'}
 ,{id:30,name:'گیلاس بافتنی',price:90000,category:'طرح میوه',badge:'🍒 خاص',description:'گیلاس بافتنی خوش‌رنگ و دوست‌داشتنی.',emoji:'🍒'}
-,{id:31,name:'آناناس بافتنی',price:90000,category:'طرح میوه',badge:'🍍 خاص',description:'آناناس بافتنی با ظاهر تابستونی و شاد.',emoji:'🍍'}].map(p=>({...p,active:true,images:[svgEmoji(p.emoji),svgEmoji(p.emoji+' 💙','#f3f9ff')]}));
+,{id:31,name:'آناناس بافتنی',price:90000,category:'طرح میوه',badge:'🍍 خاص',description:'آناناس بافتنی با ظاهر تابستونی و شاد.',emoji:'🍍'},{id:33,name:'ماهی بافتنی',price:95000,category:'طرح میوه',badge:'🐟 دریایی',description:'ماهی کوچولوی بافتنی با رنگ‌های شاد؛ مناسب آویز کیف یا هدیه.',emoji:'🐟'}].map(p=>({...p,active:true,images:[svgEmoji(p.emoji),svgEmoji(p.emoji+' 💙','#f3f9ff')]}));
 let products=readJSON('heloProductsV2',null);
 if(!Array.isArray(products)||!products.length){products=defaults;saveJSON('heloProductsV2',products)}
 let cart=readJSON('heloCart',[]),favorites=readJSON('heloFavorites',[]),category='همه',currentProduct=null,appliedDiscount=0,appliedCode='',adminUnlocked=false;
