@@ -621,10 +621,13 @@ header{background:linear-gradient(125deg,#052b67 0%,#0876df 48%,#073d91 100%)}
 
 <div class="modal" id="trackingModal"><div class="modal-content">
 <button class="close" onclick="closeModal('trackingModal')">×</button><h2>📦 پیگیری سفارش</h2>
-<p>شماره موبایلی را که هنگام سفارش وارد کردی بنویس.</p>
-<input id="trackingPhone" class="field" placeholder="شماره موبایل" inputmode="tel">
-<button class="btn" onclick="trackOrders()">جست‌وجوی سفارش‌ها</button>
-<div id="trackingResults"></div>
+<p>برای نمایش امن وضعیت سفارش، شماره سفارش و همان شماره موبایلی را که هنگام ثبت سفارش وارد کردی بنویس.</p>
+<label class="field-label" for="trackingCode">شماره سفارش</label>
+<input id="trackingCode" class="field" placeholder="مثلاً HELO-A1B2C3D4" autocomplete="off">
+<label class="field-label" for="trackingPhone">شماره موبایل ثبت‌شده</label>
+<input id="trackingPhone" class="field" placeholder="شماره موبایل" inputmode="tel" autocomplete="tel">
+<button class="btn" id="trackOrdersButton" onclick="trackOrders()">🔎 جست‌وجوی سفارش</button>
+<div id="trackingResults" aria-live="polite"></div>
 </div></div>
 
 <div class="modal" id="invoiceModal"><div class="modal-content">
@@ -758,8 +761,25 @@ function openAccount(){updateUserUI();$('accountModal').style.display='block'}
 function updateUserUI(){const box=$('accountContent');const user=readJSON('heloUser',null);if(user){box.innerHTML=`<h3>سلام ${esc(user.name)} 👋</h3><p>📱 شماره: ${esc(user.phone)}</p><button class="btn danger" onclick="logout()">🚪 خروج از حساب</button>`}else{box.innerHTML=`<label class="field-label" for="loginName">نام و نام خانوادگی</label><input id="loginName" class="field" placeholder="نام شما" autocomplete="name"><label class="field-label" for="loginPhone">شماره موبایل</label><input id="loginPhone" class="field" placeholder="شماره موبایل" inputmode="tel" autocomplete="tel"><p class="muted">حساب این نسخه روی همین مرورگر ذخیره می‌شود؛ ورود امن چندکاربره به سرور نیاز دارد.</p><button class="btn" onclick="login()">✅ ورود / ثبت‌نام</button>`}}
 function login(){const name=$('loginName').value.trim(),phone=$('loginPhone').value.trim();if(!name||!phone){alert('نام و شماره موبایل را وارد کن.');return}saveJSON('heloUser',{name,phone});updateUserUI();alert('✅ حساب محلی ساخته شد!')}
 function logout(){localStorage.removeItem('heloUser');updateUserUI();alert('از حساب خارج شدی.')}
-function openTracking(){$('trackingModal').style.display='block'}
-function trackOrders(){const phone=$('trackingPhone').value.trim();const orders=readJSON('heloOrdersLocal',[]).filter(o=>o.phone===phone);$('trackingResults').innerHTML=orders.length?orders.map(o=>`<div class="admin-product"><strong>${esc(o.id)}</strong><p>${esc(o.date)}</p><strong>${formatPrice(o.total)} تومان</strong></div>`).join(''):'<div class="empty">سفارشی با این شماره در این مرورگر پیدا نشد.</div>'}
+function openTracking(){$('trackingModal').style.display='block';$('trackingResults').innerHTML=''}
+async function trackOrders(){
+ const code=$('trackingCode').value.trim().toUpperCase();
+ const phone=$('trackingPhone').value.trim();
+ const result=$('trackingResults'),button=$('trackOrdersButton');
+ if(!code||!phone){result.innerHTML='<div class="notice">شماره سفارش و شماره موبایل را وارد کن.</div>';return}
+ if(!/^HELO-[A-Z0-9]{8}$/.test(code)){result.innerHTML='<div class="notice">شماره سفارش معتبر نیست؛ نمونه: HELO-A1B2C3D4</div>';return}
+ button.disabled=true;button.textContent='در حال جست‌وجو…';result.innerHTML='<div class="muted">در حال اتصال به پایگاه داده…</div>';
+ try{
+  if(!window.HeloServer||typeof window.HeloServer.trackOrder!=='function')throw new Error('اتصال پایگاه داده آماده نیست');
+  const order=await window.HeloServer.trackOrder(code,phone);
+  if(!order){result.innerHTML='<div class="empty">سفارشی با این شماره سفارش و موبایل پیدا نشد. اطلاعات را بررسی کن.</div>';return}
+  const labels={new:'ثبت‌شده',preparing:'در حال آماده‌سازی',shipped:'ارسال‌شده',completed:'تکمیل‌شده',cancelled:'لغوشده'};
+  const date=order.created_at?new Date(order.created_at).toLocaleString('fa-IR'):'—';
+  const items=Array.isArray(order.items)?order.items.map(it=>'<div class="invoice-line"><span>'+esc(it.name||it.id||'محصول')+' × '+formatPrice(it.qty)+'</span><strong>'+formatPrice((Number(it.price)||0)*(Number(it.qty)||0))+' تومان</strong></div>').join(''):'';
+  result.innerHTML='<div class="admin-product"><h3>سفارش '+esc(order.order_code)+'</h3><p>وضعیت: <strong>'+esc(labels[order.status]||'در انتظار بررسی')+'</strong></p><p>تاریخ ثبت: '+esc(date)+'</p><h4>محصولات</h4>'+items+'<div class="summary-total"><span>مبلغ سفارش</span><strong>'+formatPrice(order.total)+' تومان</strong></div></div>';
+ }catch(e){console.error('پیگیری سفارش ناموفق بود:',e);result.innerHTML='<div class="notice">اتصال به پایگاه داده انجام نشد. چند لحظه بعد دوباره تلاش کن.</div>'}
+ finally{button.disabled=false;button.textContent='🔎 جست‌وجوی سفارش'}
+}
 function openSupport(){location.href='tel:09915023632'}
 async function createInvoice(){
 const user=readJSON('heloUser',null);
@@ -881,6 +901,14 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
       return data;
     } catch (e) { console.error("ثبت سفارش ناموفق بود:", e.message); alert("ثبت سفارش انجام نشد: " + (e.message || "خطای سرور")); return null; }
   }
+  async function trackOrder(orderCode, phone) {
+    const { data, error } = await db.rpc("track_store_order", {
+      p_order_code: String(orderCode || '').trim().toUpperCase().slice(0,20),
+      p_phone: String(phone || '').trim().slice(0,30)
+    });
+    if (error) { console.error("پیگیری سفارش ناموفق بود:", error.message); throw error; }
+    return data || null;
+  }
   async function getOrders() {
     const { data, error } = await db.from("orders").select("*").order("created_at", {ascending:false});
     if (error) { console.error("دریافت سفارش‌ها ناموفق بود:", error.message); return []; }
@@ -928,7 +956,7 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
   }
   window.HeloServer = {
     getProducts: getServerProducts, saveProduct: saveServerProduct,
-    saveOrder: saveServerOrder, getOrders, updateOrderStatus, uploadImage: uploadProductImage, signInAdminPassword,
+    saveOrder: saveServerOrder, trackOrder, getOrders, updateOrderStatus, uploadImage: uploadProductImage, signInAdminPassword,
     signOut: async function(){const {error}=await db.auth.signOut();if(error)console.error("خروج ناموفق بود:",error.message)}
   };
   db.auth.getSession().then(({data}) => checkAdminSession(data.session));
