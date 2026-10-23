@@ -760,7 +760,7 @@ function closeModal(id){$(id).style.display='none'}
 window.addEventListener('click',e=>{if(e.target.classList.contains('modal'))e.target.style.display='none'});
 window.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal').forEach(m=>m.style.display='none')});
 
-function openAdminLogin(){if(adminUnlocked){renderAdminProducts();renderAdminOrders();$('adminModal').style.display='block';return}$('adminEmail').value='Parsaalighlichpour@gmail.com';$('adminLoginModal').style.display='block'}
+async function openAdminLogin(){if(adminUnlocked){try{products=await window.HeloServer.getProducts();saveJSON('heloProductsV2',products);renderProducts()}catch(e){console.warn('تازه‌سازی محصولات انجام نشد:',e.message)}renderAdminProducts();await renderAdminOrders();$('adminModal').style.display='block';return}$('adminEmail').value='parsaalighlichpour@gmail.com';$('adminLoginModal').style.display='block'}
 async function adminLogin(){
  const email=$('adminEmail').value.trim().toLowerCase();
  const password=$('adminPassword').value;
@@ -773,9 +773,9 @@ async function adminLogin(){
 async function adminLogout(){adminUnlocked=false;closeModal('adminModal');if(window.HeloServer)await window.HeloServer.signOut();alert('از پنل مدیریت خارج شدی.')}
 function showAdminTab(tab){$('adminProductsTab').classList.toggle('hide',tab!=='products');$('adminOrdersTab').classList.toggle('hide',tab!=='orders')}
 function renderAdminProducts(){if(!adminUnlocked)return;$('adminProductList').innerHTML=products.map(p=>`<div class="admin-product"><strong>${esc(p.name)}</strong><div class="muted">${esc(p.category)} · ${formatPrice(p.price)} تومان · ${p.active===false?'غیرفعال':'فعال'}</div><div class="tools-row"><button class="btn small" onclick="editAdminProduct(${p.id})">✏️ ویرایش</button><button class="btn small secondary" onclick="toggleAdminProduct(${p.id})">${p.active===false?'فعال‌کردن':'غیرفعال‌کردن'}</button></div></div>`).join('')}
-async function addAdminProduct(){if(!adminUnlocked)return;const name=$('newName').value.trim(),price=Number($('newPrice').value),category=$('newCategory').value,badge=$('newBadge').value.trim()||'🧶 دست‌ساز',description=$('newDescription').value.trim();if(!name||!Number.isFinite(price)||price<0){alert('نام و قیمت معتبر وارد کن.');return}const id=Math.max(0,...products.map(p=>Number(p.id)||0))+1;const emoji='🧶';const product={id,name,price,category,badge,description,emoji,active:true,images:[svgEmoji(emoji),svgEmoji(emoji+' 💙','#f3f9ff')]};products.push(product);saveJSON('heloProductsV2',products);const ok=await window.HeloServer.saveProduct(product);if(!ok){alert('ذخیره روی سرور ناموفق بود؛ تغییر فقط روی همین دستگاه مانده است.');return}['newName','newPrice','newBadge','newDescription'].forEach(k=>$(k).value='');renderAdminProducts();renderProducts();alert('محصول اضافه و روی سرور ذخیره شد 💙')}
-async function editAdminProduct(id){if(!adminUnlocked)return;const p=products.find(x=>x.id===id);if(!p)return;const name=prompt('نام محصول:',p.name);if(name===null)return;const price=prompt('قیمت به تومان:',p.price);if(price===null)return;if(!name.trim()||!Number.isFinite(Number(price))||Number(price)<0){alert('نام یا قیمت معتبر نیست.');return}const description=prompt('توضیحات محصول:',p.description||'');if(description===null)return;p.name=name.trim();p.price=Number(price);p.description=description.trim();saveJSON('heloProductsV2',products);const ok=await window.HeloServer.saveProduct(p);if(!ok){alert('ذخیره روی سرور ناموفق بود.');return}renderAdminProducts();renderProducts();alert('تغییرات روی سرور ذخیره شد.')}
-async function toggleAdminProduct(id){if(!adminUnlocked)return;const p=products.find(x=>x.id===id);if(!p)return;p.active=p.active===false;saveJSON('heloProductsV2',products);const ok=await window.HeloServer.saveProduct(p);if(!ok){alert('ذخیره روی سرور ناموفق بود.');return}renderAdminProducts();renderProducts()}
+async function addAdminProduct(){if(!adminUnlocked)return;const name=$('newName').value.trim(),price=Number($('newPrice').value),category=$('newCategory').value,badge=$('newBadge').value.trim()||'🧶 دست‌ساز',description=$('newDescription').value.trim();if(!name||!Number.isFinite(price)||price<0){alert('نام و قیمت معتبر وارد کن.');return}const id=Math.max(0,...products.map(p=>Number(p.id)||0))+1;const emoji='🧶';const product={id,name,price,category,badge,description,emoji,active:true,images:[svgEmoji(emoji),svgEmoji(emoji+' 💙','#f3f9ff')]};const ok=await window.HeloServer.saveProduct(product);if(!ok){alert('ذخیره در پایگاه داده ناموفق بود؛ هیچ تغییر محلی ثبت نشد. صفحه را تازه کن و دوباره امتحان کن.');return}products.push(product);saveJSON('heloProductsV2',products);if(window.refreshHeloProducts)await window.refreshHeloProducts();['newName','newPrice','newBadge','newDescription'].forEach(k=>$(k).value='');renderAdminProducts();renderProducts();alert('محصول در سرور ذخیره شد و روی دستگاه‌های دیگر هم نمایش داده می‌شود 💙')}
+async function editAdminProduct(id){if(!adminUnlocked)return;const p=products.find(x=>String(x.id)===String(id));if(!p)return;const name=prompt('نام محصول:',p.name);if(name===null)return;const price=prompt('قیمت به تومان:',p.price);if(price===null)return;if(!name.trim()||!Number.isFinite(Number(price))||Number(price)<0){alert('نام یا قیمت معتبر نیست.');return}const description=prompt('توضیحات محصول:',p.description||'');if(description===null)return;const updated={...p,name:name.trim(),price:Number(price),description:description.trim()};const ok=await window.HeloServer.saveProduct(updated);if(!ok){alert('ذخیره در پایگاه داده ناموفق بود؛ تغییر اعمال نشد.');return}Object.assign(p,updated);saveJSON('heloProductsV2',products);if(window.refreshHeloProducts)await window.refreshHeloProducts();renderAdminProducts();renderProducts();alert('تغییرات در سرور ذخیره شد و بین دستگاه‌ها هماهنگ می‌شود.')}
+async function toggleAdminProduct(id){if(!adminUnlocked)return;const p=products.find(x=>String(x.id)===String(id));if(!p)return;const updated={...p,active:p.active===false};const ok=await window.HeloServer.saveProduct(updated);if(!ok){alert('ذخیره در پایگاه داده ناموفق بود؛ وضعیت محصول تغییر نکرد.');return}Object.assign(p,updated);saveJSON('heloProductsV2',products);if(window.refreshHeloProducts)await window.refreshHeloProducts();renderAdminProducts();renderProducts()}
 async function renderAdminOrders(){if(!adminUnlocked)return;const orders=await window.HeloServer.getOrders();$('adminOrderList').innerHTML=orders.length?orders.map(o=>`<div class="admin-product"><strong>${esc(o.order_code||o.id)}</strong><p>👤 ${esc(o.customer_name||o.name)} · 📱 ${esc(o.phone)}</p><p>تاریخ: ${esc(o.created_at||o.date||'')}</p><strong>${formatPrice(o.total)} تومان</strong><div class="muted">وضعیت: ${esc(o.status||'new')}</div></div>`).join(''):'<div class="empty">هنوز سفارشی در سرور ثبت نشده است.</div>'}
 renderProducts();updateCartCount();updateUserUI();initTheme();
 </script>
@@ -871,10 +871,35 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
   };
   db.auth.getSession().then(({data}) => checkAdminSession(data.session));
   db.auth.onAuthStateChange((_event, session) => { if (session) checkAdminSession(session); else adminUnlocked = false; });
-  getServerProducts().then(rows => {
-    if (rows.length) { products = rows; saveJSON('heloProductsV2', products); renderProducts(); }
-  }).catch(e => console.warn("محصولات محلی نمایش داده می‌شوند تا اتصال سرور آماده شود.", e.message));
-  console.log("اتصال Supabase پیکربندی شد.");
+  async function refreshVisibleProducts() {
+    try {
+      const rows = await getServerProducts();
+      products = rows;
+      saveJSON('heloProductsV2', products);
+      renderProducts();
+      if (adminUnlocked) renderAdminProducts();
+      return true;
+    } catch (e) {
+      console.warn('تازه‌سازی محصولات از سرور انجام نشد:', e.message);
+      return false;
+    }
+  }
+  window.refreshHeloProducts = refreshVisibleProducts;
+  refreshVisibleProducts();
+  window.addEventListener('focus', refreshVisibleProducts);
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') refreshVisibleProducts();
+  });
+  // Realtime helps other open devices update quickly; focus/poll refresh is the fallback.
+  try {
+    db.channel('helo-products-sync')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, () => refreshVisibleProducts())
+      .subscribe();
+  } catch (e) { console.warn('Realtime در دسترس نیست؛ همگام‌سازی با تازه‌سازی انجام می‌شود.'); }
+  window.setInterval(() => {
+    if (document.visibilityState === 'visible') refreshVisibleProducts();
+  }, 30000);
+  console.log('اتصال Supabase پیکربندی شد؛ همگام‌سازی محصولات فعال است.');
 })();
 </script>
 <script>
