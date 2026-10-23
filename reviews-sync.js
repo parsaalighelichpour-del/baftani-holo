@@ -47,7 +47,7 @@
   };
 
   window.addComment = async function () {
-    const p = window.currentProduct;
+    const p = currentProduct;
     if (!p) return;
     const name = document.getElementById("commentName").value.trim();
     const text = document.getElementById("commentText").value.trim();
