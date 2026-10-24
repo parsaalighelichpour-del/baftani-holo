@@ -842,6 +842,143 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 }
 </style>
 
+
+<style id="helo-readable-refresh-v4">
+/* خوانایی و هماهنگی سراسری فروشگاه؛ منطق و امکانات جاوااسکریپت دست‌نخورده می‌ماند */
+:root{
+ --blue:#0879c9;--deep:#064b86;--navy:#082744;--pale:#e8f5ff;
+ --ink:#172f46;--paper:#ffffff;--muted:#4d6478;--line:#b8d8ef;
+ --shadow:0 10px 28px rgba(8,52,88,.10);
+}
+html{scroll-behavior:smooth}
+body{
+ font-family:Tahoma,Arial,sans-serif!important;
+ color:#172f46!important;
+ background:linear-gradient(145deg,#edf7ff 0%,#f8fbff 45%,#e7f3ff 100%)!important;
+ line-height:1.8;
+}
+header{
+ background:linear-gradient(125deg,#073b70,#0879c9 58%,#07549a)!important;
+ color:#fff!important;border-bottom:3px solid #8dd8ff!important;
+ box-shadow:0 8px 26px rgba(3,45,82,.2)!important;
+}
+header h1{color:#fff!important;line-height:1.6;text-shadow:0 2px 12px #002c5c66!important}
+header p{color:#f0f9ff!important}
+.nav-btn{color:#fff!important;background:rgba(255,255,255,.12)!important;border:1px solid rgba(255,255,255,.48)!important}
+.nav-btn:hover{background:rgba(255,255,255,.24)!important}
+.container{width:min(100%,1240px);padding-left:clamp(10px,2vw,20px);padding-right:clamp(10px,2vw,20px)}
+.hero{
+ background:linear-gradient(125deg,#fff 0%,#f0f8ff 70%,#e1f2ff 100%)!important;
+ border:1px solid #b9ddf5!important;border-top:4px solid #1689d0!important;
+ box-shadow:0 12px 30px rgba(8,52,88,.10)!important;
+}
+.hero h2{color:#064b86!important;font-family:Tahoma,Arial,sans-serif!important;line-height:1.8}
+.hero p{color:#304d66!important}
+.hero-art{color:#064b86}
+.pill{background:#d9efff!important;color:#064b86!important;border:1px solid #9dd4f6!important}
+.tools,.card,.empty{
+ background:#fff!important;color:#172f46!important;
+ border-color:#c4e0f4!important;box-shadow:0 8px 22px rgba(8,52,88,.08)!important;
+}
+.search,.field{
+ color:#172f46!important;background:#fff!important;border:1.5px solid #9bc9e8!important;
+ border-radius:10px!important;min-height:44px;
+}
+.search::placeholder,.field::placeholder{color:#61778b!important;opacity:1!important}
+.search:focus,.field:focus{
+ border-color:#0879c9!important;outline:none!important;
+ box-shadow:0 0 0 3px rgba(8,121,201,.15)!important;
+}
+.cat{
+ color:#124c78!important;background:#e7f4ff!important;border:1px solid #c2e1f7!important;
+ border-radius:9px!important;font-weight:700;
+}
+.cat.active,.cat:hover{background:#075fa5!important;color:#fff!important;border-color:#075fa5!important}
+.cat.utility{background:#e4f5ec!important;color:#145b3b!important;border-color:#b9e4cb!important}
+.cat.dark{background:#17354f!important;color:#fff!important;border-color:#315c7e!important}
+.section-head{color:#123b5b!important;border-bottom:1px solid #b9d8ed!important}
+.section-head h2{color:#123b5b!important;line-height:1.7}
+.section-head span{color:#45657d!important}
+.card{border-radius:14px!important;overflow:hidden;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease!important}
+.card:hover{transform:translateY(-3px);border-color:#81c6f0!important;box-shadow:0 14px 28px rgba(8,88,145,.14)!important}
+.product-image{background:#edf7ff!important}
+.card h3{color:#064b86!important;line-height:1.8!important}
+.muted{color:#4d6478!important;line-height:1.8}
+.price{color:#075fa5!important;font-weight:800}
+.badge{background:#075fa5!important;color:#fff!important}
+.heart{color:#b4233c!important}
+.btn{
+ background:linear-gradient(135deg,#0879c9,#07549a)!important;color:#fff!important;
+ border:1px solid #07549a!important;border-radius:9px!important;
+ text-shadow:none!important;opacity:1!important;
+}
+.btn:hover{background:linear-gradient(135deg,#1294e8,#0867b7)!important}
+.btn.secondary{background:#e4f3ff!important;color:#064b86!important;border:1px solid #a9d6f3!important}
+.btn.green{background:#18734b!important;border-color:#18734b!important;color:#fff!important}
+.btn.danger,.remove-btn{background:#b42332!important;color:#fff!important;border-color:#b42332!important}
+.modal{background:rgba(3,22,40,.72)!important;backdrop-filter:blur(5px)}
+#productModal .modal-content,#cartModal .modal-content,#accountModal .modal-content,
+#trackingModal .modal-content,#invoiceModal .modal-content{
+ background:#fff!important;color:#172f46!important;border:1px solid #b9d9f0!important;
+ border-top:4px solid #0879c9!important;border-radius:14px!important;
+}
+.modal-content h2,.modal-content h3{color:#064b86!important;line-height:1.8}
+.modal-content p,.modal-content label,.modal-content div{line-height:1.8}
+.close{color:#075fa5!important}
+.cart-item,.invoice-line,.summary-total,.rating-box,.comment-box{
+ background:#eaf5ff!important;color:#173b58!important;border-color:#c1def2!important;
+}
+.summary-total{color:#064b86!important}
+.comment-name{color:#064b86!important}
+.star{color:#9aa8b4}
+.star.selected{color:#c77b00}
+.admin-product{background:#f3f9ff!important;color:#173b58!important;border-color:#c1def2!important}
+.notice{color:#533d0c!important;background:#fff7d6!important;border-color:#ead28a!important}
+.invoice-area{background:#fff!important;color:#172f46!important;border-color:#0879c9!important}
+.footer{background:linear-gradient(125deg,#082744,#064b86)!important;color:#f0f9ff!important;border-top:3px solid #8dd8ff!important}
+.footer a{color:#bce8ff!important}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
+ outline:3px solid #38bdf8!important;outline-offset:3px!important;
+}
+#adminModal .modal-content,#adminLoginModal .modal-content{
+ color:#f0f9ff!important;
+}
+#adminModal .modal-content h2,#adminModal .modal-content h3,
+#adminLoginModal .modal-content h2{color:#d7f2ff!important}
+#adminModal .modal-content p,#adminModal .modal-content label,
+#adminLoginModal .modal-content p{color:#e5f4ff!important}
+#adminModal .modal-content input,#adminModal .modal-content textarea,
+#adminModal .modal-content select,#adminLoginModal .modal-content input{
+ color:#f0f9ff!important;background:#071a35!important;border-color:#65bde9!important;
+}
+#adminModal .admin-product,#adminModal .admin-order-item,#adminModal .admin-grid>div{
+ color:#eaf5ff!important;
+}
+@media(max-width:640px){
+ header{padding:21px 10px 18px!important}
+ header h1{font-size:clamp(22px,6vw,29px)!important}
+ .nav{display:flex;flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;padding:4px 1px 10px;scrollbar-width:thin}
+ .nav>*{flex:0 0 auto}
+ .hero{grid-template-columns:1fr!important;padding:19px 15px!important;gap:8px!important}
+ .hero-art{font-size:52px!important;padding:7px!important}
+ .hero h2{font-size:22px!important}
+ .hero p{font-size:14px!important}
+ .tools{padding:12px!important}
+ .products{gap:10px!important}
+ .card{padding:9px!important}
+ .product-image{height:clamp(125px,37vw,180px)!important}
+ .card h3{font-size:14px!important}
+ .price{font-size:15px!important}
+ .muted{font-size:12px!important}
+ .card-actions{gap:6px!important}
+ .card-actions .btn{font-size:12px!important;padding:9px 6px!important;line-height:1.6!important}
+ .modal-content{padding:18px 14px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*:before,*:after{scroll-behavior:auto!important;animation:none!important;transition:none!important}
+}
+</style>
+
 </head>
 <body>
 <header>
