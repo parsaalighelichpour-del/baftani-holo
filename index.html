@@ -764,7 +764,7 @@ header{background:linear-gradient(125deg,#052b67 0%,#0876df 48%,#073d91 100%)}
 <button class="nav-btn" onclick="openTracking()">📦 پیگیری سفارش</button>
 <button class="nav-btn" onclick="openOrdersSection()">🧾 سفارش‌ها</button>
 <button class="nav-btn" onclick="openAccount()">👤 حساب من</button>
-<button class="nav-btn" onclick="openAdminLogin()">🔐 مدیریت</button>
+<button class="nav-btn" onclick="ordersAfterLogin=false;openAdminLogin()">🔐 مدیریت</button>
 <a href="https://ble.ir/Parsa_Gh93" target="_blank" rel="noopener" class="nav-btn">📢 کانال بله</a>
 </nav>
 </header>
@@ -1052,7 +1052,7 @@ function closeModal(id){$(id).style.display='none'}
 window.addEventListener('click',e=>{if(e.target.classList.contains('modal'))e.target.style.display='none'});
 window.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal').forEach(m=>m.style.display='none')});
 
-async function openAdminLogin(){$('adminEmail').value='parsaalighlichpour@gmail.com';$('adminPassword').value='';$('adminLoginModal').style.display='block'}
+async function openAdminLogin(){$('adminEmail').value='parsaalighlichpour@gmail.com';$('adminPassword').value='';$('adminLoginModal').querySelector('h2').textContent='🔐 ورود به پنل مدیریت';$('adminLoginModal').style.display='block'}
 async function openOrdersSection(){
  if(adminUnlocked){$('adminModal').style.display='block';await showAdminTab('orders');return}
  ordersAfterLogin=true;
