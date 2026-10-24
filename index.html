@@ -979,6 +979,157 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 }
 </style>
 
+
+<style id="helo-beauty-upgrade-v5">
+/* Holo beauty upgrade: visual-only polish, existing functionality preserved */
+:root{
+  --helo-blue:#1677e8;
+  --helo-blue-deep:#1047a5;
+  --helo-ice:#f1f8ff;
+  --helo-glass:rgba(255,255,255,.78);
+  --helo-line:rgba(36,123,225,.16);
+  --helo-shadow:0 14px 36px rgba(25,91,166,.12);
+}
+html{scroll-behavior:smooth;scroll-padding-top:88px}
+body{
+  background:
+    radial-gradient(ellipse at 8% 5%,rgba(107,190,255,.20),transparent 32%),
+    radial-gradient(ellipse at 92% 22%,rgba(119,167,255,.15),transparent 30%),
+    linear-gradient(180deg,#f7fbff 0%,#edf6ff 48%,#f8fbff 100%)!important;
+  color:#163252!important;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+  background-image:radial-gradient(rgba(36,112,196,.10) .7px,transparent .7px);
+  background-size:22px 22px;opacity:.3;
+}
+header,.header,.topbar,.nav{
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+}
+nav{
+  border:1px solid rgba(255,255,255,.62);
+  box-shadow:0 8px 28px rgba(20,83,151,.10);
+  border-radius:20px;
+}
+.nav-btn,.btn,button{
+  transition:transform .22s ease,box-shadow .22s ease,background .22s ease,filter .22s ease;
+}
+.btn:not(:disabled):hover,button:not(:disabled):hover,.nav-btn:hover{
+  transform:translateY(-2px);
+  filter:saturate(1.08);
+}
+.btn:not(:disabled):active,button:not(:disabled):active{transform:scale(.98)}
+.hero{
+  position:relative;isolation:isolate;overflow:hidden;
+  border:1px solid rgba(255,255,255,.68)!important;
+  border-radius:30px!important;
+  background:linear-gradient(125deg,rgba(255,255,255,.94),rgba(224,241,255,.82) 54%,rgba(206,229,255,.88))!important;
+  box-shadow:0 22px 55px rgba(24,96,175,.14),inset 0 1px 0 rgba(255,255,255,.95)!important;
+}
+.hero::before,.hero::after{
+  content:"";position:absolute;border-radius:50%;pointer-events:none;z-index:-1;
+}
+.hero::before{width:240px;height:240px;top:-110px;left:-45px;background:rgba(77,164,255,.14);filter:blur(2px)}
+.hero::after{width:170px;height:170px;bottom:-95px;right:24%;background:rgba(111,194,255,.16);filter:blur(3px)}
+.hero h1,.hero h2{letter-spacing:-.035em;line-height:1.5}
+.hero-art{filter:drop-shadow(0 14px 20px rgba(31,100,177,.16))}
+.section-head{margin-bottom:18px}
+.section-head h2,.section-head h3{letter-spacing:-.02em}
+#products{
+  gap:20px!important;
+}
+.card{
+  position:relative;overflow:hidden;
+  border:1px solid rgba(40,123,210,.13)!important;
+  border-radius:23px!important;
+  background:linear-gradient(155deg,rgba(255,255,255,.98),rgba(245,250,255,.91))!important;
+  box-shadow:0 7px 22px rgba(20,77,139,.07),inset 0 1px 0 rgba(255,255,255,.95)!important;
+  transition:transform .28s cubic-bezier(.2,.75,.25,1),box-shadow .28s ease,border-color .28s ease!important;
+}
+.card::before{
+  content:"";position:absolute;inset:0 0 auto;height:3px;z-index:2;
+  background:linear-gradient(90deg,#80d0ff,#2478e8,#a5cfff);
+  opacity:.0;transition:opacity .25s ease;
+}
+.card:hover{
+  transform:translateY(-6px)!important;
+  border-color:rgba(36,119,222,.32)!important;
+  box-shadow:0 18px 38px rgba(20,91,169,.15)!important;
+}
+.card:hover::before{opacity:1}
+.card .image-wrap,.card .product-image{
+  overflow:hidden;border-radius:18px!important;
+  background:linear-gradient(135deg,#edf7ff,#dceeff)!important;
+}
+.card img,.product-image img{
+  transition:transform .5s cubic-bezier(.2,.75,.25,1),filter .4s ease;
+}
+.card:hover img{transform:scale(1.045)}
+.card .price{color:#075fc6!important;font-weight:900;letter-spacing:-.02em}
+.card .badge,.pill{
+  border:1px solid rgba(39,120,220,.14);
+  box-shadow:0 3px 10px rgba(35,100,170,.07);
+}
+.tools,.tools-row,.search{
+  border-color:rgba(42,122,205,.15)!important;
+}
+input,textarea,select,.field{
+  border:1px solid rgba(36,111,194,.20)!important;
+  border-radius:13px!important;
+  background:rgba(255,255,255,.88)!important;
+  color:#173654!important;
+  transition:border-color .2s ease,box-shadow .2s ease!important;
+}
+input:focus,textarea:focus,select:focus,.field:focus{
+  outline:none!important;border-color:#4294f3!important;
+  box-shadow:0 0 0 4px rgba(55,145,239,.13)!important;
+}
+.btn:not(.secondary),button:not(.secondary):not(.close){
+  box-shadow:0 5px 14px rgba(20,101,203,.14);
+}
+.modal{
+  backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+}
+.modal-content{
+  border:1px solid rgba(255,255,255,.82)!important;
+  border-radius:25px!important;
+  box-shadow:0 24px 80px rgba(5,39,85,.24),inset 0 1px 0 rgba(255,255,255,.85)!important;
+}
+.close{border-radius:12px;transition:transform .2s ease,background .2s ease}
+.close:hover{transform:rotate(5deg) scale(1.04)}
+.cart-item,.admin-product,.comment-box,.invoice-area,.summary-line,.empty,.notice{
+  border-radius:16px!important;
+}
+.heart{transition:transform .2s ease,background .2s ease}
+.heart:hover{transform:scale(1.12)}
+footer{
+  border-top:1px solid rgba(40,119,202,.12);
+}
+@keyframes heloSoftRise{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.hero,.section-head{animation:heloSoftRise .55s ease both}
+@media(min-width:760px){
+  .hero{padding:clamp(24px,4vw,48px)!important}
+}
+@media(max-width:600px){
+  .hero{border-radius:23px!important}
+  .card{border-radius:18px!important}
+  .card:hover{transform:translateY(-2px)!important}
+  .modal-content{border-radius:20px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}
+}
+/* Keep the administrator's requested dark blue glass appearance */
+#adminModal .modal-content{
+  background:linear-gradient(145deg,rgba(8,29,62,.98),rgba(13,57,112,.97))!important;
+  border:1px solid rgba(119,190,255,.32)!important;
+  box-shadow:0 24px 80px rgba(2,19,46,.40),inset 0 1px 0 rgba(255,255,255,.10)!important;
+}
+</style>
+
 </head>
 <body>
 <header>
