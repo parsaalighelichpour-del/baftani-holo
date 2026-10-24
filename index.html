@@ -1298,6 +1298,32 @@ footer a{color:#155eb8!important}
 <div class="hero-art">🧶🧸💙</div>
 </section>
 
+<section class="holo-profile" id="holo-google-profile" aria-label="معرفی فروشگاه بافتنی هلو">
+  <div class="holo-profile-top">
+    <div class="holo-profile-brand">
+      <div class="holo-profile-logo" aria-hidden="true">🍑</div>
+      <div>
+        <span class="holo-profile-tag">🧶 محصولات دست‌ساز با عشق</span>
+        <h2>فروشگاه بافتنی هلو</h2>
+        <p>عروسک‌های بافتنی، جاکلیدی، گل و هدیه‌های خاص؛ هر محصول با حوصله و عشق بافته می‌شود.</p>
+      </div>
+    </div>
+    <div style="font-size:clamp(42px,8vw,76px);text-align:center" aria-hidden="true">🧸💙</div>
+  </div>
+  <div class="holo-profile-links">
+    <a href="https://parsaalighelichpour-del.github.io/baftani-holo/" aria-label="مشاهده محصولات فروشگاه">🌐 مشاهده فروشگاه</a>
+    <a href="https://ble.ir/Parsa_Gh93" target="_blank" rel="noopener">📢 کانال بله</a>
+    <a href="#shop">🛍️ دیدن محصولات</a>
+  </div>
+  <div class="holo-profile-gallery" aria-label="دسته‌های محصولات">
+    <div class="holo-profile-item" title="جاکلیدی بافتنی">🍓</div>
+    <div class="holo-profile-item" title="عروسک بافتنی">🐰</div>
+    <div class="holo-profile-item" title="هدیه دست‌ساز">🧸</div>
+    <div class="holo-profile-item" title="سبد بافتنی">🧺</div>
+  </div>
+  <div class="holo-profile-note">💙 <strong>بافتنی هلو؛</strong> انتخابی دوست‌داشتنی برای هدیه دادن و خوشحال کردن عزیزانت. از محصولات دیدن کن و سفارش خودت را در همین فروشگاه ثبت کن.</div>
+</section>
+
 <section class="tools" id="shop">
 <input id="searchInput" class="search" placeholder="🔎 جست‌وجوی نام یا دستهٔ محصول..." oninput="renderProducts()">
 <div class="tools-row">
@@ -1553,6 +1579,22 @@ const html=`<!DOCTYPE html><html lang="fa" dir="rtl"><meta charset="UTF-8"><titl
     max-height:calc(100dvh - 16px)!important;
   }
 }
+
+/* معرفی ویژه فروشگاه هلو */
+.holo-profile{margin:20px 0 26px;padding:clamp(16px,3vw,30px);border:1px solid #9ccfff;border-radius:22px;background:linear-gradient(135deg,#f8fcff,#dceeff 58%,#eff8ff);box-shadow:0 14px 35px #001b3b20;overflow:hidden;color:#123f78}
+.holo-profile-top{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center}
+.holo-profile-brand{display:flex;align-items:center;gap:14px}
+.holo-profile-logo{width:92px;height:92px;flex:0 0 92px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 30% 25%,#58baff,#0754b6 70%);border:4px solid white;box-shadow:0 0 0 3px #78bdff;font-size:45px}
+.holo-profile h2{font-size:clamp(23px,4vw,34px);margin:0 0 7px;color:#0b438d}
+.holo-profile p{line-height:1.9;margin:7px 0;color:#31577e}
+.holo-profile-tag{display:inline-block;background:#d4eaff;border:1px solid #b2d7ff;border-radius:999px;padding:7px 12px;font-size:13px;font-weight:bold}
+.holo-profile-links{display:flex;gap:9px;flex-wrap:wrap;margin:18px 0}
+.holo-profile-links a{flex:1;min-width:125px;text-align:center;text-decoration:none;border:1px solid #a9d2ff;background:#ffffffc9;color:#0753a7;padding:12px 10px;border-radius:14px;font-weight:bold}
+.holo-profile-gallery{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.holo-profile-item{min-height:105px;border-radius:15px;background:linear-gradient(135deg,#d5eaff,#fff);display:grid;place-items:center;font-size:clamp(34px,7vw,58px);border:1px solid #c1ddfa}
+.holo-profile-note{margin-top:14px;background:#ffffffb8;border:1px solid #c6e1ff;padding:13px 15px;border-radius:15px;line-height:1.9}
+@media(max-width:520px){.holo-profile-top{grid-template-columns:1fr}.holo-profile-logo{width:72px;height:72px;flex-basis:72px;font-size:36px}.holo-profile-gallery{gap:6px}.holo-profile-item{min-height:78px;border-radius:11px}}
+
 </style>
 
 </body></html>`;
