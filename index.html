@@ -1256,6 +1256,22 @@ footer a{color:#155eb8!important}
 }
 </style>
 
+<style id="helo-two-column-finish-v7">
+#products.products{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important;align-items:stretch}
+#products .card{min-width:0!important;padding:10px!important;border-radius:20px!important;border:1px solid #dceafa!important;background:linear-gradient(155deg,#fff,#f1f8ff)!important;box-shadow:0 8px 24px rgba(20,78,139,.09)!important;display:flex;flex-direction:column}
+#products .image-wrap{overflow:hidden;border-radius:15px!important;background:#eaf5ff!important}
+#products .product-image{display:block;width:100%!important;height:clamp(125px,27vw,220px)!important;object-fit:cover!important;border-radius:15px!important}
+#products .card h3{font-size:clamp(12px,1.5vw,16px)!important;line-height:1.8!important;margin:11px 3px 4px!important;overflow-wrap:anywhere}
+#products .card .muted{font-size:12px!important;line-height:1.7!important}
+#products .card .price{font-size:clamp(14px,1.7vw,19px)!important;margin:8px 3px 10px!important}
+#products .card-actions{display:flex!important;flex-direction:column!important;gap:7px!important;margin-top:auto!important}
+#products .card-actions .btn{width:100%!important;min-width:0!important;padding:10px 6px!important;font-size:12px!important;border-radius:12px!important}
+#products .badge{max-width:calc(100% - 48px);font-size:10px!important;padding:5px 7px!important}
+#products .heart{width:33px!important;height:33px!important;font-size:17px!important}
+@media(min-width:900px){#products.products{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:22px!important}#products .product-image{height:225px!important}#products .card-actions{flex-direction:row!important}#products .card-actions .btn{font-size:13px!important}}
+@media(max-width:390px){#products.products{gap:9px!important}#products .card{padding:8px!important;border-radius:16px!important}#products .product-image{height:clamp(115px,35vw,150px)!important}#products .card h3{font-size:12px!important}#products .card .price{font-size:14px!important}#products .card-actions .btn{font-size:11px!important;padding:9px 4px!important}}
+</style>
+
 </head>
 <body>
 <header>
