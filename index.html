@@ -1144,17 +1144,16 @@ function renderAdminProducts(){if(!adminUnlocked)return;$('adminProductList').in
 async function addAdminProduct(){if(!adminUnlocked)return;const name=$('newName').value.trim(),price=Number($('newPrice').value),category=$('newCategory').value,badge=$('newBadge').value.trim()||'🧶 دست‌ساز',description=$('newDescription').value.trim(),stock=Math.max(0,Math.floor(Number($('newStock').value)||0)),stock_enabled=$('newStockEnabled').checked,files=Array.from($('newImage').files||[]);if(!name||!Number.isFinite(price)||price<0){alert('نام و قیمت معتبر وارد کن.');return}if(files.length>6){alert('برای هر محصول حداکثر ۶ عکس انتخاب کن.');return}if(files.length>6){alert('برای هر محصول حداکثر ۶ عکس انتخاب کن.');return}const id=Math.max(0,...products.map(p=>Number(p.id)||0))+1;const emoji='🧶';let images=[svgEmoji(emoji),svgEmoji(emoji+' 💙','#f3f9ff')];if(files.length){const uploaded=[];try{for(const file of files){const url=await uploadImageFile(file,id);uploaded.push(url)}images=uploaded}catch(error){console.error('بارگذاری عکس هنگام افزودن محصول ناموفق بود:',error);alert('محصول ساخته نشد. '+(error&&error.message?error.message:'بارگذاری عکس ناموفق بود.'));return}}const product={id,name,price,category,badge,description,emoji,active:true,images,stock,stock_enabled};const ok=await window.HeloServer.saveProduct(product);if(!ok){alert('ذخیره محصول در سرور ناموفق بود؛ دوباره تلاش کن.');return}products.push(product);saveJSON('heloProductsV2',products);if(window.refreshHeloProducts)await window.refreshHeloProducts();['newName','newPrice','newBadge','newDescription'].forEach(k=>$(k).value='');$('newImage').value='';$('newStock').value='1';$('newStockEnabled').checked=true;renderAdminProducts();renderProducts();alert('محصول با '+(files.length||'تصاویر پیش‌فرض')+' تصویر روی سرور ذخیره شد 💙')}
 async function prepareProductImage(file){
   if(!file) throw new Error('فایلی انتخاب نشده است.');
-  const type=String(file.type||'').toLowerCase();
   const ext=(String(file.name||'').split('.').pop()||'').toLowerCase();
-  const looksLikeImage=type.startsWith('image/')||['jpg','jpeg','png','webp','gif','bmp','avif'].includes(ext);
+  const inferredType=({jpg:'image/jpeg',jpeg:'image/jpeg',png:'image/png',webp:'image/webp',gif:'image/gif',bmp:'image/bmp',avif:'image/avif',heic:'image/heic',heif:'image/heif'})[ext]||'';
+  const type=String(file.type||inferredType).toLowerCase();
+  const looksLikeImage=type.startsWith('image/')||Boolean(inferredType);
   if(!looksLikeImage) throw new Error('فایل انتخاب‌شده تصویر شناخته نشد؛ یک JPG یا PNG انتخاب کن.');
   if(file.size>15*1024*1024) throw new Error('حجم عکس بیشتر از ۱۵ مگابایت است.');
-  if(file.size<=4*1024*1024 && type && !['image/heic','image/heif'].includes(type)) return file;
+  if(['image/heic','image/heif'].includes(type)) throw new Error('فرمت HEIC/HEIF در این پنل پشتیبانی نمی‌شود؛ عکس را از گالری به JPG تبدیل کن.');
+  if(file.size<=4*1024*1024) return file;
   // Compress large phone photos before upload to avoid slow or rejected uploads.
-  if(!type.startsWith('image/') || ['image/heic','image/heif'].includes(type)) {
-    if(file.size<=5*1024*1024 && type.startsWith('image/')) return file;
-    throw new Error('این فرمت عکس روی گوشی قابل فشرده‌سازی نیست؛ آن را به JPG یا PNG تبدیل کن.');
-  }
+  if(!type.startsWith('image/')) throw new Error('فرمت عکس قابل شناسایی نیست؛ آن را به JPG یا PNG تبدیل کن.');
   const objectUrl=URL.createObjectURL(file);
   try {
     const img=new Image();
