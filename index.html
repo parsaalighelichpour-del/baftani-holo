@@ -1714,7 +1714,32 @@ window.uploadProductImage=async function(id,button){
 }
 
 
-async function setProductStock(id){if(!adminUnlocked)return;const p=products.find(x=>String(x.id)===String(id));if(!p)return;const value=prompt('تعداد موجودی برای '+p.name+' (عدد صفر یعنی ناموجود):',p.stock_enabled?Number(p.stock):'');if(value===null)return;if(value.trim()===''||!Number.isInteger(Number(value))||Number(value)<0){alert('موجودی باید عدد صحیح صفر یا بیشتر باشد.');return}const updated={...p,stock:Number(value),stock_enabled:true};const ok=await window.HeloServer.saveProduct(updated);if(!ok){alert('ذخیره موجودی ناموفق بود.');return}Object.assign(p,updated);if(window.refreshHeloProducts)await window.refreshHeloProducts();renderAdminProducts();renderProducts();alert(Number(value)===0?'محصول ناموجود شد و در همه دستگاه‌ها همین وضعیت را نشان می‌دهد.':'موجودی در سرور ذخیره شد و در همه دستگاه‌ها به‌روز می‌شود.')}
+async function setProductStock(id){
+  if(!adminUnlocked){alert('ابتدا وارد پنل مدیریت شو.');return}
+  const p=products.find(x=>String(x.id)===String(id));
+  if(!p){alert('محصول پیدا نشد؛ فهرست محصولات را تازه کن.');return}
+  const normalizeDigits=value=>String(value).replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[٬,،]/g,'').trim();
+  const raw=prompt('تعداد موجودی برای «'+p.name+'» را وارد کن.\nعدد ۰ یعنی ناموجود؛ فقط عدد صحیح مجاز است:',String(p.stock_enabled?Number(p.stock)||0:''));
+  if(raw===null)return;
+  const cleaned=normalizeDigits(raw);
+  if(cleaned===''||!/^\d+$/.test(cleaned)||!Number.isSafeInteger(Number(cleaned))||Number(cleaned)<0){
+    alert('موجودی معتبر نیست. یک عدد صحیح مثل 0، 5 یا 25 وارد کن.');return
+  }
+  const stock=Number(cleaned), updated={...p,stock,stock_enabled:true};
+  try{
+    if(!window.HeloServer||typeof window.HeloServer.saveProduct!=='function')throw new Error('اتصال فروشگاه آماده نیست؛ صفحه را تازه کن و دوباره امتحان کن.');
+    const saved=await window.HeloServer.saveProduct(updated);
+    if(!saved)throw new Error('سرور ذخیره موجودی را تأیید نکرد.');
+    Object.assign(p,updated);
+    saveJSON('heloProductsV2',products);
+    if(window.refreshHeloProducts)await window.refreshHeloProducts();
+    renderAdminProducts();renderProducts();
+    alert(stock===0?'موجودی ذخیره شد؛ محصول در فروشگاه ناموجود نمایش داده می‌شود.':'موجودی '+stock+' عدد ذخیره شد و در فروشگاه به‌روزرسانی شد.');
+  }catch(error){
+    console.error('ذخیره موجودی محصول ناموفق بود:',error);
+    alert('موجودی ذخیره نشد: '+(error&&error.message?error.message:'خطای نامشخص')+'\nلطفاً اتصال اینترنت و دسترسی پنل مدیریت را بررسی کن.');
+  }
+}
 async function editAdminProduct(id){if(!adminUnlocked)return;const p=products.find(x=>String(x.id)===String(id));if(!p)return;const name=prompt('نام محصول:',p.name);if(name===null)return;const price=prompt('قیمت به تومان:',p.price);if(price===null)return;if(!name.trim()||!Number.isFinite(Number(price))||Number(price)<0){alert('نام یا قیمت معتبر نیست.');return}const description=prompt('توضیحات محصول:',p.description||'');if(description===null)return;const stock=prompt('موجودی عددی (خالی = کنترل موجودی خاموش، صفر = ناموجود):',p.stock_enabled?String(p.stock):'');if(stock===null)return;if(stock.trim()!==''&&(!Number.isInteger(Number(stock))||Number(stock)<0)){alert('موجودی باید عدد صحیح صفر یا بیشتر باشد.');return}const updated={...p,name:name.trim(),price:Number(price),description:description.trim(),stock:stock.trim()===''?Number(p.stock||0):Number(stock),stock_enabled:stock.trim()!==''};const ok=await window.HeloServer.saveProduct(updated);if(!ok){alert('ذخیره در پایگاه داده ناموفق بود؛ تغییر اعمال نشد.');return}Object.assign(p,updated);saveJSON('heloProductsV2',products);if(window.refreshHeloProducts)await window.refreshHeloProducts();renderAdminProducts();renderProducts();alert('تغییرات محصول در سرور ذخیره شد و بین دستگاه‌ها هماهنگ می‌شود.')}
 async function toggleAdminProduct(id){if(!adminUnlocked)return;const p=products.find(x=>String(x.id)===String(id));if(!p)return;const updated={...p,active:p.active===false};const ok=await window.HeloServer.saveProduct(updated);if(!ok){alert('ذخیره در پایگاه داده ناموفق بود؛ وضعیت محصول تغییر نکرد.');return}Object.assign(p,updated);saveJSON('heloProductsV2',products);if(window.refreshHeloProducts)await window.refreshHeloProducts();renderAdminProducts();renderProducts()}
 async function renderAdminOrders(){if(!adminUnlocked)return;const box=$('adminOrderList');box.innerHTML='<div class="notice">در حال دریافت سفارش‌ها از سرور…</div>';try{const orders=await window.HeloServer.getOrders();const labels={new:'جدید',preparing:'در حال آماده‌سازی',shipped:'ارسال‌شده',completed:'تکمیل‌شده',cancelled:'لغوشده'};box.innerHTML=orders.length?orders.map(o=>`<div class="admin-product"><strong>${esc(o.order_code||o.id)}</strong><p>👤 ${esc(o.customer_name||o.name)} · 📱 ${esc(o.phone)}</p><p>تاریخ: ${esc(o.created_at||o.date||'')}</p><p>🧶 محصولات: ${(o.items||[]).map(it=>{const p=products.find(x=>String(x.id)===String(it.id));return esc(it.name||(p&&p.name)||it.id)+' × '+formatPrice(it.qty)}).join('، ')||'جزئیات محصول ثبت نشده'}</p><strong>${formatPrice(o.total)} تومان</strong><label class="field-label">وضعیت سفارش</label><select class="field" onchange="updateOrderStatus('${esc(o.id)}',this.value)">${Object.entries(labels).map(([v,l])=>`<option value="${v}" ${(o.status||'new')===v?'selected':''}>${l}</option>`).join('')}</select></div>`).join(''):'<div class="empty">هنوز سفارشی در سرور ثبت نشده است.</div>'}catch(e){console.error('دریافت سفارش‌ها ناموفق بود:',e);box.innerHTML='<div class="notice">خطا در دریافت سفارش‌ها: '+esc(e&&e.message?e.message:'اتصال سرور را بررسی کن')+'<br>دوباره روی «تازه‌سازی سفارش‌ها» بزن.</div>'}}
