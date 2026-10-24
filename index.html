@@ -1426,6 +1426,53 @@ body.dark-mode .cat.active{background:#0879d1;color:white}
 }
 
 
+
+/* === Fix profile site/channel links appearance === */
+.holo-profile-links{
+ display:grid!important;
+ grid-template-columns:repeat(3,minmax(0,1fr))!important;
+ gap:10px!important;
+ align-items:stretch;
+ width:100%;
+}
+.holo-profile-links a,
+.holo-profile-links a.holo-profile-link{
+ display:flex!important;
+ align-items:center;
+ justify-content:center;
+ min-width:0!important;
+ min-height:46px;
+ box-sizing:border-box;
+ padding:11px 12px!important;
+ border:1px solid #a9d7fa!important;
+ border-radius:13px!important;
+ background:linear-gradient(135deg,#f5fbff,#dcefff)!important;
+ color:#0757a5!important;
+ text-decoration:none!important;
+ text-align:center;
+ font-family:Tahoma,Arial,sans-serif;
+ font-size:14px;
+ font-weight:700;
+ line-height:1.7;
+ white-space:normal;
+ overflow-wrap:anywhere;
+ box-shadow:0 5px 14px rgba(7,85,165,.12);
+ transition:transform .18s,box-shadow .18s,background .18s;
+}
+.holo-profile-links a:hover{
+ transform:translateY(-2px);
+ box-shadow:0 9px 20px rgba(7,85,165,.18);
+}
+.holo-profile-links a.holo-profile-link-primary{
+ background:linear-gradient(135deg,#1688e8,#0755a5)!important;
+ color:#fff!important;
+ border-color:#1688e8!important;
+}
+@media(max-width:520px){
+ .holo-profile-links{grid-template-columns:1fr!important;gap:8px!important}
+ .holo-profile-links a,.holo-profile-links a.holo-profile-link{min-height:44px;font-size:13px;padding:10px!important}
+}
+
 /* === Holo button visibility and balance fix === */
 button,a.nav-btn,.btn,.cat{
  cursor:pointer;
@@ -1551,9 +1598,9 @@ img,video,canvas,iframe{max-width:100%}
     <div style="font-size:clamp(42px,8vw,76px);text-align:center" aria-hidden="true">🧸💙</div>
   </div>
   <div class="holo-profile-links">
-    <a href="https://parsaalighelichpour-del.github.io/baftani-holo/" aria-label="مشاهده محصولات فروشگاه">🌐 مشاهده فروشگاه</a>
-    <a href="https://ble.ir/Parsa_Gh93" target="_blank" rel="noopener">📢 کانال بله</a>
-    <a href="#shop">🛍️ دیدن محصولات</a>
+    <a class="holo-profile-link" href="https://parsaalighelichpour-del.github.io/baftani-holo/" aria-label="دیدن سایت فروشگاه">🌐 دیدن سایت</a>
+    <a class="holo-profile-link" href="https://ble.ir/Parsa_Gh93" target="_blank" rel="noopener">📢 کانال بله</a>
+    <a class="holo-profile-link holo-profile-link-primary" href="#shop">🛍️ دیدن محصولات</a>
   </div>
   <div class="holo-profile-gallery" aria-label="دسته‌های محصولات">
     <div class="holo-profile-item" title="جاکلیدی بافتنی">🍓</div>
