@@ -1052,7 +1052,7 @@ function closeModal(id){$(id).style.display='none'}
 window.addEventListener('click',e=>{if(e.target.classList.contains('modal'))e.target.style.display='none'});
 window.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal').forEach(m=>m.style.display='none')});
 
-async function openAdminLogin(){
+async async function openAdminLogin(){
   if(adminUnlocked){
     ordersAfterLogin=false;
     $('adminLoginModal').style.display='none';
