@@ -1168,10 +1168,16 @@ window.uploadProductImage=async function(id,button){
   if(button){button.dataset.uploading='1';button.disabled=true;button.textContent='در حال آپلود…';}
   try{
     const urls=[];
-    for(const file of files) urls.push(await uploadImageFile(file,id));
+    for(let i=0;i<files.length;i++){
+      if(button)button.textContent='در حال آپلود عکس '+(i+1)+' از '+files.length+'…';
+      urls.push(await uploadImageFile(files[i],id));
+    }
     const updated={...p,images:[...existing,...urls]};
-    const ok=await window.HeloServer.saveProduct(updated);
-    if(!ok) throw new Error('عکس آپلود شد، اما ذخیرهٔ اطلاعات محصول در پایگاه داده انجام نشد.');
+    if(button)button.textContent='عکس آپلود شد؛ در حال ذخیره محصول…';
+    const savePromise=window.HeloServer.saveProduct(updated);
+    const timeoutPromise=new Promise((_,reject)=>setTimeout(()=>reject(new Error('عکس آپلود شد، اما ذخیره محصول بیش از ۲۰ ثانیه طول کشید. اینترنت را بررسی کن و دوباره امتحان کن.')),20000));
+    const saved=await Promise.race([savePromise,timeoutPromise]);
+    if(!saved) throw new Error('عکس آپلود شد، اما سرور اطلاعات محصول را ذخیره نکرد.');
     Object.assign(p,updated);
     saveJSON('heloProductsV2',products);
     if(window.refreshHeloProducts) await window.refreshHeloProducts();
@@ -1261,11 +1267,13 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
     return (data || []).map(localProduct);
   }
   async function saveServerProduct(product) {
-    try {
-      const { data, error } = await db.from("products").upsert(serverProduct(product), {onConflict:"id"}).select().single();
-      if (error) throw error;
-      return data;
-    } catch (e) { console.error("ذخیره محصول ناموفق بود:", e.message); return null; }
+    const { data, error } = await db.from("products").upsert(serverProduct(product), {onConflict:"id"}).select().single();
+    if (error) {
+      console.error("ذخیره محصول ناموفق بود:", error.message, error);
+      throw new Error(error.message || "ذخیره محصول در پایگاه داده انجام نشد.");
+    }
+    if (!data) throw new Error("سرور پاسخ ذخیره محصول را برنگرداند.");
+    return data;
   }
   async function saveServerOrder(order) {
     try {
