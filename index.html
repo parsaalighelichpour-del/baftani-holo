@@ -1055,12 +1055,16 @@ window.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelector
 async function openAdminLogin(){$('adminEmail').value='parsaalighlichpour@gmail.com';$('adminPassword').value='';$('adminLoginModal').querySelector('h2').textContent='🔐 ورود به پنل مدیریت';$('adminLoginModal').style.display='block'}
 window.openOrdersSection = async function(){
  try {
+  ordersAfterLogin=true;
   if(adminUnlocked){
    $('adminModal').style.display='block';
    await showAdminTab('orders');
+   const productButton=Array.from($('adminModal').querySelectorAll('.tools-row button')).find(b=>b.textContent.includes('مدیریت محصولات'));
+   if(productButton)productButton.style.display='none';
+   $('adminProductsTab').classList.add('hide');
+   $('adminOrdersTab').classList.remove('hide');
    return;
   }
-  ordersAfterLogin=true;
   await openAdminLogin();
   $('adminLoginModal').querySelector('h2').textContent='🔐 ورود برای مشاهده سفارش‌ها';
  } catch(e) {
@@ -1090,8 +1094,19 @@ async function adminLogin(){
       closeModal('adminLoginModal');
       if(adminUnlocked){
         $('adminModal').style.display='block';
-        if(ordersAfterLogin){ordersAfterLogin=false;$('adminLoginModal').querySelector('h2').textContent='🔐 ورود به پنل مدیریت';await showAdminTab('orders')}
-        else{await showAdminTab('products')}
+        if(ordersAfterLogin){
+          ordersAfterLogin=false;
+          $('adminLoginModal').querySelector('h2').textContent='🔐 ورود به پنل مدیریت';
+          await showAdminTab('orders');
+          const productButton=Array.from($('adminModal').querySelectorAll('.tools-row button')).find(b=>b.textContent.includes('مدیریت محصولات'));
+          if(productButton)productButton.style.display='none';
+          $('adminProductsTab').classList.add('hide');
+          $('adminOrdersTab').classList.remove('hide');
+        }else{
+          const productButton=Array.from($('adminModal').querySelectorAll('.tools-row button')).find(b=>b.textContent.includes('مدیریت محصولات'));
+          if(productButton)productButton.style.display='';
+          await showAdminTab('products');
+        }
       } else {ordersAfterLogin=false;alert('حساب شما اجازه مدیریت ندارد.')}
     }
   } catch(e) {
