@@ -1425,6 +1425,64 @@ body.dark-mode .cat.active{background:#0879d1;color:white}
  .footer{font-size:13px;padding:24px 12px}
 }
 
+
+/* === Holo button visibility and balance fix === */
+button,a.nav-btn,.btn,.cat{
+ cursor:pointer;
+ font-family:Tahoma,Arial,sans-serif;
+ text-decoration:none;
+}
+main .btn, .modal-content .btn{
+ display:inline-flex;
+ align-items:center;
+ justify-content:center;
+ text-align:center;
+ gap:6px;
+ min-height:40px;
+ padding:10px 14px;
+ color:#fff;
+ background:linear-gradient(135deg,#1688e8,#0755a5);
+ border:1px solid rgba(255,255,255,.5);
+ border-radius:12px;
+ box-shadow:0 5px 14px rgba(7,85,165,.18);
+ line-height:1.65;
+ visibility:visible;
+ opacity:1;
+}
+main .btn.secondary,.modal-content .btn.secondary{
+ color:#0757a5;
+ background:linear-gradient(135deg,#edf8ff,#d8efff);
+ border:1px solid #a9d7f8;
+ box-shadow:0 3px 9px rgba(7,85,165,.09);
+}
+main .btn:disabled,.modal-content .btn:disabled{
+ opacity:.6;
+ cursor:not-allowed;
+ filter:grayscale(.15);
+}
+.card-actions{
+ display:grid!important;
+ grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ align-items:stretch;
+ gap:8px!important;
+ margin-top:10px;
+ width:100%;
+}
+.card-actions .btn{
+ display:flex!important;
+ width:100%;
+ min-width:0!important;
+ min-height:40px;
+ padding:8px 5px!important;
+ white-space:normal;
+ overflow-wrap:anywhere;
+ font-size:12px!important;
+}
+.cat{display:inline-flex;align-items:center;justify-content:center}
+@media(max-width:470px){
+ .card-actions{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}
+ .card-actions .btn{font-size:11px!important;min-height:38px;padding:7px 3px!important}
+}
 /* === Holo viewport alignment fix === */
 *,*::before,*::after{box-sizing:border-box}
 html,body{width:100%;max-width:100%;margin:0;overflow-x:clip}
