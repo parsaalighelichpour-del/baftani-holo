@@ -762,7 +762,7 @@ header{background:linear-gradient(125deg,#052b67 0%,#0876df 48%,#073d91 100%)}
 <nav class="nav">
 <button class="nav-btn" onclick="openCart()">🛒 سبد خرید (<span id="cartCount">۰</span>)</button>
 <button class="nav-btn" onclick="openTracking()">📦 پیگیری سفارش</button>
-<button class="nav-btn" onclick="openOrdersSection()">🧾 سفارش‌ها</button>
+<button type="button" id="openOrdersNavButton" class="nav-btn" onclick="window.openOrdersSection()">🧾 سفارش‌ها</button>
 <button class="nav-btn" onclick="openAccount()">👤 حساب من</button>
 <button class="nav-btn" onclick="ordersAfterLogin=false;openAdminLogin()">🔐 مدیریت</button>
 <a href="https://ble.ir/Parsa_Gh93" target="_blank" rel="noopener" class="nav-btn">📢 کانال بله</a>
@@ -1053,12 +1053,25 @@ window.addEventListener('click',e=>{if(e.target.classList.contains('modal'))e.ta
 window.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal').forEach(m=>m.style.display='none')});
 
 async function openAdminLogin(){$('adminEmail').value='parsaalighlichpour@gmail.com';$('adminPassword').value='';$('adminLoginModal').querySelector('h2').textContent='🔐 ورود به پنل مدیریت';$('adminLoginModal').style.display='block'}
-async function openOrdersSection(){
- if(adminUnlocked){$('adminModal').style.display='block';await showAdminTab('orders');return}
- ordersAfterLogin=true;
- await openAdminLogin();
- $('adminLoginModal').querySelector('h2').textContent='🔐 ورود برای مشاهده سفارش‌ها';
-}
+window.openOrdersSection = async function(){
+ try {
+  if(adminUnlocked){
+   $('adminModal').style.display='block';
+   await showAdminTab('orders');
+   return;
+  }
+  ordersAfterLogin=true;
+  await openAdminLogin();
+  $('adminLoginModal').querySelector('h2').textContent='🔐 ورود برای مشاهده سفارش‌ها';
+ } catch(e) {
+  console.error('باز کردن بخش سفارش‌ها ناموفق بود:',e);
+  alert('باز کردن بخش سفارش‌ها ناموفق بود. صفحه را تازه‌سازی کن و دوباره امتحان کن.');
+ }
+};
+document.addEventListener('DOMContentLoaded',function(){
+ const btn=$('openOrdersNavButton');
+ if(btn) btn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();window.openOrdersSection();});
+});
 
 function updateVipWelcome(isVip){const banner=$('vipWelcomeBanner');if(!banner)return;const user=readJSON('heloUser',null);const normalizeName=v=>String(v||'').replace(/[ي]/g,'ی').replace(/[ك]/g,'ک').replace(/\s+/g,' ').trim();const ownerNameMatches=!!user&&normalizeName(user.name)==='پارسا قلیچ پور';const showVip=!!isVip&&!!adminUnlocked&&ownerNameMatches;banner.style.display=showVip?'flex':'none';document.body.classList.toggle('helo-vip-active',showVip)}
 async function adminLogin(){
