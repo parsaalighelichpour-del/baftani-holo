@@ -853,7 +853,7 @@ header{background:linear-gradient(125deg,#052b67 0%,#0876df 48%,#073d91 100%)}
 
 <div class="modal" id="adminModal"><div class="modal-content">
 <button class="close" onclick="adminLogout()">×</button><h2>پنل مدیریت هلو</h2><p>مدیریت محصولات و سفارش‌ها</p>
-<div class="tools-row"><button class="btn" onclick="showAdminTab('products')">مدیریت محصولات</button><button class="btn secondary" onclick="showAdminTab('orders')">سفارش‌ها</button><button class="btn danger" onclick="adminLogout()">خروج</button></div>
+<div class="tools-row"><button class="btn" onclick="showAdminTab('products')">مدیریت محصولات</button><button class="btn secondary" onclick="showAdminTab('photos')">📸 عکس محصولات</button><button class="btn secondary" onclick="showAdminTab('orders')">سفارش‌ها</button><button class="btn danger" onclick="adminLogout()">خروج</button></div>
 <section id="adminProductsTab">
 <h3>➕ افزودن محصول</h3>
 <div class="admin-grid">
@@ -871,7 +871,7 @@ header{background:linear-gradient(125deg,#052b67 0%,#0876df 48%,#073d91 100%)}
 <button id="heloAddProductButton" type="button" class="btn" onclick="return false">افزودن محصول</button>
 <h3>محصولات فعلی</h3><div id="adminProductList"></div>
 </section>
-<section id="adminOrdersTab" class="hide"><h3>📦 سفارش‌های ثبت‌شده روی سرور</h3><div class="notice">سفارش‌ها از پایگاه داده مشترک خوانده می‌شوند؛ تغییر وضعیت اینجا برای پنل مدیریت روی دستگاه‌های دیگر هم ذخیره می‌شود.</div><button class="btn secondary small" onclick="renderAdminOrders()">🔄 تازه‌سازی سفارش‌ها</button><div id="adminOrderList"></div></section>
+<section id="adminPhotosTab" class="hide"><h3>📸 مدیریت عکس محصولات</h3><p>محصول را انتخاب کن و عکسش را از گالری گوشی انتخاب کن.</p><select id="photoProductSelect" class="field"><option value="">انتخاب محصول</option></select><input id="photoProductFile" class="field" type="file" accept="image/*"><img id="photoManagerPreview" style="max-width:100%;max-height:220px;object-fit:contain"><p id="photoManagerStatus" class="muted">حداکثر ۵ مگابایت</p><button id="photoManagerUploadButton" class="btn" type="button" onclick="saveManagerPhoto()">ذخیره عکس</button></section><section id="adminOrdersTab" class="hide"><h3>📦 سفارش‌های ثبت‌شده روی سرور</h3><div class="notice">سفارش‌ها از پایگاه داده مشترک خوانده می‌شوند؛ تغییر وضعیت اینجا برای پنل مدیریت روی دستگاه‌های دیگر هم ذخیره می‌شود.</div><button class="btn secondary small" onclick="renderAdminOrders()">🔄 تازه‌سازی سفارش‌ها</button><div id="adminOrderList"></div></section>
 </div></div>
 
 "<form id="orderForm" action="https://formsubmit.co/Parsaalighlichpour@gmail.com" method="POST" target="_blank" class="hide">
