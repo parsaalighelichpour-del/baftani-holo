@@ -800,6 +800,48 @@ header{background:linear-gradient(125deg,#052b67 0%,#0876df 48%,#073d91 100%)}
 }
 </style>
 
+
+<style id="helo-shop-update-v3">
+/* آپدیت ظاهری فروشگاه؛ بدون تغییر در منطق سبد خرید یا پنل مدیریت */
+:root{scroll-behavior:smooth}
+body{background-image:radial-gradient(ellipse at 8% 8%,rgba(56,189,248,.10),transparent 30%),radial-gradient(ellipse at 92% 28%,rgba(59,130,246,.08),transparent 32%)}
+header{position:relative;overflow:hidden}
+header:after{content:"";position:absolute;width:240px;height:240px;left:-95px;top:-145px;border-radius:50%;background:rgba(125,211,252,.10);pointer-events:none}
+header h1{letter-spacing:-.4px;text-shadow:0 4px 24px rgba(56,189,248,.18)}
+.nav{scrollbar-width:thin;scrollbar-color:rgba(125,211,252,.45) transparent}
+.nav-btn,.btn,.cat{transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease,background .18s ease}
+.nav-btn:hover,.btn:hover,.cat:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(14,165,233,.18)}
+.nav-btn:active,.btn:active,.cat:active{transform:translateY(0) scale(.98)}
+.hero{position:relative;isolation:isolate;overflow:hidden;border:1px solid rgba(125,211,252,.28);background:linear-gradient(125deg,rgba(12,36,78,.96),rgba(13,75,126,.90) 58%,rgba(30,64,175,.88));box-shadow:0 18px 48px rgba(2,20,52,.20),inset 0 1px 0 rgba(255,255,255,.12)}
+.hero:before{content:"";position:absolute;z-index:-1;width:290px;height:290px;right:-100px;bottom:-180px;border-radius:50%;border:1px solid rgba(186,230,253,.20);box-shadow:0 0 0 28px rgba(186,230,253,.035),0 0 0 58px rgba(186,230,253,.025)}
+.hero h2{line-height:1.55;text-wrap:balance}
+.hero p{line-height:2}
+.hero-art{filter:drop-shadow(0 12px 20px rgba(0,0,0,.18));animation:heloFloat 4.5s ease-in-out infinite}
+.section-head{margin-top:28px}
+.section-head h2{letter-spacing:-.3px}
+.products{align-items:stretch}
+.products .product-card,.products .product,.product-card{border:1px solid rgba(125,211,252,.18);box-shadow:0 8px 24px rgba(15,23,42,.07);transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
+.products .product-card:hover,.products .product:hover,.product-card:hover{transform:translateY(-4px);border-color:rgba(56,189,248,.48);box-shadow:0 16px 34px rgba(14,165,233,.13)}
+.product-image{background:linear-gradient(135deg,rgba(219,234,254,.45),rgba(224,242,254,.22))}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid rgba(56,189,248,.8);outline-offset:3px}
+#searchInput{border:1px solid rgba(56,189,248,.25);box-shadow:0 5px 20px rgba(15,23,42,.04)}
+#searchInput:focus{border-color:#38bdf8;box-shadow:0 0 0 4px rgba(56,189,248,.13)}
+@keyframes heloFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@media(max-width:640px){
+ header{padding-top:22px}
+ .nav{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;padding:8px 2px 12px;scroll-snap-type:x proximity}
+ .nav>*{flex:0 0 auto;scroll-snap-align:start}
+ .hero{gap:12px}
+ .hero-art{font-size:clamp(2rem,9vw,3.5rem)}
+ .section-head{gap:8px;align-items:center}
+ .products .product-card:hover,.products .product:hover,.product-card:hover{transform:translateY(-2px)}
+}
+@media(prefers-reduced-motion:reduce){
+ :root{scroll-behavior:auto}
+ *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+</style>
+
 </head>
 <body>
 <header>
