@@ -1561,10 +1561,11 @@ img,video,canvas,iframe{max-width:100%}
 </style>
 
 <style id="helo-all-buttons-float-animation">
-/* حرکت شناور آرام برای دکمه‌ها؛ فقط ظاهر، بدون تغییر عملکرد یا جای عناصر */
+/* شناور عمودی نرم برای همه دکمه‌ها؛ بدون تغییر چیدمان یا عملکرد */
 @keyframes heloButtonFloat {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-3px); }
+  25% { transform: translateY(-4px); }
+  75% { transform: translateY(4px); }
 }
 button,
 input[type="button"],
@@ -1574,8 +1575,7 @@ input[type="reset"],
 .nav-btn,
 .holo-profile-link,
 [role="button"] {
-  animation: heloButtonFloat 3.8s ease-in-out infinite;
-  will-change: transform;
+  animation: heloButtonFloat 3.6s ease-in-out infinite;
 }
 button:disabled,
 input[type="button"]:disabled,
@@ -1594,7 +1594,6 @@ input[type="reset"]:disabled,
   .holo-profile-link,
   [role="button"] {
     animation: none !important;
-    will-change: auto;
   }
 }
 </style>
