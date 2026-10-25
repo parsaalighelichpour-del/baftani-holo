@@ -1559,6 +1559,46 @@ img,video,canvas,iframe{max-width:100%}
  .card-actions .btn{font-size:10px!important;padding:7px 3px!important}
 }
 </style>
+
+<style id="helo-all-buttons-float-animation">
+/* حرکت شناور آرام برای دکمه‌ها؛ فقط ظاهر، بدون تغییر عملکرد یا جای عناصر */
+@keyframes heloButtonFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+.btn,
+.nav-btn,
+.holo-profile-link,
+[role="button"] {
+  animation: heloButtonFloat 3.8s ease-in-out infinite;
+  will-change: transform;
+}
+button:disabled,
+input[type="button"]:disabled,
+input[type="submit"]:disabled,
+input[type="reset"]:disabled,
+[aria-disabled="true"] {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  button,
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"],
+  .btn,
+  .nav-btn,
+  .holo-profile-link,
+  [role="button"] {
+    animation: none !important;
+    will-change: auto;
+  }
+}
+</style>
+
 </head>
 <body>
 <header>
