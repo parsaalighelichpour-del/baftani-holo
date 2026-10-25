@@ -1598,6 +1598,78 @@ input[type="reset"]:disabled,
 }
 </style>
 
+
+<style id="helo-buttons-vertical-layout">
+/* چیدمان مرتب دکمه‌های اصلی: زیر هم، هم‌اندازه و سازگار با موبایل */
+.nav,
+.tools-row,
+.card-actions,
+.holo-profile-links {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 9px !important;
+}
+.nav > *,
+.tools-row > *,
+.card-actions > *,
+.holo-profile-links > * {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  flex: 0 0 auto !important;
+  box-sizing: border-box !important;
+}
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+.btn,
+.nav-btn,
+.holo-profile-link,
+.cat,
+[role="button"] {
+  box-sizing: border-box;
+}
+.nav-btn,
+.btn,
+.holo-profile-link,
+.card-actions .btn,
+.tools-row .cat {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.holo-profile-links a {
+  flex: 0 0 auto !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+@media (max-width: 600px) {
+  .nav,
+  .tools-row,
+  .card-actions,
+  .holo-profile-links {
+    gap: 8px !important;
+  }
+  .nav-btn,
+  .btn,
+  .holo-profile-link,
+  .card-actions .btn,
+  .tools-row .cat {
+    width: 100% !important;
+    min-height: 44px;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
+</style>
+
 </head>
 <body>
 <header>
