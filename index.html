@@ -1670,6 +1670,86 @@ input[type="reset"],
 }
 </style>
 
+
+<style id="helo-balanced-button-layout">
+/* چیدمان متعادل و سلیقه‌ای؛ خرید و جزئیات جدا از هم باقی می‌مانند */
+.nav {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  align-items: stretch !important;
+  gap: 9px !important;
+}
+.nav > * {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-sizing: border-box !important;
+}
+.tools-row {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: stretch !important;
+  gap: 8px !important;
+}
+.tools-row > * {
+  flex: 1 1 calc(33.333% - 8px) !important;
+  width: auto !important;
+  min-width: 105px !important;
+  max-width: 100% !important;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-sizing: border-box !important;
+}
+.card-actions {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 8px !important;
+}
+.card-actions > * {
+  display: flex !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-sizing: border-box !important;
+}
+.holo-profile-links {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  align-items: stretch !important;
+  gap: 9px !important;
+}
+.holo-profile-links > * {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  min-height: 44px;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-sizing: border-box !important;
+}
+@media (max-width: 420px) {
+  .nav { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 7px !important; }
+  .nav > * { padding: 9px 5px !important; font-size: 12px; }
+  .tools-row > * { flex-basis: calc(50% - 8px) !important; min-width: 0 !important; }
+  .holo-profile-links { grid-template-columns: 1fr !important; }
+}
+</style>
+
 </head>
 <body>
 <header>
