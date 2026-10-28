@@ -2073,6 +2073,76 @@ const html=`<!DOCTYPE html><html lang="fa" dir="rtl"><meta charset="UTF-8"><titl
 .holo-profile-note{margin-top:14px;background:#ffffffb8;border:1px solid #c6e1ff;padding:13px 15px;border-radius:15px;line-height:1.9}
 @media(max-width:520px){.holo-profile-top{grid-template-columns:1fr}.holo-profile-logo{width:72px;height:72px;flex-basis:72px;font-size:36px}.holo-profile-gallery{gap:6px}.holo-profile-item{min-height:78px;border-radius:11px}}
 
+
+/* === تم بنفش جدید فروشگاه بافتنی هلو === */
+:root{
+ --blue:#9b5de5;--deep:#5a189a;--navy:#240046;--pale:#f4eaff;
+ --ink:#352044;--paper:#fffaff;--muted:#796b87;--line:#e0c9f7;
+ --shadow:0 12px 30px #35105b18;
+}
+body{
+ color:var(--ink);
+ background:linear-gradient(135deg,#26113f,#45206a 48%,#241039);
+ background-attachment:fixed;
+}
+header{
+ background:linear-gradient(125deg,#3c096c,#7209b7 55%,#560bad);
+ color:#fff;
+ border-bottom:3px solid #d7a8ff;
+}
+header p{color:#f0dcff}
+.nav-btn,.btn{
+ background:linear-gradient(135deg,#9d4edd,#7209b7);
+ border:1px solid #c77dff;color:#fff;
+ box-shadow:0 4px 12px #3b07641f;
+}
+.nav-btn{background:#ffffff18;border-color:#e5c6ff;color:#fff}
+.nav-btn:hover,.btn:hover{background:linear-gradient(135deg,#b66bfa,#7b2cbf)}
+.hero{
+ background:linear-gradient(125deg,#fffaff,#f0e1ff);
+ border-color:#d8b4fe;border-top-color:#9d4edd;
+}
+.hero h2{color:#5a189a}
+.hero p{color:#695578}
+.hero-art{background:linear-gradient(135deg,#f8edff,#e5ccff);border-color:#d8b4fe}
+.pill{background:#ead7ff;color:#5a189a;border-color:#d0a9ff}
+.tools,.card,.empty{background:#fffaff;border-color:#e0c9f7}
+.search,.field{background:#fffaff;color:#352044;border-color:#d7b8f4}
+.search:focus,.field:focus{border-color:#9d4edd;box-shadow:0 0 0 2px #9d4edd25}
+.cat{background:#f1e5ff;color:#6523a5;border-color:#dfc5ff}
+.cat.active,.cat:hover{background:#7209b7;color:#fff;border-color:#9d4edd}
+.section-head{color:#fff;border-bottom-color:#b88adf}
+.section-head span{color:#e5cfff}
+.card h3,.modal-content h2,.modal-content h3,.comment-name{color:#6a1b9a}
+.product-image{background:#f1e5ff}
+.badge{background:#9d4edd;color:#fff}
+.heart{border-color:#e0c9f7}
+.price{color:#7b2cbf}
+.btn.secondary{background:#f1e5ff;color:#5a189a;border-color:#dfc5ff}
+.btn.danger{background:#b4235a;border-color:#e78aad}
+.btn.green{background:#39734b;border-color:#8dc99a}
+.modal-content{background:#fffaff;border-color:#d8b4fe}
+.close{color:#7209b7}
+.thumb.selected{border-color:#9d4edd}
+.cart-item,.invoice-line,.rating-box,.comment-box,.admin-product{
+ background:#f5ebff;border-color:#e0c9f7;
+}
+.summary-total{background:#ead7ff;border-color:#d0a9ff;color:#5a189a}
+.qty-btn{background:#9d4edd}
+.invoice-area{border-color:#9d4edd}
+.footer{background:linear-gradient(120deg,#240046,#3c096c);color:#f0dcff;border-top:3px solid #b66bfa}
+body.dark-mode{--paper:#251a32;--ink:#f6edff;--muted:#c9b8dc;--line:#59416d;background:linear-gradient(135deg,#140b1e,#28113d,#140b1e);color:#f6edff}
+body.dark-mode .hero,body.dark-mode .tools,body.dark-mode .card,body.dark-mode .modal-content{background:#251a32;color:#f6edff;border-color:#59416d}
+body.dark-mode .hero p{color:#d6c5e7}
+body.dark-mode .hero-art{background:#352044;border-color:#59416d}
+body.dark-mode .card h3,body.dark-mode .modal-content h2,body.dark-mode .modal-content h3{color:#d7a8ff}
+body.dark-mode .cat{background:#352044;color:#f6edff;border-color:#59416d}
+body.dark-mode .cat.active{background:#9d4edd;color:#fff}
+body.dark-mode .field,body.dark-mode .search{background:#1b1225;color:#fff;border-color:#59416d}
+body.dark-mode .cart-item,body.dark-mode .invoice-line,body.dark-mode .summary-total,body.dark-mode .rating-box,body.dark-mode .comment-box,body.dark-mode .admin-product{background:#352044;color:#f6edff;border-color:#59416d}
+body.dark-mode .btn.secondary{background:#352044;color:#f6edff;border-color:#59416d}
+@media(max-width:800px){.section-head{color:#fff}}
+
 </style>
 
 </body></html>`;
