@@ -1750,6 +1750,18 @@ input[type="reset"],
 }
 </style>
 
+<style id="helo-halloween-sale-style">
+.halloween-sale{position:relative;overflow:hidden;display:grid;grid-template-columns:1fr auto;align-items:center;gap:16px;margin:18px 0 22px;padding:clamp(20px,4vw,34px);border:2px solid #bd72e8;border-radius:18px;background:radial-gradient(circle at 12% 18%,#7841a8 0,transparent 34%),linear-gradient(120deg,#210d36,#4a1767 58%,#210d36);color:#fff;box-shadow:0 14px 34px #18062655}
+.halloween-sale:before,.halloween-sale:after{content:"✦";position:absolute;color:#e7b8ff;opacity:.55;font-size:28px}.halloween-sale:before{top:12px;left:18px}.halloween-sale:after{bottom:12px;right:18px}
+.halloween-sale-art{grid-column:1/-1;text-align:center;font-size:clamp(25px,5vw,42px);letter-spacing:8px}
+.halloween-sale-copy{text-align:center}.halloween-kicker{display:inline-block;padding:6px 12px;border:1px solid #e9c6ff;border-radius:999px;color:#f3d9ff;font-size:13px}
+.halloween-sale-copy h2{margin:12px 0;color:#fff;font-size:clamp(21px,4vw,32px);line-height:1.8}.halloween-sale-copy p{margin:5px 0 10px;color:#f0dcff;line-height:1.9}
+.halloween-dates{display:block;color:#ffcf82;margin:8px 0 14px}.halloween-cta{border:0;border-radius:10px;padding:12px 20px;background:linear-gradient(120deg,#ffb347,#ff7b39);color:#381345;font-weight:900;cursor:pointer}
+.halloween-discount{display:flex;flex-direction:column;align-items:center;justify-content:center;width:clamp(95px,16vw,150px);height:clamp(95px,16vw,150px);border-radius:50%;border:3px dashed #ffd58d;background:#7a2c98;color:#fff;font-size:clamp(28px,5vw,46px);font-weight:900;box-shadow:0 0 25px #e8b5ff55}
+.halloween-discount small{font-size:14px}
+.halloween-old-price{color:#9b8b80;text-decoration:line-through;font-size:.82em;margin-left:7px;font-weight:500}.halloween-new-price{color:#e14b37;font-weight:900}
+@media(max-width:560px){.halloween-sale{grid-template-columns:1fr;padding:18px 13px;gap:8px}.halloween-discount{grid-row:1;width:88px;height:88px;margin:auto}.halloween-sale-art{font-size:24px;letter-spacing:3px}.halloween-sale-copy h2{font-size:20px}.halloween-cta{width:100%}}
+</style>
 </head>
 <body>
 <header>
@@ -1774,6 +1786,18 @@ input[type="reset"],
 <div style="margin-top:15px"><button class="btn" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">دیدن محصولات 🧶</button></div>
 </div>
 <div class="hero-art">🧶🧸💙</div>
+</section>
+
+<section class="halloween-sale" aria-label="جشنواره تخفیف هالووین">
+  <div class="halloween-sale-art" aria-hidden="true">🎃 🦇 🧶 🍑</div>
+  <div class="halloween-sale-copy">
+    <span class="halloween-kicker">جشنواره ویژه پاییزی هلو</span>
+    <h2>هالووین هلو؛ ۵۰٪ تخفیف روی همه محصولات!</h2>
+    <p>روی تمام محصولات فعال فروشگاه، فقط به مدت ۱۰ روز 💜</p>
+    <strong class="halloween-dates">از ۳ نوامبر تا ۱۳ نوامبر ۲۰۲۶</strong>
+    <button class="halloween-cta" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">خرید با نصف قیمت 🛍️</button>
+  </div>
+  <div class="halloween-discount">۵۰٪<small>تخفیف</small></div>
 </section>
 
 <section class="holo-profile" id="holo-google-profile" aria-label="معرفی فروشگاه بافتنی هلو">
@@ -1959,28 +1983,34 @@ function updateCartCount(){$('cartCount').textContent=formatPrice(cart.reduce((s
 function isFavorite(id){return favorites.includes(id)}
 function toggleFavorite(id){favorites=isFavorite(id)?favorites.filter(x=>x!==id):[...favorites,id];saveJSON('heloFavorites',favorites);renderProducts()}
 function setCategory(c,el){category=c;document.querySelectorAll('.cat').forEach(b=>b.classList.remove('active'));if(el)el.classList.add('active');renderProducts()}
+const HALLOWEEN_PROMO_START=Date.parse('2026-11-03T17:32:00+03:30');
+const HALLOWEEN_PROMO_END=Date.parse('2026-11-13T17:32:00+03:30');
+function isHalloweenSaleActive(){return Date.now()>=HALLOWEEN_PROMO_START&&Date.now()<HALLOWEEN_PROMO_END}
+function effectiveDiscount(){return isHalloweenSaleActive()?50:appliedDiscount}
+function salePrice(price){return Math.round(Number(price||0)*(100-(isHalloweenSaleActive()?50:0))/100)}
+function displaySalePrice(price){return isHalloweenSaleActive()?'<span class="halloween-old-price">'+formatPrice(price)+' تومان</span><span class="halloween-new-price">'+formatPrice(salePrice(price))+' تومان</span>':formatPrice(price)+' تومان'}
 function renderProducts(){
 const q=$('searchInput').value.trim().toLowerCase();
 const list=products.filter(p=>p.active!==false&&(category==='همه'||(category==='علاقه‌مندی‌ها'?isFavorite(p.id):p.category===category))&&(`${p.name} ${p.category} ${p.description}`.toLowerCase().includes(q)));
 $('productCount').textContent=`${formatPrice(list.length)} محصول`;
-$('products').innerHTML=list.length?list.map(p=>`<article class="card"><div class="image-wrap"><img class="product-image" src="${getProductImage(p,0)}" alt="${esc(p.name)}" loading="lazy" onerror="imageLoadFallback(this,${p.id})"><span class="badge">${esc(p.badge||'🧶 دست‌ساز')}</span><button class="heart ${isFavorite(p.id)?'active':''}" aria-label="علاقه‌مندی" onclick="toggleFavorite(${p.id})">${isFavorite(p.id)?'❤️':'🤍'}</button></div><h3>${esc(p.name)}</h3><div class="muted">${esc(p.category)}</div><div class="price">${formatPrice(p.price)} تومان</div>${p.stock_enabled?`<div class="muted">${Number(p.stock)>0?'📦 موجودی: '+formatPrice(p.stock):'❌ فعلاً ناموجود'}</div>`:''}<div class="card-actions"><button class="btn" ${p.stock_enabled&&Number(p.stock)<=0?'disabled':''} onclick="addToCart(${p.id})">${p.stock_enabled&&Number(p.stock)<=0?'ناموجود':'🛒 خرید'}</button><button class="btn secondary" onclick="openProduct(${p.id})">جزئیات</button></div></article>`).join(''):'<div class="empty">محصولی پیدا نشد 🧶</div>';
+$('products').innerHTML=list.length?list.map(p=>`<article class="card"><div class="image-wrap"><img class="product-image" src="${getProductImage(p,0)}" alt="${esc(p.name)}" loading="lazy" onerror="imageLoadFallback(this,${p.id})"><span class="badge">${esc(p.badge||'🧶 دست‌ساز')}</span><button class="heart ${isFavorite(p.id)?'active':''}" aria-label="علاقه‌مندی" onclick="toggleFavorite(${p.id})">${isFavorite(p.id)?'❤️':'🤍'}</button></div><h3>${esc(p.name)}</h3><div class="muted">${esc(p.category)}</div><div class="price">${displaySalePrice(p.price)}</div>${p.stock_enabled?`<div class="muted">${Number(p.stock)>0?'📦 موجودی: '+formatPrice(p.stock):'❌ فعلاً ناموجود'}</div>`:''}<div class="card-actions"><button class="btn" ${p.stock_enabled&&Number(p.stock)<=0?'disabled':''} onclick="addToCart(${p.id})">${p.stock_enabled&&Number(p.stock)<=0?'ناموجود':'🛒 خرید'}</button><button class="btn secondary" onclick="openProduct(${p.id})">جزئیات</button></div></article>`).join(''):'<div class="empty">محصولی پیدا نشد 🧶</div>';
 }
-function openProduct(id){currentProduct=products.find(p=>p.id===id);if(!currentProduct)return;$('modalName').textContent=currentProduct.name;$('modalPrice').textContent=formatPrice(currentProduct.price)+' تومان';$('modalDescription').textContent=currentProduct.description||'';$('modalImage').src=getProductImage(currentProduct,0);$('modalImage').onerror=()=>imageLoadFallback($('modalImage'),currentProduct.id);$('modalGallery').innerHTML=getProductImages(currentProduct).map((im,i)=>`<img class="thumb ${i===0?'selected':''}" src="${im}" alt="تصویر نمونه ${i+1}" loading="lazy" onerror="imageLoadFallback(this,${currentProduct.id})" onclick="selectImage('${im}',this)">`).join('');renderRating(id);renderComments(id);$('commentName').value=readJSON('heloUser',{})?.name||'';$('productModal').style.display='block'}
+function openProduct(id){currentProduct=products.find(p=>p.id===id);if(!currentProduct)return;$('modalName').textContent=currentProduct.name;$('modalPrice').innerHTML=displaySalePrice(currentProduct.price);$('modalDescription').textContent=currentProduct.description||'';$('modalImage').src=getProductImage(currentProduct,0);$('modalImage').onerror=()=>imageLoadFallback($('modalImage'),currentProduct.id);$('modalGallery').innerHTML=getProductImages(currentProduct).map((im,i)=>`<img class="thumb ${i===0?'selected':''}" src="${im}" alt="تصویر نمونه ${i+1}" loading="lazy" onerror="imageLoadFallback(this,${currentProduct.id})" onclick="selectImage('${im}',this)">`).join('');renderRating(id);renderComments(id);$('commentName').value=readJSON('heloUser',{})?.name||'';$('productModal').style.display='block'}
 function selectImage(src,el){$('modalImage').src=src;document.querySelectorAll('.thumb').forEach(x=>x.classList.remove('selected'));el.classList.add('selected')}
 function addToCart(id){const p=products.find(x=>String(x.id)===String(id));if(!p||p.active===false)return;if(p.stock_enabled&&Number(p.stock)<=0){alert('این محصول فعلاً ناموجود است.');return}const item=cart.find(x=>String(x.id)===String(id));if(item&&p.stock_enabled&&item.qty>=Number(p.stock)){alert('تعداد موجودی همین‌قدر است.');return}if(item)item.qty++;else cart.push({id:p.id,qty:1});saveCart();alert('به سبد خرید اضافه شد 💙');if($('productModal').style.display==='block')closeModal('productModal')}
 function openCart(){$('cartModal').style.display='block';renderCart()}
 function renderCart(){
 const items=cart.map(i=>({...i,product:products.find(p=>p.id===i.id)})).filter(i=>i.product);
-$('cartItems').innerHTML=items.length?items.map(i=>`<div class="cart-item"><div><strong>${esc(i.product.name)}</strong><div>${formatPrice(i.product.price)} تومان</div><div class="tools-row"><button class="qty-btn" onclick="changeQty(${i.id},-1)">−</button><span>${formatPrice(i.qty)}</span><button class="qty-btn" onclick="changeQty(${i.id},1)">+</button></div></div><button class="remove-btn" onclick="removeFromCart(${i.id})">حذف</button></div>`).join(''):'<div class="empty">سبد خریدت خالیه 🛒</div>';
+$('cartItems').innerHTML=items.length?items.map(i=>`<div class="cart-item"><div><strong>${esc(i.product.name)}</strong><div>${displaySalePrice(i.product.price)}</div><div class="tools-row"><button class="qty-btn" onclick="changeQty(${i.id},-1)">−</button><span>${formatPrice(i.qty)}</span><button class="qty-btn" onclick="changeQty(${i.id},1)">+</button></div></div><button class="remove-btn" onclick="removeFromCart(${i.id})">حذف</button></div>`).join(''):'<div class="empty">سبد خریدت خالیه 🛒</div>';
 const subtotal=items.reduce((s,i)=>s+i.product.price*i.qty,0);
 $('cartSummary').innerHTML=`<div class="summary-line"><span>جمع محصولات</span><strong>${formatPrice(subtotal)} تومان</strong></div>${discountAmount()?`<div class="summary-line"><span>تخفیف</span><strong>− ${formatPrice(discountAmount())} تومان</strong></div>`:''}`;
 $('cartTotal').textContent=formatPrice(finalTotal())+' تومان';
 }
-function discountAmount(){const subtotal=cart.reduce((s,i)=>{const p=products.find(x=>x.id===i.id);return s+(p?p.price*i.qty:0)},0);return Math.round(subtotal*appliedDiscount/100)}
+function discountAmount(){const subtotal=cart.reduce((s,i)=>{const p=products.find(x=>x.id===i.id);return s+(p?p.price*i.qty:0)},0);return Math.round(subtotal*effectiveDiscount()/100)}
 function finalTotal(){return Math.max(0,cart.reduce((s,i)=>{const p=products.find(x=>x.id===i.id);return s+(p?p.price*i.qty:0)},0)-discountAmount())}
 function changeQty(id,d){const item=cart.find(x=>String(x.id)===String(id));if(!item)return;const p=products.find(x=>String(x.id)===String(id));if(d>0&&p&&p.stock_enabled&&item.qty>=Number(p.stock)){alert('تعداد بیشتر از موجودی قابل انتخاب نیست.');return}item.qty+=d;if(item.qty<=0)cart=cart.filter(x=>String(x.id)!==String(id));saveCart();renderCart()}
 function removeFromCart(id){cart=cart.filter(x=>x.id!==id);saveCart();renderCart()}
-function applyDiscount(){const code=$('discountCode').value.trim().toUpperCase();if(code==='HELO10'||code==='HELO20'){appliedDiscount=Number(code.slice(4));appliedCode=code;alert(`🎁 تخفیف ${appliedDiscount}٪ اعمال شد`)}else{appliedDiscount=0;appliedCode='';alert('❌ کد تخفیف معتبر نیست')}renderCart()}
+function applyDiscount(){if(isHalloweenSaleActive()){appliedDiscount=50;appliedCode='HALLOWEEN50';alert('🎃 تخفیف ۵۰٪ هالووین به‌صورت خودکار روی همه محصولات اعمال شده است!');renderCart();return}const code=$('discountCode').value.trim().toUpperCase();if(code==='HELO10'||code==='HELO20'){appliedDiscount=Number(code.slice(4));appliedCode=code;alert('🎁 تخفیف '+appliedDiscount+'٪ اعمال شد')}else{appliedDiscount=0;appliedCode='';alert('❌ کد تخفیف معتبر نیست')}renderCart()}
 function openAccount(){updateUserUI();$('accountModal').style.display='block'}
 function updateUserUI(){const box=$('accountContent');const user=readJSON('heloUser',null);if(user){box.innerHTML=`<h3>سلام ${esc(user.name)} 👋</h3><p>📱 شماره: ${esc(user.phone)}</p><button class="btn danger" onclick="logout()">🚪 خروج از حساب</button>`}else{box.innerHTML=`<label class="field-label" for="loginName">نام و نام خانوادگی</label><input id="loginName" class="field" placeholder="نام شما" value="پارسا قلیچ پور" autocomplete="name"><label class="field-label" for="loginPhone">شماره موبایل</label><input id="loginPhone" class="field" placeholder="شماره موبایل" value="۰۹۹۱۵۰۲۳۶۳۲" inputmode="tel" autocomplete="tel"><p class="muted">حساب این نسخه روی همین مرورگر ذخیره می‌شود؛ ورود امن چندکاربره به سرور نیاز دارد.</p><button class="btn" onclick="login()">✅ ورود / ثبت‌نام</button>`}}
 function login(){const name=$('loginName').value.trim(),phone=$('loginPhone').value.trim();if(!name||!phone){alert('نام و شماره موبایل را وارد کن.');return}saveJSON('heloUser',{name,phone});updateUserUI();updateVipWelcome(!!adminUnlocked);alert('✅ حساب محلی ساخته شد!')}
@@ -2009,7 +2039,7 @@ async function createInvoice(){
 const user=readJSON('heloUser',null);
 if(!user){alert('ابتدا وارد حساب شو.');openAccount();return}
 if(!cart.length){alert('سبد خرید خالی است.');return}
-const order={id:'HELO-'+Date.now().toString().slice(-8),date:new Date().toLocaleString('fa-IR'),name:user.name,phone:user.phone,items:cart.map(i=>({id:i.id,qty:i.qty})),total:finalTotal(),discount:appliedDiscount,discountCode:appliedCode};
+const order={id:'HELO-'+Date.now().toString().slice(-8),date:new Date().toLocaleString('fa-IR'),name:user.name,phone:user.phone,items:cart.map(i=>({id:i.id,qty:i.qty})),total:finalTotal(),discount:effectiveDiscount(),discountCode:isHalloweenSaleActive()?'HALLOWEEN50':appliedCode};
 const cloudOrder=await window.HeloServer.saveOrder(order);
 if(!cloudOrder){alert('❌ سفارش ثبت نشد. موجودی محصول یا اتصال اینترنت را بررسی کن؛ هیچ سفارش تأییدنشده‌ای ساخته نشد.');return}
 order.id=cloudOrder.order_code||order.id;
@@ -2017,7 +2047,7 @@ order.total=Number(cloudOrder.total??order.total);
 order.items=cloudOrder.items||order.items;
 let orders=readJSON('heloOrdersLocal',[]);orders.unshift(order);saveJSON('heloOrdersLocal',orders.slice(0,50));
 $('invoiceCustomer').innerHTML=`<div class="invoice-line"><span>شماره سفارش</span><strong>${esc(order.id)}</strong></div><div class="invoice-line"><span>مشتری</span><strong>${esc(user.name)}</strong></div><div class="invoice-line"><span>شماره</span><strong>${esc(user.phone)}</strong></div><div class="invoice-line"><span>تاریخ</span><strong>${esc(order.date)}</strong></div>`;
-$('invoiceProducts').innerHTML=cart.map(i=>{const p=products.find(x=>x.id===i.id);return p?`<div class="invoice-line"><span>${esc(p.name)} × ${formatPrice(i.qty)}</span><strong>${formatPrice(p.price*i.qty)} تومان</strong></div>`:''}).join('')+(discountAmount()?`<div class="invoice-line"><span>تخفیف ${appliedDiscount}٪</span><strong>− ${formatPrice(discountAmount())} تومان</strong></div>`:'');
+$('invoiceProducts').innerHTML=cart.map(i=>{const p=products.find(x=>x.id===i.id);return p?`<div class="invoice-line"><span>${esc(p.name)} × ${formatPrice(i.qty)}</span><strong>${formatPrice(p.price*i.qty)} تومان</strong></div>`:''}).join('')+(discountAmount()?`<div class="invoice-line"><span>تخفیف ${effectiveDiscount()}٪</span><strong>− ${formatPrice(discountAmount())} تومان</strong></div>`:'');
 $('invoiceTotal').textContent=formatPrice(order.total)+' تومان';alert('✅ سفارش با موفقیت در پایگاه داده ثبت شد!\n\nشماره سفارش شما: '+order.id+'\n\nاین شماره و همان شماره موبایل ثبت‌شده را نگه دار. از بخش «پیگیری سفارش» می‌توانی وضعیت سفارشت را آنلاین ببینی.');
 $('emailName').value=user.name;$('emailPhone').value=user.phone;
 $('emailProducts').value=cart.map(i=>{const p=products.find(x=>x.id===i.id);return p?`${p.name} × ${i.qty} = ${formatPrice(p.price*i.qty)} تومان`:''}).join('\n')+`\nشماره سفارش: ${order.id}`;
