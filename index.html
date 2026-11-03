@@ -1828,7 +1828,29 @@ main.container>.halloween-sale .halloween-discount{width:76px!important;height:7
 main.container>.halloween-sale .halloween-sale-copy p{font-size:13px!important;line-height:1.6!important}
 main.container>.holo-profile,main.container>#shop,main.container>.section-head,main.container>.products{grid-column:1/-1!important}
 }
-@media(max-width:699px){main.container{display:block!important}main.container>.hero,main.container>.halloween-sale{margin-bottom:14px!important}}
+@media(max-width:699px){
+main.container{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;column-gap:8px!important;align-items:stretch!important}
+main.container>.hero,main.container>.halloween-sale{grid-row:1!important;min-width:0!important;height:100%!important;margin:0 0 12px!important;padding:11px 9px!important;display:flex!important;flex-direction:column!important;justify-content:center!important;gap:7px!important;border-radius:13px!important}
+main.container>.hero{grid-column:1!important}
+main.container>.halloween-sale{grid-column:2!important}
+main.container>.hero .hero-art{display:block!important;font-size:29px!important;padding:2px!important}
+main.container>.hero h2{font-size:13px!important;line-height:1.55!important;margin:0 0 5px!important}
+main.container>.hero p{font-size:10px!important;line-height:1.55!important}
+main.container>.hero .pill{font-size:9px!important;padding:4px 6px!important;margin-bottom:5px!important}
+main.container>.halloween-sale .halloween-sale-art{font-size:17px!important;letter-spacing:1px!important;line-height:1.3!important}
+main.container>.halloween-sale .halloween-sale-copy h2{font-size:12px!important;line-height:1.5!important;margin:3px 0!important}
+main.container>.halloween-sale .halloween-sale-copy p{font-size:9px!important;line-height:1.45!important;margin:3px 0!important}
+main.container>.halloween-sale .halloween-discount{width:47px!important;height:47px!important;font-size:17px!important;flex:0 0 auto!important}
+main.container>.halloween-sale .halloween-discount small{font-size:8px!important}
+main.container>.halloween-sale .halloween-cta{font-size:9px!important;padding:6px 5px!important;width:100%!important}
+main.container>.holo-profile,main.container>#shop,main.container>.section-head,main.container>.products{grid-column:1/-1!important}
+}
+@media(max-width:360px){
+main.container>.hero,main.container>.halloween-sale{padding:8px 6px!important}
+main.container>.hero h2{font-size:12px!important}
+main.container>.halloween-sale .halloween-sale-copy h2{font-size:11px!important}
+main.container>.hero p,main.container>.halloween-sale .halloween-sale-copy p{font-size:8px!important}
+}
 @media(prefers-reduced-motion:reduce){.nav-btn,.halloween-tools .cat{transition:none!important}}
 </style>
 </head>
