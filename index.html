@@ -1860,7 +1860,7 @@ input[type="reset"],
 <div class="modal" id="cartModal"><div class="modal-content">
 <button class="close" onclick="closeModal('cartModal')">×</button>
 <h2>🛒 سبد خرید</h2><div id="cartItems"></div>
-<div class="tools-row"><input id="discountCode" class="field" placeholder="کد تخفیف (HELO10 یا HELO20)"><button class="btn" onclick="applyDiscount()">اعمال تخفیف</button></div>
+<div class="tools-row"><input id="discountCode" class="field" placeholder="تخفیف ۵۰٪ هالووین خودکار اعمال می‌شود"><button class="btn" onclick="applyDiscount()">اعمال تخفیف</button></div>
 <div id="cartSummary"></div><div class="summary-total"><span>مبلغ نهایی</span><span id="cartTotal">۰ تومان</span></div>
 <button class="btn green" onclick="createInvoice()">ساخت فاکتور و ثبت سفارش</button>
 </div></div>
@@ -2003,7 +2003,7 @@ function renderCart(){
 const items=cart.map(i=>({...i,product:products.find(p=>p.id===i.id)})).filter(i=>i.product);
 $('cartItems').innerHTML=items.length?items.map(i=>`<div class="cart-item"><div><strong>${esc(i.product.name)}</strong><div>${displaySalePrice(i.product.price)}</div><div class="tools-row"><button class="qty-btn" onclick="changeQty(${i.id},-1)">−</button><span>${formatPrice(i.qty)}</span><button class="qty-btn" onclick="changeQty(${i.id},1)">+</button></div></div><button class="remove-btn" onclick="removeFromCart(${i.id})">حذف</button></div>`).join(''):'<div class="empty">سبد خریدت خالیه 🛒</div>';
 const subtotal=items.reduce((s,i)=>s+i.product.price*i.qty,0);
-$('cartSummary').innerHTML=`<div class="summary-line"><span>جمع محصولات</span><strong>${formatPrice(subtotal)} تومان</strong></div>${discountAmount()?`<div class="summary-line"><span>تخفیف</span><strong>− ${formatPrice(discountAmount())} تومان</strong></div>`:''}`;
+$('cartSummary').innerHTML=`<div class="summary-line"><span>جمع محصولات</span><strong>${formatPrice(subtotal)} تومان</strong></div>${discountAmount()?`<div class="summary-line"><span>تخفیف ${effectiveDiscount()}٪</span><strong>− ${formatPrice(discountAmount())} تومان</strong></div>`:''}`;
 $('cartTotal').textContent=formatPrice(finalTotal())+' تومان';
 }
 function discountAmount(){const subtotal=cart.reduce((s,i)=>{const p=products.find(x=>x.id===i.id);return s+(p?p.price*i.qty:0)},0);return Math.round(subtotal*effectiveDiscount()/100)}
