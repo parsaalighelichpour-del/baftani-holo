@@ -1855,6 +1855,116 @@ main.container>.hero p,main.container>.halloween-sale .halloween-sale-copy p{fon
 }
 @media(prefers-reduced-motion:reduce){.nav-btn,.halloween-tools .cat{transition:none!important}}
 </style>
+
+<style id="helo-two-banner-beautify">
+/* کارت‌های معرفی و تخفیف؛ ظاهر هماهنگ و خوانا */
+main.container>.hero,
+main.container>.halloween-sale{
+  position:relative!important;isolation:isolate!important;overflow:hidden!important;
+  min-width:0!important;min-height:275px!important;height:100%!important;
+  border-radius:24px!important;padding:clamp(17px,2.5vw,28px)!important;
+  box-shadow:0 16px 38px #08031188, inset 0 1px 0 #ffffff30!important;
+  transition:transform .25s ease,box-shadow .25s ease!important;
+}
+main.container>.hero:hover,
+main.container>.halloween-sale:hover{
+  transform:translateY(-3px);
+  box-shadow:0 20px 44px #08031199,inset 0 1px 0 #ffffff40!important;
+}
+main.container>.hero{
+  display:flex!important;align-items:center!important;
+  background:radial-gradient(circle at 88% 12%,#ffb0d955 0 3%,transparent 28%),
+    linear-gradient(145deg,#321044 0%,#713b83 52%,#a34d68 100%)!important;
+  border:1px solid #e6a9e8!important;border-top:5px solid #ffbd79!important;
+}
+main.container>.hero:after{
+  content:"🎁";position:absolute;right:16px;bottom:8px;z-index:-1;
+  font-size:clamp(48px,7vw,82px);opacity:.17;transform:rotate(-12deg);
+  pointer-events:none;
+}
+main.container>.hero>div{position:relative;z-index:1;width:100%}
+main.container>.hero .pill{
+  display:inline-flex!important;border-radius:999px!important;
+  padding:7px 12px!important;background:#fff0df!important;color:#71365d!important;
+  border:1px solid #ffd0a1!important;font-weight:900!important;
+}
+main.container>.hero h2{
+  margin:12px 0 8px!important;font-size:clamp(19px,2.4vw,27px)!important;
+  line-height:1.65!important;color:#fff7ed!important;text-shadow:0 2px 12px #1b092b88;
+}
+main.container>.hero p{font-size:13px!important;line-height:1.9!important;color:#f9e8ff!important}
+main.container>.hero .btn{
+  border:1px solid #ffe0b5!important;border-radius:13px!important;
+  padding:11px 18px!important;background:linear-gradient(120deg,#ffd08b,#ff965d)!important;
+  color:#472044!important;font-weight:1000!important;box-shadow:0 7px 18px #16082055!important;
+}
+main.container>.halloween-sale{
+  background:radial-gradient(circle at 15% 15%,#a95b3d88 0,transparent 34%),
+    linear-gradient(145deg,#1e0b31 0%,#512066 55%,#782e50 100%)!important;
+  border:1px solid #ffc17e!important;border-top:5px solid #ff9e55!important;
+  box-shadow:0 16px 38px #08031188,inset 0 1px 0 #ffffff30!important;
+}
+main.container>.halloween-sale:before,
+main.container>.halloween-sale:after{color:#ffd39b!important;opacity:.75!important;text-shadow:0 0 12px #ffb56b88}
+main.container>.halloween-sale .halloween-sale-art{
+  font-size:clamp(23px,3vw,34px)!important;letter-spacing:5px!important;
+  filter:drop-shadow(0 3px 7px #09031188);
+}
+main.container>.halloween-sale .halloween-kicker{
+  background:#ffffff14!important;border-color:#ffd19a!important;color:#ffe3bd!important;
+  font-weight:800!important;letter-spacing:.2px;
+}
+main.container>.halloween-sale .halloween-sale-copy h2{
+  font-size:clamp(18px,2.2vw,25px)!important;line-height:1.65!important;
+  color:#fff8ef!important;text-shadow:0 2px 12px #16082099;
+}
+main.container>.halloween-sale .halloween-sale-copy p{
+  color:#f4e2ff!important;font-size:13px!important;line-height:1.8!important;
+}
+main.container>.halloween-sale .halloween-dates{
+  color:#ffd18b!important;font-size:12px!important;line-height:1.7!important;
+}
+main.container>.halloween-sale .halloween-discount{
+  border:3px dashed #ffe0a6!important;
+  background:radial-gradient(circle at 30% 25%,#b96b9c,#762e87 72%)!important;
+  color:#fff!important;box-shadow:0 0 0 6px #ffffff12,0 0 28px #f6b8ff55!important;
+  text-shadow:0 2px 8px #260d35aa;
+}
+main.container>.halloween-sale .halloween-cta{
+  border:1px solid #ffe1b0!important;border-radius:13px!important;
+  background:linear-gradient(120deg,#ffd28d,#ff8f51)!important;
+  color:#421d3c!important;font-weight:1000!important;
+  box-shadow:0 7px 18px #10051d66!important;
+}
+@media(max-width:699px){
+  main.container>.hero,main.container>.halloween-sale{
+    min-height:252px!important;padding:12px 10px!important;border-radius:17px!important;
+    gap:7px!important;
+  }
+  main.container>.hero h2{font-size:14px!important;line-height:1.65!important;margin:8px 0 5px!important}
+  main.container>.hero p{font-size:10px!important;line-height:1.75!important}
+  main.container>.hero .pill{font-size:9px!important;padding:5px 7px!important}
+  main.container>.hero .btn{width:100%!important;padding:8px 5px!important;font-size:10px!important}
+  main.container>.hero:after{font-size:48px;right:5px;bottom:2px}
+  main.container>.halloween-sale .halloween-sale-art{font-size:18px!important;letter-spacing:2px!important}
+  main.container>.halloween-sale .halloween-sale-copy h2{font-size:13px!important;line-height:1.6!important}
+  main.container>.halloween-sale .halloween-sale-copy p{font-size:10px!important;line-height:1.65!important}
+  main.container>.halloween-sale .halloween-dates{font-size:9px!important;margin:5px 0 8px!important}
+  main.container>.halloween-sale .halloween-discount{width:54px!important;height:54px!important;font-size:19px!important}
+  main.container>.halloween-sale .halloween-discount small{font-size:9px!important}
+  main.container>.halloween-sale .halloween-cta{font-size:10px!important;padding:8px 5px!important}
+}
+@media(max-width:360px){
+  main.container>.hero,main.container>.halloween-sale{min-height:245px!important;padding:9px 7px!important}
+  main.container>.hero h2{font-size:12px!important}
+  main.container>.hero p,main.container>.halloween-sale .halloween-sale-copy p{font-size:9px!important}
+  main.container>.halloween-sale .halloween-sale-copy h2{font-size:11px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  main.container>.hero,main.container>.halloween-sale{transition:none!important}
+}
+</style>
+
 </head>
 <body>
 <header>
