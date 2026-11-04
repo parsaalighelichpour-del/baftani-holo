@@ -2639,7 +2639,7 @@ body.dark-mode .helo-world-section,body.dark-mode .helo-world-card{background:#2
   const dayKey = () => new Date().toISOString().slice(0,10);
   let dailyProductId = null;
 
-  function activeProducts(){return Array.isArray(window.products)?window.products.filter(p=>p.active!==false):[];}
+  function activeProducts(){return typeof products!=='undefined'&&Array.isArray(products)?products.filter(p=>p.active!==false):[];}
   function updateClubUI(){
     const n=points(), level=n>=100?'طرفدار طلایی هلو 🏅':n>=30?'دوست هلو 💜':'تازه‌وارد هلو 🍑';
     const a=document.getElementById('heloClubPoints'),b=document.getElementById('heloClubModalPoints'),c=document.getElementById('heloClubLevel');
