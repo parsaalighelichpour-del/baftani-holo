@@ -2198,7 +2198,7 @@ main.container>.helo-feature-banner{position:relative!important;isolation:isolat
 
 <div class="modal" id="adminModal"><div class="modal-content">
 <button class="close" onclick="adminLogout()">×</button><h2>پنل مدیریت هلو</h2><p>مدیریت محصولات و سفارش‌ها</p>
-<div class="tools-row"><button class="btn" onclick="showAdminTab('products')">مدیریت محصولات</button><button class="btn secondary" onclick="showAdminTab('photos')">📸 عکس محصولات</button><button class="btn secondary" onclick="showAdminTab('orders')">سفارش‌ها</button><button class="btn danger" onclick="adminLogout()">خروج</button></div>
+<div class="tools-row"><button class="btn" onclick="showAdminTab('products')">مدیریت محصولات</button><button class="btn secondary" onclick="showAdminTab('photos')">📸 عکس محصولات</button><button class="btn secondary" onclick="showAdminTab('orders')">سفارش‌ها</button><button class="btn secondary" onclick="showAdminTab('custom')">🧶 درخواست اختصاصی</button><button class="btn danger" onclick="adminLogout()">خروج</button></div>
 <section id="adminProductsTab">
 <h3>➕ افزودن محصول</h3>
 <div class="admin-grid">
@@ -2216,7 +2216,7 @@ main.container>.helo-feature-banner{position:relative!important;isolation:isolat
 <button id="heloAddProductButton" type="button" class="btn" onclick="return false">افزودن محصول</button>
 <h3>محصولات فعلی</h3><div id="adminProductList"></div>
 </section>
-<section id="adminPhotosTab" class="hide"><h3>📸 مدیریت عکس محصولات</h3><p>محصول را انتخاب کن و عکسش را از گالری گوشی انتخاب کن.</p><select id="photoProductSelect" class="field"><option value="">انتخاب محصول</option></select><input id="photoProductFile" class="field" type="file" accept="image/*"><img id="photoManagerPreview" style="max-width:100%;max-height:220px;object-fit:contain"><p id="photoManagerStatus" class="muted">حداکثر ۵ مگابایت</p><button id="photoManagerUploadButton" class="btn" type="button" onclick="saveManagerPhoto()">ذخیره عکس</button></section><section id="adminOrdersTab" class="hide"><h3>📦 سفارش‌های ثبت‌شده روی سرور</h3><div class="notice">سفارش‌ها از پایگاه داده مشترک خوانده می‌شوند؛ تغییر وضعیت اینجا برای پنل مدیریت روی دستگاه‌های دیگر هم ذخیره می‌شود.</div><button class="btn secondary small" onclick="renderAdminOrders()">🔄 تازه‌سازی سفارش‌ها</button><div id="adminOrderList"></div></section>
+<section id="adminPhotosTab" class="hide"><h3>📸 مدیریت عکس محصولات</h3><p>محصول را انتخاب کن و عکسش را از گالری گوشی انتخاب کن.</p><select id="photoProductSelect" class="field"><option value="">انتخاب محصول</option></select><input id="photoProductFile" class="field" type="file" accept="image/*"><img id="photoManagerPreview" style="max-width:100%;max-height:220px;object-fit:contain"><p id="photoManagerStatus" class="muted">حداکثر ۵ مگابایت</p><button id="photoManagerUploadButton" class="btn" type="button" onclick="saveManagerPhoto()">ذخیره عکس</button></section><section id="adminOrdersTab" class="hide"><h3>📦 سفارش‌های ثبت‌شده روی سرور</h3><div class="notice">سفارش‌ها از پایگاه داده مشترک خوانده می‌شوند؛ تغییر وضعیت اینجا برای پنل مدیریت روی دستگاه‌های دیگر هم ذخیره می‌شود.</div><button class="btn secondary small" onclick="renderAdminOrders()">🔄 تازه‌سازی سفارش‌ها</button><div id="adminOrderList"></div></section><section id="adminCustomTab" class="hide"><h3>🧶 درخواست‌های سفارش اختصاصی</h3><button class="btn secondary small" onclick="renderAdminCustomOrders()">🔄 تازه‌سازی درخواست‌ها</button><div id="adminCustomOrderList"></div></section>
 </div></div>
 
 "<form id="orderForm" action="https://formsubmit.co/Parsaalighlichpour@gmail.com" method="POST" target="_blank" class="hide">
@@ -2800,7 +2800,7 @@ async function adminLogout(){
   if(window.HeloServer)await window.HeloServer.signOut();
   alert('از پنل مدیریت خارج شدی.');
 }
-async function showAdminTab(tab){if(!adminUnlocked){alert('اول وارد پنل مدیریت شو.');return}$('adminProductsTab').classList.toggle('hide',tab!=='products');$('adminPhotosTab').classList.toggle('hide',tab!=='photos');$('adminOrdersTab').classList.toggle('hide',tab!=='orders');if(tab==='photos'){renderPhotoManager()}if(tab==='products'){const list=$('adminProductList');if(list)list.innerHTML='<div class="notice">در حال دریافت محصولات...</div>';try{if(window.HeloServer&&typeof window.HeloServer.getProducts==='function'){const rows=await window.HeloServer.getProducts();if(Array.isArray(rows)&&rows.length){products=rows;saveJSON('heloProductsV2',products)}else if(Array.isArray(rows)&&!rows.length&&products.length){console.warn('سرور فهرست خالی برگرداند؛ فهرست فعلی حفظ شد تا محصولات بی‌دلیل ناپدید نشوند.')}}renderAdminProducts();if(list&&!products.length)list.innerHTML='<div class="empty">محصولی پیدا نشد. اگر قبلاً محصول داشتی، خطای سرور را بررسی می‌کنیم.</div>'}catch(e){console.error('دریافت محصولات در پنل ناموفق بود:',e);if(list)list.innerHTML='<div class="notice">دریافت محصولات ناموفق بود: '+esc(e&&e.message?e.message:'خطای نامشخص')+'</div>'}}else if(tab==='orders'){try{await renderAdminOrders()}catch(e){console.error(e);$('adminOrderList').innerHTML='<div class="notice">دریافت سفارش‌ها ناموفق بود.</div>'}}}
+async function showAdminTab(tab){if(!adminUnlocked){alert('اول وارد پنل مدیریت شو.');return}$('adminProductsTab').classList.toggle('hide',tab!=='products');$('adminPhotosTab').classList.toggle('hide',tab!=='photos');$('adminOrdersTab').classList.toggle('hide',tab!=='orders');$('adminCustomTab').classList.toggle('hide',tab!=='custom');if(tab==='photos'){renderPhotoManager()}if(tab==='custom'){renderAdminCustomOrders()}if(tab==='products'){const list=$('adminProductList');if(list)list.innerHTML='<div class="notice">در حال دریافت محصولات...</div>';try{if(window.HeloServer&&typeof window.HeloServer.getProducts==='function'){const rows=await window.HeloServer.getProducts();if(Array.isArray(rows)&&rows.length){products=rows;saveJSON('heloProductsV2',products)}else if(Array.isArray(rows)&&!rows.length&&products.length){console.warn('سرور فهرست خالی برگرداند؛ فهرست فعلی حفظ شد تا محصولات بی‌دلیل ناپدید نشوند.')}}renderAdminProducts();if(list&&!products.length)list.innerHTML='<div class="empty">محصولی پیدا نشد. اگر قبلاً محصول داشتی، خطای سرور را بررسی می‌کنیم.</div>'}catch(e){console.error('دریافت محصولات در پنل ناموفق بود:',e);if(list)list.innerHTML='<div class="notice">دریافت محصولات ناموفق بود: '+esc(e&&e.message?e.message:'خطای نامشخص')+'</div>'}}else if(tab==='orders'){try{await renderAdminOrders()}catch(e){console.error(e);$('adminOrderList').innerHTML='<div class="notice">دریافت سفارش‌ها ناموفق بود.</div>'}}}
 function renderPhotoManager(){const select=$('photoProductSelect'),old=select.value;select.innerHTML='<option value="">انتخاب محصول</option>'+products.map(p=>'<option value="'+esc(p.id)+'">'+esc(p.name)+'</option>').join('');if(products.some(p=>String(p.id)===String(old)))select.value=old;}
 $('photoProductFile')?.addEventListener('change',function(){const f=this.files&&this.files[0];if(!f)return;if(f.size>5242880){$('photoManagerStatus').textContent='حجم عکس بیشتر از ۵ مگابایت است.';this.value='';return}$('photoManagerPreview').src=URL.createObjectURL(f);});
 async function saveManagerPhoto(){const id=$('photoProductSelect').value,input=$('photoProductFile'),file=input.files[0],button=$('photoManagerUploadButton');if(!adminUnlocked){alert('اول وارد پنل مدیریت شو.');return}if(!id||!file){alert('محصول و عکس را انتخاب کن.');return}button.disabled=true;button.textContent='در حال ذخیره…';input.id='imageFile-'+id;try{await window.uploadProductImage(id,button);$('photoManagerStatus').textContent='عکس ذخیره شد و در فروشگاه نمایش داده می‌شود 💙'}catch(e){$('photoManagerStatus').textContent='ذخیره نشد: '+(e.message||'خطای نامشخص')}finally{input.id='photoProductFile';button.disabled=false;button.textContent='ذخیره عکس'}}
@@ -2885,6 +2885,20 @@ async function setProductStock(id){
 }
 async function editAdminProduct(id){if(!adminUnlocked)return;const p=products.find(x=>String(x.id)===String(id));if(!p)return;const name=prompt('نام محصول:',p.name);if(name===null)return;const price=prompt('قیمت به تومان:',p.price);if(price===null)return;if(!name.trim()||!Number.isFinite(Number(price))||Number(price)<0){alert('نام یا قیمت معتبر نیست.');return}const description=prompt('توضیحات محصول:',p.description||'');if(description===null)return;const stock=prompt('موجودی عددی (خالی = کنترل موجودی خاموش، صفر = ناموجود):',p.stock_enabled?String(p.stock):'');if(stock===null)return;if(stock.trim()!==''&&(!Number.isInteger(Number(stock))||Number(stock)<0)){alert('موجودی باید عدد صحیح صفر یا بیشتر باشد.');return}const updated={...p,name:name.trim(),price:Number(price),description:description.trim(),stock:stock.trim()===''?Number(p.stock||0):Number(stock),stock_enabled:stock.trim()!==''};const ok=await window.HeloServer.saveProduct(updated);if(!ok){alert('ذخیره در پایگاه داده ناموفق بود؛ تغییر اعمال نشد.');return}Object.assign(p,updated);saveJSON('heloProductsV2',products);if(window.refreshHeloProducts)await window.refreshHeloProducts();renderAdminProducts();renderProducts();alert('تغییرات محصول در سرور ذخیره شد و بین دستگاه‌ها هماهنگ می‌شود.')}
 async function toggleAdminProduct(id){if(!adminUnlocked)return;const p=products.find(x=>String(x.id)===String(id));if(!p)return;const updated={...p,active:p.active===false};const ok=await window.HeloServer.saveProduct(updated);if(!ok){alert('ذخیره در پایگاه داده ناموفق بود؛ وضعیت محصول تغییر نکرد.');return}Object.assign(p,updated);saveJSON('heloProductsV2',products);if(window.refreshHeloProducts)await window.refreshHeloProducts();renderAdminProducts();renderProducts()}
+async function renderAdminCustomOrders(){
+ if(!adminUnlocked)return;
+ const box=$('adminCustomOrderList');if(!box)return;
+ box.innerHTML='<div class="notice">در حال دریافت درخواست‌ها…</div>';
+ try{
+  const requests=await window.HeloServer.getCustomOrders(),labels={new:'جدید',reviewing:'در حال بررسی',accepted:'پذیرفته‌شده',declined:'ردشده'};
+  box.innerHTML=requests.length?requests.map(r=>'<div class="admin-product"><strong>'+esc(r.product_name)+'</strong><p>👤 '+esc(r.customer_name)+' · 📱 '+esc(r.phone)+'</p><p>🎨 رنگ: '+esc(r.color||'انتخاب نشده')+'</p><p>توضیحات: '+esc(r.notes||'ندارد')+'</p><p>تاریخ: '+esc(r.created_at||'')+'</p><label class="field-label">وضعیت درخواست</label><select class="field" onchange="updateCustomOrderStatus(\''+esc(r.id)+'\',this.value)">'+Object.entries(labels).map(([v,l])=>'<option value="'+v+'" '+(r.status===v?'selected':'')+'>'+l+'</option>').join('')+'</select></div>').join(''):'<div class="empty">درخواستی ثبت نشده است.</div>';
+ }catch(e){box.innerHTML='<div class="notice">دریافت درخواست‌ها ناموفق بود: '+esc(e.message||'خطا')+'</div>'}
+}
+async function updateCustomOrderStatus(id,status){
+ if(!adminUnlocked)return;
+ if(!await window.HeloServer.updateCustomOrderStatus(id,status)){alert('ذخیره وضعیت درخواست ناموفق بود.');await renderAdminCustomOrders();return}
+ alert('وضعیت درخواست ذخیره شد.');await renderAdminCustomOrders();
+}
 async function renderAdminOrders(){
  if(!adminUnlocked)return;const box=$('adminOrderList');box.innerHTML='<div class="notice">در حال دریافت سفارش‌ها از سرور…</div>';
  try{const orders=await window.HeloServer.getOrders(),labels={new:'جدید',preparing:'در حال آماده‌سازی',shipped:'ارسال‌شده',completed:'تکمیل‌شده',cancelled:'لغوشده'};
@@ -3010,6 +3024,24 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
     const {data,error}=await customerDb.rpc("my_store_orders");
     if(error)throw error;
     return Array.isArray(data)?data:[];
+  }
+  async function saveCustomOrder(request) {
+    if(!customerSession?.user)throw new Error("برای ثبت درخواست در حساب، اول وارد شو.");
+    const payload={customer_id:customerSession.user.id,customer_name:String(request.name||"").trim().slice(0,100),phone:String(request.phone||"").trim().slice(0,30),product_name:String(request.product||"").trim().slice(0,160),color:String(request.color||"").trim().slice(0,120),notes:String(request.notes||"").trim().slice(0,1000)};
+    const {data,error}=await customerDb.from("custom_order_requests").insert(payload).select("id,created_at").single();
+    if(error)throw error;
+    return data;
+  }
+  async function getCustomOrders() {
+    const {data,error}=await db.from("custom_order_requests").select("*").order("created_at",{ascending:false}).limit(100);
+    if(error)throw error;
+    return Array.isArray(data)?data:[];
+  }
+  async function updateCustomOrderStatus(id,status) {
+    if(!["new","reviewing","accepted","declined"].includes(status))return false;
+    const {data,error}=await db.from("custom_order_requests").update({status}).eq("id",id).select("id").maybeSingle();
+    if(error||!data){console.error("تغییر وضعیت درخواست اختصاصی ناموفق بود:",error?.message);return false}
+    return true;
   }
   async function getProductReviews(productId) {
     const pid=String(productId),marker="heloReviewsMigrated_"+pid;
@@ -3156,7 +3188,7 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
     get customerEmail(){return customerEmail;},
     signUpCustomer, signInCustomer, saveCustomerData, claimCustomerMission, initCustomerAuth, signOutCustomer,
     getProducts: getServerProducts, saveProduct: saveServerProduct,
-    saveOrder: saveServerOrder, trackOrdersByPhone, getOrders, getMyOrders, getProductReviews, addProductReview, updateOrderStatus, updateOrderEta, uploadImage: uploadProductImage,
+    saveOrder: saveServerOrder, trackOrdersByPhone, getOrders, getMyOrders, getProductReviews, addProductReview, saveCustomOrder, getCustomOrders, updateCustomOrderStatus, updateOrderStatus, updateOrderEta, uploadImage: uploadProductImage,
     signInAdminPassword, signOut: async function(){const {error}=await db.auth.signOut();if(error)console.error("خروج ناموفق بود:",error.message)}
   };
   initCustomerAuth().catch(e=>console.error("بازیابی حساب مشتری ناموفق بود:",e.message));
@@ -3322,9 +3354,18 @@ body.dark-mode .helo-world-section,body.dark-mode .helo-world-card{background:#2
     }catch(e){alert(e.message||'ذخیره امتیاز انجام نشد.');}
   };
   window.openCustomOrder=function(){const u=user();document.getElementById('heloCustomName').value=u?.name||'';document.getElementById('heloCustomPhone').value=u?.phone||'';document.getElementById('heloCustomOrderModal').style.display='block';};
-  window.sendHeloCustomOrder=function(){
+  window.sendHeloCustomOrder=async function(){
     const name=document.getElementById('heloCustomName').value.trim(),phone=document.getElementById('heloCustomPhone').value.trim(),product=document.getElementById('heloCustomProduct').value.trim(),color=document.getElementById('heloCustomColor').value.trim(),notes=document.getElementById('heloCustomNotes').value.trim();
     if(!name||!phone||!product){alert('نام، شماره تماس و مدل محصول را وارد کن.');return;}
+    const request={name,phone,product,color,notes};
+    if(window.HeloServer?.customerProfile){
+      try{
+        await window.HeloServer.saveCustomOrder(request);
+        alert('درخواستت در پایگاه داده ثبت شد و در پنل مدیریت هلو قابل مشاهده است 🍑');
+        ['heloCustomName','heloCustomPhone','heloCustomProduct','heloCustomColor','heloCustomNotes'].forEach(id=>document.getElementById(id).value='');
+        document.getElementById('heloCustomOrderModal').style.display='none';return;
+      }catch(e){alert('ثبت در پایگاه داده انجام نشد: '+(e.message||'خطای اتصال'));return;}
+    }
     const body=['درخواست سفارش اختصاصی بافتنی هلو','نام: '+name,'شماره: '+phone,'محصول: '+product,'رنگ: '+(color||'انتخاب نشده'),'توضیحات: '+(notes||'ندارد')].join('\n');
     window.location.href='mailto:Parsaalighlichpour@gmail.com?subject='+encodeURIComponent('درخواست سفارش اختصاصی هلو')+'&body='+encodeURIComponent(body);
   };
