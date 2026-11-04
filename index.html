@@ -2588,9 +2588,11 @@ header:after{content:none!important;display:none!important}
 
 <style id="helo-30-features-style">
 .helo30-note{color:var(--muted,#806b91);line-height:1.9;margin:10px 0 16px}
-.helo30-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.helo30-feature{display:flex;flex-direction:column;align-items:flex-start;gap:6px;text-align:right;padding:13px;border:1px solid #d8b5f2;border-radius:14px;background:linear-gradient(145deg,#fffaff,#f2e3ff);color:#48166c;cursor:pointer;min-width:0}
-.helo30-feature>span{font-size:25px}.helo30-feature strong{font-size:14px}.helo30-feature small{font-size:11px;line-height:1.7;color:#795b8e}
+.helo30-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;align-items:stretch}
+.helo30-feature{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;align-items:center;column-gap:8px;row-gap:3px;text-align:right;padding:10px;border:1px solid #d8b5f2;border-radius:12px;background:linear-gradient(145deg,#fffaff,#f2e3ff);color:#48166c;cursor:pointer;min-width:0;min-height:74px;box-shadow:0 2px 7px #55207812}
+.helo30-feature>span{grid-row:1/3;font-size:22px}.helo30-feature strong{font-size:12px;line-height:1.45}.helo30-feature small{font-size:10px;line-height:1.45;color:#795b8e;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#helo30ActionModal .modal-content{max-height:86vh;overflow-y:auto}
+.helo30-feature:active{transform:scale(.98)}
 .helo30-item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px;margin:8px 0;border:1px solid #e1c9f3;border-radius:12px;background:#fffaff;color:#45185e}
 .helo30-item>div{display:flex;flex-direction:column;gap:5px}.helo30-item small{color:#806b91}
 .helo30-picks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-height:38vh;overflow:auto;margin:12px 0}
@@ -2603,7 +2605,7 @@ header:after{content:none!important;display:none!important}
 .helo30-gallery img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px}
 body.dark-mode .helo30-feature,body.dark-mode .helo30-item,body.dark-mode .helo30-compare-grid>div,body.dark-mode .helo30-picks label,body.dark-mode .helo30-gallery button{background:#30203d;color:#f8edff;border-color:#67477b}
 body.dark-mode .helo30-feature small,body.dark-mode .helo30-item small{color:#d6c2e7}
-@media(max-width:430px){.helo30-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.helo30-feature{padding:10px}.helo30-feature strong{font-size:12px}.helo30-feature small{font-size:10px}.helo30-compare-grid{grid-template-columns:1fr}}
+@media(max-width:600px){.helo30-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.helo30-feature{padding:9px;min-height:68px}.helo30-feature>span{font-size:20px}.helo30-feature strong{font-size:11px}.helo30-feature small{font-size:9px}}@media(max-width:350px){.helo30-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}.helo30-feature{padding:7px;column-gap:5px}}@media(min-width:601px){.helo30-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.helo30-feature{min-height:82px}}.helo30-compare-grid{grid-template-columns:1fr}
 </style>
 <script src="helo-30-features.js"></script>
 
