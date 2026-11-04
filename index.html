@@ -1972,6 +1972,9 @@ main.container>.halloween-sale .halloween-cta{
 .order-late-help{display:grid;gap:10px;margin-top:14px;padding:14px;border-radius:14px;background:#fff;border:1px solid #d8b4fe}
 .order-late-help .btn{display:block;text-decoration:none;text-align:center;padding:11px;border-radius:10px}
 .order-eta-panel p{margin:8px 0}
+.tracking-eta-card{margin:12px 0;padding:14px;border:1px solid #d8b4fe;border-radius:12px;background:#f3e8ff;color:#4c1d95;text-align:center}
+.tracking-eta-card .order-eta-clock{font-size:30px;margin:10px auto}
+.admin-eta-editor{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 </style>
 </head>
 <body>
@@ -2232,23 +2235,36 @@ function openAccount(){updateUserUI();$('accountModal').style.display='block'}
 function updateUserUI(){const box=$('accountContent');const user=readJSON('heloUser',null);if(user){box.innerHTML=`<h3>سلام ${esc(user.name)} 👋</h3><p>📱 شماره: ${esc(user.phone)}</p><button class="btn danger" onclick="logout()">🚪 خروج از حساب</button>`}else{box.innerHTML=`<label class="field-label" for="loginName">نام و نام خانوادگی</label><input id="loginName" class="field" placeholder="نام شما" value="پارسا قلیچ پور" autocomplete="name"><label class="field-label" for="loginPhone">شماره موبایل</label><input id="loginPhone" class="field" placeholder="شماره موبایل" value="۰۹۹۱۵۰۲۳۶۳۲" inputmode="tel" autocomplete="tel"><p class="muted">حساب این نسخه روی همین مرورگر ذخیره می‌شود؛ ورود امن چندکاربره به سرور نیاز دارد.</p><button class="btn" onclick="login()">✅ ورود / ثبت‌نام</button>`}}
 function login(){const name=$('loginName').value.trim(),phone=$('loginPhone').value.trim();if(!name||!phone){alert('نام و شماره موبایل را وارد کن.');return}saveJSON('heloUser',{name,phone});updateUserUI();updateVipWelcome(!!adminUnlocked);alert('✅ حساب محلی ساخته شد!')}
 function logout(){localStorage.removeItem('heloUser');updateUserUI();updateVipWelcome(!!adminUnlocked);alert('از حساب خارج شدی.')}
-function openTracking(){$('trackingModal').style.display='block';$('trackingResults').innerHTML=''}
+function openTracking(){if(trackingEtaInterval)clearInterval(trackingEtaInterval);$('trackingModal').style.display='block';$('trackingResults').innerHTML=''}
+let trackingEtaInterval=null;
+function startTrackingEtaClock(){
+ if(trackingEtaInterval)clearInterval(trackingEtaInterval);
+ const tick=()=>document.querySelectorAll('[data-eta-deadline]').forEach(node=>{
+  const left=Math.max(0,Number(node.dataset.etaDeadline)-Date.now());
+  const h=Math.floor(left/3600000),m=Math.floor(left%3600000/60000),sec=Math.floor(left%60000/1000);
+  const d=n=>String(n).padStart(2,'0').replace(/\d/g,x=>'۰۱۲۳۴۵۶۷۸۹'[Number(x)]);
+  node.textContent=d(h)+':'+d(m)+':'+d(sec);
+  const card=node.closest('.tracking-eta-card'),late=card&&card.querySelector('[data-eta-late]');
+  if(late)late.style.display=left<=0?'grid':'none';
+ });
+ tick();trackingEtaInterval=setInterval(tick,1000);
+}
 async function trackOrders(){
- const phone=$('trackingPhone').value.trim();
- const result=$('trackingResults'),button=$('trackOrdersButton');
+ const phone=$('trackingPhone').value.trim(),result=$('trackingResults'),button=$('trackOrdersButton');
  if(!phone){result.innerHTML='<div class="notice">شماره موبایل را وارد کن.</div>';return}
+ if(trackingEtaInterval)clearInterval(trackingEtaInterval);
  button.disabled=true;button.textContent='در حال جست‌وجو…';result.innerHTML='<div class="muted">در حال اتصال به پایگاه داده…</div>';
  try{
-  if(!window.HeloServer||typeof window.HeloServer.trackOrdersByPhone!=='function')throw new Error('اتصال پایگاه داده آماده نیست');
   const orders=await window.HeloServer.trackOrdersByPhone(phone);
-  if(!Array.isArray(orders)||!orders.length){result.innerHTML='<div class="empty">سفارشی با این شماره موبایل پیدا نشد. شماره را بررسی کن.</div>';return}
+  if(!orders.length){result.innerHTML='<div class="empty">سفارشی با این شماره موبایل پیدا نشد.</div>';return}
   const labels={new:'ثبت‌شده',preparing:'در حال آماده‌سازی',shipped:'ارسال‌شده',completed:'تکمیل‌شده',cancelled:'لغوشده'};
-  result.innerHTML=orders.map(order=>{
-   const date=order.created_at?new Date(order.created_at).toLocaleString('fa-IR'):'—';
-   const items=Array.isArray(order.items)?order.items.map(it=>'<div class="invoice-line"><span>'+esc(it.name||it.id||'محصول')+' × '+formatPrice(it.qty)+'</span><strong>'+formatPrice((Number(it.price)||0)*(Number(it.qty)||0))+' تومان</strong></div>').join(''):'';
-   return '<div class="admin-product"><h3>سفارش '+esc(order.order_code||'')+'</h3><p>وضعیت: <strong>'+esc(labels[order.status]||'در انتظار بررسی')+'</strong></p><p>تاریخ ثبت: '+esc(date)+'</p><h4>محصولات</h4>'+items+'<div class="summary-total"><span>مبلغ سفارش</span><strong>'+formatPrice(order.total)+' تومان</strong></div></div>';
+  result.innerHTML=orders.map(o=>{
+   const date=o.created_at?new Date(o.created_at).toLocaleString('fa-IR'):'—',mins=Math.min(10080,Math.max(1,Number(o.prep_minutes)||120)),start=Date.parse(o.prep_started_at||o.created_at||Date.now()),deadline=(Number.isFinite(start)?start:Date.now())+mins*60000;
+   const items=Array.isArray(o.items)?o.items.map(it=>'<div class="invoice-line"><span>'+esc(it.name||it.id||'محصول')+' × '+formatPrice(it.qty)+'</span><strong>'+formatPrice((Number(it.price)||0)*(Number(it.qty)||0))+' تومان</strong></div>').join(''):'';
+   return '<div class="admin-product"><h3>سفارش '+esc(o.order_code||'')+'</h3><p>وضعیت: <strong>'+esc(labels[o.status]||'در انتظار بررسی')+'</strong></p><p>تاریخ ثبت: '+esc(date)+'</p><div class="tracking-eta-card"><strong>⏳ زمان باقی‌مانده آماده‌سازی</strong><div class="order-eta-clock" data-eta-deadline="'+deadline+'">۰۰:۰۰:۰۰</div><div data-eta-late style="display:none"><p>زمان تخمینی تمام شده؛ برای پیگیری با ما تماس بگیر.</p><a class="btn secondary" href="https://ble.ir/Parsa_Gh93">کانال بله</a> <a class="btn secondary" href="tel:09915023632">تماس با پشتیبانی</a></div></div><h4>محصولات</h4>'+items+'<div class="summary-total"><span>مبلغ سفارش</span><strong>'+formatPrice(o.total)+' تومان</strong></div></div>';
   }).join('');
- }catch(e){console.error('پیگیری سفارش ناموفق بود:',e);result.innerHTML='<div class="notice">اتصال به پایگاه داده انجام نشد. چند لحظه بعد دوباره تلاش کن.</div>'}
+  startTrackingEtaClock();
+ }catch(e){console.error(e);result.innerHTML='<div class="notice">اتصال به پایگاه داده انجام نشد. دوباره تلاش کن.</div>'}
  finally{button.disabled=false;button.textContent='🔎 جست‌وجوی سفارش'}
 }
 let orderEtaInterval=null;
@@ -2705,7 +2721,18 @@ async function setProductStock(id){
 }
 async function editAdminProduct(id){if(!adminUnlocked)return;const p=products.find(x=>String(x.id)===String(id));if(!p)return;const name=prompt('نام محصول:',p.name);if(name===null)return;const price=prompt('قیمت به تومان:',p.price);if(price===null)return;if(!name.trim()||!Number.isFinite(Number(price))||Number(price)<0){alert('نام یا قیمت معتبر نیست.');return}const description=prompt('توضیحات محصول:',p.description||'');if(description===null)return;const stock=prompt('موجودی عددی (خالی = کنترل موجودی خاموش، صفر = ناموجود):',p.stock_enabled?String(p.stock):'');if(stock===null)return;if(stock.trim()!==''&&(!Number.isInteger(Number(stock))||Number(stock)<0)){alert('موجودی باید عدد صحیح صفر یا بیشتر باشد.');return}const updated={...p,name:name.trim(),price:Number(price),description:description.trim(),stock:stock.trim()===''?Number(p.stock||0):Number(stock),stock_enabled:stock.trim()!==''};const ok=await window.HeloServer.saveProduct(updated);if(!ok){alert('ذخیره در پایگاه داده ناموفق بود؛ تغییر اعمال نشد.');return}Object.assign(p,updated);saveJSON('heloProductsV2',products);if(window.refreshHeloProducts)await window.refreshHeloProducts();renderAdminProducts();renderProducts();alert('تغییرات محصول در سرور ذخیره شد و بین دستگاه‌ها هماهنگ می‌شود.')}
 async function toggleAdminProduct(id){if(!adminUnlocked)return;const p=products.find(x=>String(x.id)===String(id));if(!p)return;const updated={...p,active:p.active===false};const ok=await window.HeloServer.saveProduct(updated);if(!ok){alert('ذخیره در پایگاه داده ناموفق بود؛ وضعیت محصول تغییر نکرد.');return}Object.assign(p,updated);saveJSON('heloProductsV2',products);if(window.refreshHeloProducts)await window.refreshHeloProducts();renderAdminProducts();renderProducts()}
-async function renderAdminOrders(){if(!adminUnlocked)return;const box=$('adminOrderList');box.innerHTML='<div class="notice">در حال دریافت سفارش‌ها از سرور…</div>';try{const orders=await window.HeloServer.getOrders();const labels={new:'جدید',preparing:'در حال آماده‌سازی',shipped:'ارسال‌شده',completed:'تکمیل‌شده',cancelled:'لغوشده'};box.innerHTML=orders.length?orders.map(o=>`<div class="admin-product"><strong>${esc(o.order_code||o.id)}</strong><p>👤 ${esc(o.customer_name||o.name)} · 📱 ${esc(o.phone)}</p><p>تاریخ: ${esc(o.created_at||o.date||'')}</p><p>🧶 محصولات: ${(o.items||[]).map(it=>{const p=products.find(x=>String(x.id)===String(it.id));return esc(it.name||(p&&p.name)||it.id)+' × '+formatPrice(it.qty)}).join('، ')||'جزئیات محصول ثبت نشده'}</p><strong>${formatPrice(o.total)} تومان</strong><label class="field-label">وضعیت سفارش</label><select class="field" onchange="updateOrderStatus('${esc(o.id)}',this.value)">${Object.entries(labels).map(([v,l])=>`<option value="${v}" ${(o.status||'new')===v?'selected':''}>${l}</option>`).join('')}</select></div>`).join(''):'<div class="empty">هنوز سفارشی در سرور ثبت نشده است.</div>'}catch(e){console.error('دریافت سفارش‌ها ناموفق بود:',e);box.innerHTML='<div class="notice">خطا در دریافت سفارش‌ها: '+esc(e&&e.message?e.message:'اتصال سرور را بررسی کن')+'<br>دوباره روی «تازه‌سازی سفارش‌ها» بزن.</div>'}}
+async function renderAdminOrders(){
+ if(!adminUnlocked)return;const box=$('adminOrderList');box.innerHTML='<div class="notice">در حال دریافت سفارش‌ها از سرور…</div>';
+ try{const orders=await window.HeloServer.getOrders(),labels={new:'جدید',preparing:'در حال آماده‌سازی',shipped:'ارسال‌شده',completed:'تکمیل‌شده',cancelled:'لغوشده'};
+ box.innerHTML=orders.length?orders.map(o=>'<div class="admin-product"><strong>'+esc(o.order_code||o.id)+'</strong><p>👤 '+esc(o.customer_name||o.name)+' · 📱 '+esc(o.phone)+'</p><p>تاریخ: '+esc(o.created_at||'')+'</p><p>🧶 محصولات: '+(o.items||[]).map(it=>esc(it.name||it.id)+' × '+formatPrice(it.qty)).join('، ')+'</p><strong>'+formatPrice(o.total)+' تومان</strong><label class="field-label">وضعیت سفارش</label><select class="field" onchange="updateOrderStatus(\''+esc(o.id)+'\',this.value)">'+Object.entries(labels).map(([v,l])=>'<option value="'+v+'" '+((o.status||'new')===v?'selected':'')+'>'+l+'</option>').join('')+'</select><label class="field-label">مدت آماده‌سازی (دقیقه)</label><div class="admin-eta-editor"><input class="field" id="etaMinutes_'+esc(o.id)+'" type="number" min="1" max="10080" value="'+(Number(o.prep_minutes)||120)+'"><button class="btn small" onclick="updateOrderEta(\''+esc(o.id)+'\')">ذخیره و شروع دوباره تایمر</button></div></div>').join(''):'<div class="empty">هنوز سفارشی ثبت نشده است.</div>';
+ }catch(e){console.error(e);box.innerHTML='<div class="notice">دریافت سفارش‌ها ناموفق بود.</div>'}
+}
+async function updateOrderEta(id){
+ if(!adminUnlocked)return;const input=$('etaMinutes_'+id),raw=String(input&&input.value||'').replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).trim(),mins=Number(raw);
+ if(!/^\d+$/.test(raw)||!Number.isInteger(mins)||mins<1||mins>10080){alert('زمان باید بین ۱ تا ۱۰۰۸۰ دقیقه باشد.');return}
+ if(!await window.HeloServer.updateOrderEta(id,mins)){alert('ذخیره زمان ناموفق بود.');return}
+ alert('زمان ذخیره شد و تایمر مشتری از نو شروع شد.');await renderAdminOrders();
+}
 async function updateOrderStatus(id,status){if(!adminUnlocked)return;const labels={new:'جدید',preparing:'در حال آماده‌سازی',shipped:'ارسال‌شده',completed:'تکمیل‌شده',cancelled:'لغوشده'};const ok=await window.HeloServer.updateOrderStatus(id,status);if(!ok){alert('ذخیره وضعیت ناموفق بود؛ دسترسی مدیر و اتصال اینترنت را بررسی کن.');await renderAdminOrders();return}alert('وضعیت سفارش ذخیره شد: '+(labels[status]||status));await renderAdminOrders()}
 (function bindHeloAddProductButton(){
   const button = document.getElementById('heloAddProductButton');
@@ -2815,6 +2842,13 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
     if (error || !data) { console.error("تغییر وضعیت سفارش ناموفق بود:", error && error.message); return false; }
     return true;
   }
+  async function updateOrderEta(id, minutes) {
+    if (!Number.isInteger(Number(minutes)) || Number(minutes)<1 || Number(minutes)>10080) return false;
+    const now=new Date().toISOString();
+    const {data,error}=await db.from("orders").update({prep_minutes:Number(minutes),prep_started_at:now,updated_at:now}).eq("id",id).select("id").maybeSingle();
+    if(error||!data){console.error("تغییر زمان آماده‌سازی ناموفق بود:",error&&error.message);return false}
+    return true;
+  }
   async function uploadProductImage(file, path) {
     const ext=(String(file && file.name || '').split('.').pop()||'').toLowerCase();
     const inferred=({jpg:'image/jpeg',jpeg:'image/jpeg',png:'image/png',webp:'image/webp',gif:'image/gif'})[ext]||'';
@@ -2861,7 +2895,7 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
   }
   window.HeloServer = {
     getProducts: getServerProducts, saveProduct: saveServerProduct,
-    saveOrder: saveServerOrder, trackOrdersByPhone, getOrders, updateOrderStatus, uploadImage: uploadProductImage,
+    saveOrder: saveServerOrder, trackOrdersByPhone, getOrders, updateOrderStatus, updateOrderEta, uploadImage: uploadProductImage,
     signInAdminPassword, signOut: async function(){const {error}=await db.auth.signOut();if(error)console.error("خروج ناموفق بود:",error.message)}
   };
   db.auth.getSession().then(({data}) => checkAdminSession(data.session));
