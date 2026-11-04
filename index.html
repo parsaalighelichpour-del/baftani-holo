@@ -1977,18 +1977,23 @@ main.container>.halloween-sale .halloween-cta{
 .tracking-eta-card .order-eta-clock{font-size:30px;margin:10px auto}
 .admin-eta-editor{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 </style>
+<style id="helo-feature-banner-style">
+.helo-feature-banner{position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:18px;margin:22px 0;padding:clamp(18px,4vw,30px);border:1px solid #d8a8ff;border-radius:22px;background:radial-gradient(circle at 85% 15%,#f8d8ff 0,transparent 32%),linear-gradient(120deg,#4b147d,#8b35c7 55%,#c15bdc);color:#fff;box-shadow:0 14px 32px #6b21a833}
+.helo-banner-copy{position:relative;z-index:1;max-width:680px}.helo-banner-copy>span{display:inline-block;padding:5px 11px;border:1px solid #ffffff70;border-radius:30px;background:#ffffff20;font-size:12px;font-weight:800}.helo-banner-copy h2{margin:10px 0;color:#fff;font-size:clamp(21px,4vw,31px);line-height:1.5}.helo-banner-copy p{margin:5px 0 15px;color:#f7eaff;line-height:1.9}.helo-banner-copy button{border:0;border-radius:12px;padding:11px 17px;background:#fff;color:#641b9e;font-weight:900;cursor:pointer}.helo-banner-art{font-size:clamp(35px,7vw,65px);white-space:nowrap;filter:drop-shadow(0 5px 9px #29004455)}.helo-banner-sparkle{font-size:54px;opacity:.7}.helo-world-main-cta{margin-top:10px;min-width:min(100%,250px);box-shadow:0 7px 18px #6b21a822}
+@media(max-width:600px){.helo-feature-banner{gap:8px;padding:17px}.helo-banner-art{font-size:34px}.helo-banner-sparkle{display:none}.helo-banner-copy h2{font-size:21px}}
+</style>
 </head>
 <body>
 <header>
 <h1>🍑 فروشگاه بافتنی هلو</h1>
 <p>محصولات بافتنی دست‌ساز و دوست‌داشتنی</p>
 <nav class="nav">
-<button class="nav-btn" onclick="openCart()">🛒 سبد خرید (<span id="cartCount">۰</span>)</button>
-<button class="nav-btn" onclick="openTracking()">📦 پیگیری سفارش</button>
+<button type="button" class="nav-btn" onclick="window.openCart()">🛒 سبد خرید (<span id="cartCount">۰</span>)</button>
+<button type="button" class="nav-btn" onclick="window.openTracking()">📦 پیگیری سفارش</button>
 <button type="button" id="openOrdersNavButton" class="nav-btn" onclick="window.openOrdersSection()">🧾 سفارش‌ها</button>
-<button class="nav-btn" onclick="openAccount()">👤 حساب من</button>
-<button class="nav-btn" onclick="ordersAfterLogin=false;openAdminLogin()">🔐 مدیریت</button>
-<button class="nav-btn" onclick="openHeloWorld()">🌍 دنیای هلو</button>
+<button type="button" class="nav-btn" onclick="window.openAccount()">👤 حساب من</button>
+<button type="button" class="nav-btn" onclick="window.openAdminLogin()">🔐 مدیریت</button>
+<button type="button" class="nav-btn" onclick="window.openHeloWorld()">🌍 دنیای هلو</button>
 <a href="https://ble.ir/Parsa_Gh93" target="_blank" rel="noopener" class="nav-btn">📢 کانال بله</a>
 </nav>
 </header>
@@ -2003,6 +2008,8 @@ main.container>.halloween-sale .halloween-cta{
 </div>
 
 </section>
+
+<section class="helo-feature-banner" aria-label="بنر ویژه فروشگاه هلو"><div class="helo-banner-art" aria-hidden="true">🍑 ✨ 🧶 💜</div><div class="helo-banner-copy"><span>دنیای رنگارنگ بافتنی هلو</span><h2>یه هدیه خاص، بافته‌شده با عشق! 🎁</h2><p>پک هدیه بساز، سفارش اختصاصی ثبت کن و دنیای هلو رو کشف کن.</p><button type="button" onclick="window.openHeloWorld()">ورود به بخش ویژه فروشگاه <span aria-hidden="true">←</span></button></div><div class="helo-banner-sparkle" aria-hidden="true">💜</div></section>
 
 <section class="halloween-sale" aria-label="جشنواره تخفیف هالووین">
   <div class="halloween-sale-art" aria-hidden="true">🎃 🦇 🧶 🍑</div>
@@ -2060,6 +2067,7 @@ main.container>.halloween-sale .halloween-cta{
     <span class="helo-world-kicker">🍑 بخش ویژه فروشگاه</span>
     <h2>دنیای هلو</h2>
     <p>هدیه بساز، سفارش اختصاصی بده و با خریدهایت امتیاز جمع کن.</p>
+    <button type="button" class="btn helo-world-main-cta" onclick="window.openHeloWorld()">✨ ورود به دنیای ویژه هلو</button>
   </div>
   <div class="helo-world-grid">
     <article class="helo-world-card helo-world-feature">
@@ -3131,6 +3139,25 @@ body.dark-mode .helo-world-section,body.dark-mode .helo-world-card{background:#2
   });
   document.addEventListener('DOMContentLoaded',updateClubUI);
   updateClubUI();
+})();
+</script>
+<script id="helo-main-buttons-bridge">
+(() => {
+  const expose = (name, fn) => { if (typeof fn === 'function') window[name] = fn; };
+  const connect = () => {
+    try {
+      expose('openCart', openCart);
+      expose('openTracking', openTracking);
+      expose('openAccount', openAccount);
+      expose('openAdminLogin', openAdminLogin);
+      expose('openHeloWorld', window.openHeloWorld);
+      expose('openOrdersSection', window.openOrdersSection);
+    } catch (error) {
+      console.error('اتصال دکمه‌های اصلی فروشگاه ناموفق بود:', error);
+    }
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', connect, {once:true});
+  else connect();
 })();
 </script>
 </body>
