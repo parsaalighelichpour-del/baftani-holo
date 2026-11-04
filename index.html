@@ -3142,6 +3142,7 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
       customerProfile=data;cart=Array.isArray(data.cart)?data.cart:[];favorites=Array.isArray(data.favorites)?data.favorites:[];
       saveJSON("heloCart",cart);saveJSON("heloFavorites",favorites);
       document.body.classList.toggle("dark-mode",data.dark_mode===true);localStorage.setItem("heloDark",data.dark_mode===true?"1":"0");
+      if(data.preferences&&typeof data.preferences==="object")Object.entries(data.preferences).forEach(([k,v])=>{if(/^helo30_[a-zA-Z0-9_-]{1,70}$/.test(k))localStorage.setItem(k,typeof v==="string"?v:JSON.stringify(v));});
       updateCartCount();renderProducts();return data;
     }
     const initial={id:customerSession.user.id,full_name:String(customerSession.user.user_metadata?.full_name||""),phone:String(customerSession.user.user_metadata?.phone||""),cart,favorites,dark_mode:localStorage.getItem("heloDark")==="1",updated_at:new Date().toISOString()};
@@ -3167,7 +3168,7 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
   }
   async function claimCustomerMission(kind){
     if(!customerSession?.user)throw new Error("برای ذخیره امتیاز در همه دستگاه‌ها، اول وارد حساب مشتری شو.");
-    const rpcName=kind==="daily"?"claim_helo_daily_points":"claim_helo_profile_points";
+    const rpcName=kind==="daily"?"claim_helo_daily_points":kind==="weekly"?"claim_helo_weekly_points":"claim_helo_profile_points";
     const {data,error}=await customerDb.rpc(rpcName);
     if(error)throw error;
     if(data===null||data===undefined)return {claimed:false,points:Number(customerProfile?.points||0)};
@@ -3175,6 +3176,14 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
     if(kind==="daily")customerProfile.daily_mission_date=new Date().toISOString().slice(0,10);
     if(kind==="profile")customerProfile.profile_mission_claimed=true;
     return {claimed:true,points:Number(data)};
+  }
+  async function saveCustomerPreference(key,value){
+    if(!customerSession?.user)return false;
+    if(!/^helo30_[a-zA-Z0-9_-]{1,70}$/.test(String(key)))return false;
+    const {data,error}=await customerDb.rpc("save_helo_customer_preference",{p_key:String(key),p_value:value});
+    if(error){console.warn("ذخیره تنظیمات حساب ناموفق بود:",error.message);return false}
+    if(customerProfile)customerProfile.preferences=data||customerProfile.preferences||{};
+    return true;
   }
   async function initCustomerAuth(){
     const {data,error}=await customerDb.auth.getSession();if(error)throw error;customerSession=data.session;
@@ -3186,7 +3195,7 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
   window.HeloServer = {
     get customerProfile(){return customerProfile;},
     get customerEmail(){return customerEmail;},
-    signUpCustomer, signInCustomer, saveCustomerData, claimCustomerMission, initCustomerAuth, signOutCustomer,
+    signUpCustomer, signInCustomer, saveCustomerData, saveCustomerPreference, claimCustomerMission, initCustomerAuth, signOutCustomer,
     getProducts: getServerProducts, saveProduct: saveServerProduct,
     saveOrder: saveServerOrder, trackOrdersByPhone, getOrders, getMyOrders, getProductReviews, addProductReview, saveCustomOrder, getCustomOrders, updateCustomOrderStatus, updateOrderStatus, updateOrderEta, uploadImage: uploadProductImage,
     signInAdminPassword, signOut: async function(){const {error}=await db.auth.signOut();if(error)console.error("خروج ناموفق بود:",error.message)}
