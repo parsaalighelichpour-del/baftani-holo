@@ -3082,8 +3082,8 @@ body.dark-mode .helo-world-section,body.dark-mode .helo-world-card{background:#2
   window.sendHeloCustomOrder=function(){
     const name=document.getElementById('heloCustomName').value.trim(),phone=document.getElementById('heloCustomPhone').value.trim(),product=document.getElementById('heloCustomProduct').value.trim(),color=document.getElementById('heloCustomColor').value.trim(),notes=document.getElementById('heloCustomNotes').value.trim();
     if(!name||!phone||!product){alert('نام، شماره تماس و مدل محصول را وارد کن.');return;}
-    const body='درخواست سفارش اختصاصی بافتنی هلو%0Aنام: '+encodeURIComponent(name)+'%0Aشماره: '+encodeURIComponent(phone)+'%0Aمحصول: '+encodeURIComponent(product)+'%0Aرنگ: '+encodeURIComponent(color||'انتخاب نشده')+'%0Aتوضیحات: '+encodeURIComponent(notes||'ندارد');
-    window.location.href='mailto:Parsaalighlichpour@gmail.com?subject='+encodeURIComponent('درخواست سفارش اختصاصی هلو')+'&body='+body;
+    const body=['درخواست سفارش اختصاصی بافتنی هلو','نام: '+name,'شماره: '+phone,'محصول: '+product,'رنگ: '+(color||'انتخاب نشده'),'توضیحات: '+(notes||'ندارد')].join('\n');
+    window.location.href='mailto:Parsaalighlichpour@gmail.com?subject='+encodeURIComponent('درخواست سفارش اختصاصی هلو')+'&body='+encodeURIComponent(body);
   };
   window.openGiftPack=function(){
     const box=document.getElementById('heloGiftPackChoices'),list=activeProducts();
