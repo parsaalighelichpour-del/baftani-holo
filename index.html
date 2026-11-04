@@ -2997,7 +2997,8 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
   }
   async function saveServerOrder(order) {
     try {
-      const { data, error } = await db.rpc("place_store_order", {
+      const orderClient = customerSession?.user ? customerDb : db;
+      const { data, error } = await orderClient.rpc("place_store_order", {
         p_customer_name: String(order.name || '').slice(0,100),
         p_phone: String(order.phone || '').slice(0,30),
         p_items: order.items || [],
