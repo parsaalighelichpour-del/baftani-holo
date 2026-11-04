@@ -1965,6 +1965,14 @@ main.container>.halloween-sale .halloween-cta{
 }
 </style>
 
+<style>
+.order-eta-panel{margin:18px 0;padding:18px;border:1px solid #d8b4fe;border-radius:18px;background:linear-gradient(145deg,#faf5ff,#f3e8ff);color:#4c1d95;text-align:center}
+.order-eta-panel h3{color:#7e22ce!important;margin:0 0 8px}
+.order-eta-clock{font-size:clamp(30px,8vw,42px);font-weight:900;letter-spacing:2px;color:#7e22ce;background:#fff;border:2px dashed #c084fc;border-radius:14px;padding:10px;margin:12px auto;max-width:260px;font-variant-numeric:tabular-nums}
+.order-late-help{display:grid;gap:10px;margin-top:14px;padding:14px;border-radius:14px;background:#fff;border:1px solid #d8b4fe}
+.order-late-help .btn{display:block;text-decoration:none;text-align:center;padding:11px;border-radius:10px}
+.order-eta-panel p{margin:8px 0}
+</style>
 </head>
 <body>
 <header>
@@ -2081,6 +2089,19 @@ main.container>.halloween-sale .halloween-cta{
 <div id="invoiceCustomer"></div><h3>محصولات</h3><div id="invoiceProducts"></div>
 <div class="summary-total"><span>مبلغ قابل پرداخت</span><span id="invoiceTotal"></span></div>
 </div>
+<section id="orderEtaPanel" class="order-eta-panel" aria-live="polite" style="display:none">
+ <h3>⏳ زمان آماده‌سازی سفارش</h3>
+ <p>سفارش شما ثبت شده است. آماده‌سازی معمولاً بین <strong>۳۰ دقیقه تا ۲ ساعت</strong> زمان می‌برد.</p>
+ <div id="orderEtaClock" class="order-eta-clock">۰۲:۰۰:۰۰</div>
+ <p id="orderEtaMessage" class="muted">تا پایان زمان تخمینی باقی مانده است.</p>
+ <div id="orderLateHelp" class="order-late-help" style="display:none">
+  <strong>هنوز سفارشت آماده نشده؟ نگران نباش 💜</strong>
+  <p>برای پیگیری بیشتر از راه‌های زیر با ما در ارتباط باش:</p>
+  <button class="btn" onclick="trackCurrentOrder()">📦 پیگیری سفارش در سایت</button>
+  <a class="btn secondary" href="https://ble.ir/Parsa_Gh93" target="_blank" rel="noopener">💬 ورود به کانال بله</a>
+  <a class="btn secondary" href="tel:09915023632">📞 تماس با پشتیبانی</a>
+ </div>
+</section>
 <div class="tools-row"><button class="btn" onclick="downloadInvoice()">⬇️ دانلود فاکتور</button><button class="btn secondary" onclick="window.print()">🖨️ چاپ فاکتور</button></div>
 </div></div>
 
@@ -2230,6 +2251,29 @@ async function trackOrders(){
  }catch(e){console.error('پیگیری سفارش ناموفق بود:',e);result.innerHTML='<div class="notice">اتصال به پایگاه داده انجام نشد. چند لحظه بعد دوباره تلاش کن.</div>'}
  finally{button.disabled=false;button.textContent='🔎 جست‌وجوی سفارش'}
 }
+let orderEtaInterval=null;
+function startOrderEta(orderId,phone){
+ const key='heloOrderEta_'+String(orderId||'');
+ let started=Number(localStorage.getItem(key)||0);
+ if(!started){started=Date.now();localStorage.setItem(key,String(started))}
+ const panel=$('orderEtaPanel');if(!panel)return;
+ panel.style.display='block';
+ const clock=$('orderEtaClock'),message=$('orderEtaMessage'),late=$('orderLateHelp');
+ if(orderEtaInterval)clearInterval(orderEtaInterval);
+ function tick(){
+  const remaining=Math.max(0,started+7200000-Date.now());
+  const hours=Math.floor(remaining/3600000),minutes=Math.floor((remaining%3600000)/60000),seconds=Math.floor((remaining%60000)/1000);
+  const digits=n=>String(n).padStart(2,'0');
+  clock.textContent=digits(hours)+':'+digits(minutes)+':'+digits(seconds);
+  if(remaining<=0){message.textContent='زمان تخمینی ۲ ساعت به پایان رسیده است.';late.style.display='grid';clearInterval(orderEtaInterval);orderEtaInterval=null}
+  else{message.textContent='زمان باقی‌مانده از بازه تخمینی آماده‌سازی سفارش';late.style.display='none'}
+ }
+ tick();orderEtaInterval=setInterval(tick,1000);window.heloCurrentOrderPhone=phone||'';
+}
+function trackCurrentOrder(){
+ closeModal('invoiceModal');$('trackingPhone').value=window.heloCurrentOrderPhone||'';openTracking();
+ if(window.heloCurrentOrderPhone)trackOrders();
+}
 function openSupport(){location.href='tel:09915023632'}
 async function createInvoice(){
 const user=readJSON('heloUser',null);
@@ -2244,7 +2288,7 @@ order.items=cloudOrder.items||order.items;
 let orders=readJSON('heloOrdersLocal',[]);orders.unshift(order);saveJSON('heloOrdersLocal',orders.slice(0,50));
 $('invoiceCustomer').innerHTML=`<div class="invoice-line"><span>شماره سفارش</span><strong>${esc(order.id)}</strong></div><div class="invoice-line"><span>مشتری</span><strong>${esc(user.name)}</strong></div><div class="invoice-line"><span>شماره</span><strong>${esc(user.phone)}</strong></div><div class="invoice-line"><span>تاریخ</span><strong>${esc(order.date)}</strong></div>`;
 $('invoiceProducts').innerHTML=cart.map(i=>{const p=products.find(x=>x.id===i.id);return p?`<div class="invoice-line"><span>${esc(p.name)} × ${formatPrice(i.qty)}</span><strong>${formatPrice(p.price*i.qty)} تومان</strong></div>`:''}).join('')+(discountAmount()?`<div class="invoice-line"><span>تخفیف ${effectiveDiscount()}٪</span><strong>− ${formatPrice(discountAmount())} تومان</strong></div>`:'');
-$('invoiceTotal').textContent=formatPrice(order.total)+' تومان';alert('✅ سفارش با موفقیت در پایگاه داده ثبت شد!\n\nشماره سفارش شما: '+order.id+'\n\nاین شماره و همان شماره موبایل ثبت‌شده را نگه دار. از بخش «پیگیری سفارش» می‌توانی وضعیت سفارشت را آنلاین ببینی.');
+$('invoiceTotal').textContent=formatPrice(order.total)+' تومان';startOrderEta(order.id,user.phone);
 $('emailName').value=user.name;$('emailPhone').value=user.phone;
 $('emailProducts').value=cart.map(i=>{const p=products.find(x=>x.id===i.id);return p?`${p.name} × ${i.qty} = ${formatPrice(p.price*i.qty)} تومان`:''}).join('\n')+`\nشماره سفارش: ${order.id}`;
 $('emailTotal').value=formatPrice(order.total)+' تومان';
