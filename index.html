@@ -2609,7 +2609,7 @@ body.dark-mode .helo30-feature,body.dark-mode .helo30-item,body.dark-mode .helo3
 body.dark-mode .helo30-feature small,body.dark-mode .helo30-item small{color:#d6c2e7}
 @media(max-width:600px){.helo30-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.helo30-feature{padding:9px;min-height:68px}.helo30-feature>span{font-size:20px}.helo30-feature strong{font-size:11px}.helo30-feature small{font-size:9px}}@media(max-width:350px){.helo30-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}.helo30-feature{padding:7px;column-gap:5px}}@media(min-width:601px){.helo30-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.helo30-feature{min-height:82px}}.helo30-compare-grid{grid-template-columns:1fr}
 </style>
-<script src="helo-30-features.js"></script>
+<script src="helo-30-features.js"><\/script>
 
 </body></html>`;
 const url=URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'}));
@@ -2840,6 +2840,7 @@ async function updateOrderStatus(id,status){if(!adminUnlocked)return;const label
 })();
 renderProducts();updateCartCount();updateUserUI();initTheme();
 </script>
+<script src="helo-30-features.js"></script>
 <!-- اتصال به Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
