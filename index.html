@@ -3190,6 +3190,7 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
     if(data===null||data===undefined)return {claimed:false,points:Number(customerProfile?.points||0)};
     customerProfile={...customerProfile,points:Number(data)};
     if(kind==="daily")customerProfile.daily_mission_date=new Date().toISOString().slice(0,10);
+    if(kind==="weekly"){const d=new Date(),offset=(d.getUTCDay()+6)%7;d.setUTCDate(d.getUTCDate()-offset);customerProfile.weekly_mission_week=d.toISOString().slice(0,10);}
     if(kind==="profile")customerProfile.profile_mission_claimed=true;
     return {claimed:true,points:Number(data)};
   }
