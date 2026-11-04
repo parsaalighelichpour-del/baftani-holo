@@ -2310,10 +2310,6 @@ function finalTotal(){return Math.max(0,cart.reduce((s,i)=>{const p=products.fin
 function changeQty(id,d){const item=cart.find(x=>String(x.id)===String(id));if(!item)return;const p=products.find(x=>String(x.id)===String(id));if(d>0&&p&&p.stock_enabled&&item.qty>=Number(p.stock)){alert('تعداد بیشتر از موجودی قابل انتخاب نیست.');return}item.qty+=d;if(item.qty<=0)cart=cart.filter(x=>String(x.id)!==String(id));saveCart();renderCart()}
 function removeFromCart(id){cart=cart.filter(x=>x.id!==id);saveCart();renderCart()}
 function applyDiscount(){if(isHalloweenSaleActive()){appliedDiscount=50;appliedCode='HALLOWEEN50';alert('🎃 تخفیف ۵۰٪ هالووین به‌صورت خودکار روی همه محصولات اعمال شده است!');renderCart();return}const code=$('discountCode').value.trim().toUpperCase();if(code==='HELO10'||code==='HELO20'){appliedDiscount=Number(code.slice(4));appliedCode=code;alert('🎁 تخفیف '+appliedDiscount+'٪ اعمال شد')}else{appliedDiscount=0;appliedCode='';alert('❌ کد تخفیف معتبر نیست')}renderCart()}
-function continueAsGuest(){
- localStorage.setItem('heloGuestMode','1');
- $('accountModal').style.display='none';
-}
 function openAccount(){updateUserUI();$('accountModal').style.display='block'}
 async function renderMyOrders(){
  const box=$('myOrdersList');if(!box)return;
