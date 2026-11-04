@@ -1987,6 +1987,7 @@ main.container>.halloween-sale .halloween-cta{
 <button type="button" id="openOrdersNavButton" class="nav-btn" onclick="window.openOrdersSection()">🧾 سفارش‌ها</button>
 <button class="nav-btn" onclick="openAccount()">👤 حساب من</button>
 <button class="nav-btn" onclick="ordersAfterLogin=false;openAdminLogin()">🔐 مدیریت</button>
+<button class="nav-btn" onclick="openHeloWorld()">🌍 دنیای هلو</button>
 <a href="https://ble.ir/Parsa_Gh93" target="_blank" rel="noopener" class="nav-btn">📢 کانال بله</a>
 </nav>
 </header>
@@ -2047,6 +2048,48 @@ main.container>.halloween-sale .halloween-cta{
 <button class="cat dark" onclick="toggleDarkMode()">🌙 حالت شب</button>
 </div>
 </section>
+
+<section class="helo-world-section" id="helo-world">
+  <div class="helo-world-heading">
+    <span class="helo-world-kicker">🍑 بخش ویژه فروشگاه</span>
+    <h2>دنیای هلو</h2>
+    <p>هدیه بساز، سفارش اختصاصی بده و با خریدهایت امتیاز جمع کن.</p>
+  </div>
+  <div class="helo-world-grid">
+    <article class="helo-world-card helo-world-feature">
+      <div class="helo-world-icon">⭐</div><h3>باشگاه مشتریان هلو</h3>
+      <p>برای خریدهای تأییدشده امتیاز بگیر و مأموریت روزانه را انجام بده.</p>
+      <strong id="heloClubPoints">۰ امتیاز</strong>
+      <button class="btn" onclick="openHeloWorld()">دیدن امتیازها</button>
+    </article>
+    <article class="helo-world-card">
+      <div class="helo-world-icon">🎁</div><h3>پک هدیه دلخواه</h3>
+      <p>خودت چند محصول را انتخاب کن و یک پک هدیه بساز.</p>
+      <button class="btn" onclick="openGiftPack()">ساخت پک هدیه</button>
+    </article>
+    <article class="helo-world-card">
+      <div class="helo-world-icon">🧶</div><h3>سفارش اختصاصی</h3>
+      <p>مدل، رنگ و توضیحات محصول دلخواهت را برای ما بفرست.</p>
+      <button class="btn" onclick="openCustomOrder()">ثبت درخواست</button>
+    </article>
+    <article class="helo-world-card">
+      <div class="helo-world-icon">🌟</div><h3>محصول منتخب امروز</h3>
+      <p id="heloDailyProductText">هر روز یک محصول از فروشگاه معرفی می‌شود.</p>
+      <button class="btn secondary" onclick="addDailyProductToCart()">افزودن به سبد</button>
+    </article>
+    <article class="helo-world-card">
+      <div class="helo-world-icon">💝</div><h3>بسته‌بندی هدیه</h3>
+      <p>در سبد خرید، گزینه بسته‌بندی هدیه را فعال کن.</p>
+      <button class="btn secondary" onclick="openCart()">رفتن به سبد خرید</button>
+    </article>
+    <article class="helo-world-card">
+      <div class="helo-world-icon">💬</div><h3>نظر و امتیاز محصول</h3>
+      <p>در صفحه جزئیات هر محصول، نظر و امتیازت را ثبت کن.</p>
+      <button class="btn secondary" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">دیدن محصولات</button>
+    </article>
+  </div>
+</section>
+
 <div class="section-head"><h2>🧶 محصولات فروشگاه</h2><span id="productCount"></span></div>
 <section class="products" id="products"></section>
 </main>
@@ -2067,6 +2110,7 @@ main.container>.halloween-sale .halloween-cta{
 <div class="modal" id="cartModal"><div class="modal-content">
 <button class="close" onclick="closeModal('cartModal')">×</button>
 <h2>🛒 سبد خرید</h2><div id="cartItems"></div>
+<div class="helo-gift-option"><label><input id="heloGiftWrap" type="checkbox"> 🎀 سفارش من با بسته‌بندی هدیه آماده شود (رایگان)</label></div>
 <div class="tools-row"><input id="discountCode" class="field" placeholder="تخفیف ۵۰٪ هالووین خودکار اعمال می‌شود"><button class="btn" onclick="applyDiscount()">اعمال تخفیف</button></div>
 <div id="cartSummary"></div><div class="summary-total"><span>مبلغ نهایی</span><span id="cartTotal">۰ تومان</span></div>
 <button class="btn green" onclick="createInvoice()">ساخت فاکتور و ثبت سفارش</button>
@@ -2304,12 +2348,15 @@ order.items=cloudOrder.items||order.items;
 let orders=readJSON('heloOrdersLocal',[]);orders.unshift(order);saveJSON('heloOrdersLocal',orders.slice(0,50));
 $('invoiceCustomer').innerHTML=`<div class="invoice-line"><span>شماره سفارش</span><strong>${esc(order.id)}</strong></div><div class="invoice-line"><span>مشتری</span><strong>${esc(user.name)}</strong></div><div class="invoice-line"><span>شماره</span><strong>${esc(user.phone)}</strong></div><div class="invoice-line"><span>تاریخ</span><strong>${esc(order.date)}</strong></div>`;
 $('invoiceProducts').innerHTML=cart.map(i=>{const p=products.find(x=>x.id===i.id);return p?`<div class="invoice-line"><span>${esc(p.name)} × ${formatPrice(i.qty)}</span><strong>${formatPrice(p.price*i.qty)} تومان</strong></div>`:''}).join('')+(discountAmount()?`<div class="invoice-line"><span>تخفیف ${effectiveDiscount()}٪</span><strong>− ${formatPrice(discountAmount())} تومان</strong></div>`:'');
+if($('heloGiftWrap')&&$('heloGiftWrap').checked)$('invoiceProducts').innerHTML+='<div class="invoice-line"><span>بسته‌بندی هدیه</span><strong>رایگان 🎀</strong></div>';
 $('invoiceTotal').textContent=formatPrice(order.total)+' تومان';startOrderEta(order.id,user.phone);
 $('emailName').value=user.name;$('emailPhone').value=user.phone;
 $('emailProducts').value=cart.map(i=>{const p=products.find(x=>x.id===i.id);return p?`${p.name} × ${i.qty} = ${formatPrice(p.price*i.qty)} تومان`:''}).join('\n')+`\nشماره سفارش: ${order.id}`;
+if($('heloGiftWrap')&&$('heloGiftWrap').checked)$('emailProducts').value+='\nبسته‌بندی هدیه: بله (رایگان)';
+window.dispatchEvent(new CustomEvent('helo-order-confirmed',{detail:{total:order.total}}));
 $('emailTotal').value=formatPrice(order.total)+' تومان';
 try{$('orderForm').submit()}catch(e){console.warn(e)}
-cart=[];appliedDiscount=0;appliedCode='';$('discountCode').value='';saveCart();renderCart();
+cart=[];appliedDiscount=0;appliedCode='';$('discountCode').value='';if($('heloGiftWrap'))$('heloGiftWrap').checked=false;saveCart();renderCart();
 closeModal('cartModal');$('invoiceModal').style.display='block';
 }
 function downloadInvoice(){
@@ -2533,6 +2580,109 @@ body.dark-mode .btn.secondary{background:#0b4224;color:#f0fff4;border-color:#287
 /* حذف استیکرهای تزئینی زیر عنوان فروشگاه */
 header:after{content:none!important;display:none!important}
 </style>
+
+
+<div class="modal" id="heloWorldModal"><div class="modal-content">
+  <button class="close" onclick="closeModal('heloWorldModal')">×</button>
+  <h2>🌍 دنیای هلو</h2>
+  <p>به باشگاه مشتریان هلو خوش آمدی!</p>
+  <div class="helo-club-panel">
+    <div><span class="muted">امتیازهای این مرورگر</span><strong id="heloClubModalPoints">۰</strong></div>
+    <div><span class="muted">نشان مشتری</span><strong id="heloClubLevel">تازه‌وارد هلو 🍑</strong></div>
+  </div>
+  <div class="notice">برای هر ۱۰٬۰۰۰ تومان خرید تأییدشده، ۱ امتیاز ثبت می‌شود. امتیازها فعلاً روی همین مرورگر ذخیره می‌شوند و هنوز قابل تبدیل به تخفیف نیستند.</div>
+  <h3>🎯 مأموریت روزانه</h3>
+  <div class="helo-mission"><div><strong>بازدید روزانه</strong><p class="muted">هر روز یک‌بار وارد دنیای هلو شو و ۲ امتیاز بگیر.</p></div><button class="btn small" id="heloDailyMissionBtn" onclick="claimHeloDailyPoints()">دریافت ۲ امتیاز</button></div>
+  <div class="helo-mission"><div><strong>تکمیل حساب</strong><p class="muted">نام و شماره را در بخش حساب من ثبت کن تا ۵ امتیاز بگیری.</p></div><button class="btn small secondary" onclick="claimHeloProfilePoints()">دریافت ۵ امتیاز</button></div>
+  <div class="tools-row"><button class="btn" onclick="openGiftPack()">🎁 ساخت پک هدیه</button><button class="btn secondary" onclick="openCustomOrder()">🧶 سفارش اختصاصی</button></div>
+</div></div>
+<div class="modal" id="heloCustomOrderModal"><div class="modal-content">
+  <button class="close" onclick="closeModal('heloCustomOrderModal')">×</button>
+  <h2>🧶 سفارش اختصاصی هلو</h2>
+  <p>مدل و رنگ دلخواهت را بنویس؛ درخواست برای پشتیبانی آماده می‌شود.</p>
+  <label class="field-label">نام</label><input id="heloCustomName" class="field" placeholder="نام شما">
+  <label class="field-label">شماره تماس</label><input id="heloCustomPhone" class="field" inputmode="tel" placeholder="شماره موبایل">
+  <label class="field-label">چه محصولی می‌خواهی؟</label><input id="heloCustomProduct" class="field" placeholder="مثلاً عروسک خرگوش">
+  <label class="field-label">رنگ دلخواه</label><input id="heloCustomColor" class="field" placeholder="مثلاً صورتی و سفید">
+  <label class="field-label">توضیحات بیشتر</label><textarea id="heloCustomNotes" class="field" rows="3" placeholder="اندازه، مدل یا توضیحات دلخواه..."></textarea>
+  <button class="btn" onclick="sendHeloCustomOrder()">ارسال درخواست به پشتیبانی</button>
+  <p class="muted">درخواست در پیام آماده می‌شود؛ ارسال نهایی را خودت تأیید می‌کنی.</p>
+</div></div>
+<div class="modal" id="heloGiftPackModal"><div class="modal-content">
+  <button class="close" onclick="closeModal('heloGiftPackModal')">×</button>
+  <h2>🎁 پک هدیه دلخواه</h2>
+  <p>حداقل دو محصول انتخاب کن؛ هر محصول با قیمت فعلی خودش به سبد اضافه می‌شود.</p>
+  <div id="heloGiftPackChoices"></div>
+  <button class="btn" onclick="addSelectedGiftPack()">افزودن انتخاب‌ها به سبد خرید</button>
+</div></div>
+<style id="helo-world-features-style">
+.helo-world-section{margin:26px 0;padding:clamp(16px,3vw,25px);border:1px solid #d6a6ff;border-radius:20px;background:linear-gradient(135deg,#fff8ff,#efd9ff);box-shadow:0 12px 28px #26004724;color:#35104f}
+.helo-world-heading{text-align:center;margin-bottom:18px}.helo-world-heading h2{margin:7px 0;color:#5a189a;font-size:clamp(23px,4vw,31px)}.helo-world-heading p{margin:5px 0;color:#705184;line-height:1.9}.helo-world-kicker{display:inline-block;background:#e4c4ff;color:#5a189a;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:bold}
+.helo-world-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.helo-world-card{background:#fffaff;border:1px solid #dfc5ff;border-radius:15px;padding:15px;display:flex;flex-direction:column;gap:8px;min-width:0}.helo-world-card h3{margin:0;color:#641b9e;font-size:16px}.helo-world-card p{margin:0 0 5px;color:#715b80;line-height:1.8;font-size:13px;flex:1}.helo-world-icon{font-size:30px}.helo-world-card strong{color:#6b21a8}.helo-world-card .btn{width:100%;margin-top:4px}
+.helo-gift-option{margin:12px 0;padding:12px;background:#f5eaff;border:1px solid #dfc5ff;border-radius:12px;color:#542078;line-height:1.9}
+.helo-club-panel{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}.helo-club-panel>div{padding:14px;border-radius:12px;background:#f2e4ff;border:1px solid #dfc5ff;display:flex;flex-direction:column;gap:7px}.helo-club-panel strong{font-size:22px;color:#6b21a8}
+.helo-mission{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;margin:9px 0;background:#f7efff;border:1px solid #e3d0f7;border-radius:12px}.helo-mission p{margin:5px 0 0}.helo-mission .btn{flex-shrink:0}
+.helo-pack-choice{display:flex;align-items:center;gap:10px;padding:10px;margin:7px 0;border:1px solid #e2cef7;border-radius:10px;background:#faf5ff}.helo-pack-choice input{width:18px;height:18px}
+@media(max-width:760px){.helo-world-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:470px){.helo-world-grid{grid-template-columns:1fr}.helo-club-panel{grid-template-columns:1fr 1fr}.helo-mission{align-items:flex-start;flex-direction:column}.helo-mission .btn{width:100%}}
+body.dark-mode .helo-world-section,body.dark-mode .helo-world-card{background:#251a32;color:#f6edff;border-color:#59416d}body.dark-mode .helo-world-heading h2,body.dark-mode .helo-world-card h3{color:#d7a8ff}body.dark-mode .helo-world-heading p,body.dark-mode .helo-world-card p{color:#d6c5e7}body.dark-mode .helo-gift-option,body.dark-mode .helo-club-panel>div,body.dark-mode .helo-mission,body.dark-mode .helo-pack-choice{background:#352044;color:#f6edff;border-color:#59416d}
+</style>
+<script id="helo-world-features-script">
+(() => {
+  const read = (key, fallback) => { try { const v=JSON.parse(localStorage.getItem(key)); return v==null?fallback:v; } catch (_) { return fallback; } };
+  const write = (key, value) => localStorage.setItem(key, JSON.stringify(value));
+  const fa = n => Number(n||0).toLocaleString('fa-IR');
+  const user = () => read('heloUser', null);
+  const phoneKey = () => String(user()?.phone || 'guest').replace(/[^0-9]/g,'').slice(-11) || 'guest';
+  const pointsKey = () => 'heloClubPoints_'+phoneKey();
+  const points = () => Number(localStorage.getItem(pointsKey())||0);
+  const setPoints = n => { localStorage.setItem(pointsKey(),String(Math.max(0,Math.floor(n)))); updateClubUI(); };
+  const dayKey = () => new Date().toISOString().slice(0,10);
+  let dailyProductId = null;
+
+  function activeProducts(){return Array.isArray(window.products)?window.products.filter(p=>p.active!==false):[];}
+  function updateClubUI(){
+    const n=points(), level=n>=100?'طرفدار طلایی هلو 🏅':n>=30?'دوست هلو 💜':'تازه‌وارد هلو 🍑';
+    const a=document.getElementById('heloClubPoints'),b=document.getElementById('heloClubModalPoints'),c=document.getElementById('heloClubLevel');
+    if(a)a.textContent=fa(n)+' امتیاز';if(b)b.textContent=fa(n);if(c)c.textContent=level;
+    const btn=document.getElementById('heloDailyMissionBtn');if(btn){const done=localStorage.getItem('heloDailyMission_'+phoneKey())===dayKey();btn.disabled=done;btn.textContent=done?'امروز دریافت شد':'دریافت ۲ امتیاز';}
+  }
+  window.openHeloWorld=function(){updateClubUI();renderDailyProduct();document.getElementById('heloWorldModal').style.display='block';};
+  function renderDailyProduct(){
+    const list=activeProducts();const text=document.getElementById('heloDailyProductText');
+    if(!list.length){if(text)text.textContent='فعلاً محصول فعالی برای نمایش وجود ندارد.';dailyProductId=null;return;}
+    const day=Math.floor(Date.now()/86400000),p=list[day%list.length];dailyProductId=p.id;
+    if(text)text.textContent=p.name+' · '+fa(p.price)+' تومان';
+  }
+  window.addDailyProductToCart=function(){renderDailyProduct();if(dailyProductId==null){alert('محصول فعالی پیدا نشد.');return;}window.addToCart(dailyProductId);};
+  window.claimHeloDailyPoints=function(){const key='heloDailyMission_'+phoneKey();if(localStorage.getItem(key)===dayKey()){alert('امتیاز امروز را قبلاً گرفتی.');return;}localStorage.setItem(key,dayKey());setPoints(points()+2);alert('۲ امتیاز به باشگاه هلو اضافه شد ⭐');};
+  window.claimHeloProfilePoints=function(){const u=user();if(!u||!u.name||!u.phone){alert('اول از بخش حساب من نام و شماره‌ات را ثبت کن.');return;}const key='heloProfileMission_'+phoneKey();if(localStorage.getItem(key)==='1'){alert('این مأموریت را قبلاً انجام دادی.');return;}localStorage.setItem(key,'1');setPoints(points()+5);alert('۵ امتیاز تکمیل حساب دریافت کردی 🍑');};
+  window.openCustomOrder=function(){const u=user();document.getElementById('heloCustomName').value=u?.name||'';document.getElementById('heloCustomPhone').value=u?.phone||'';document.getElementById('heloCustomOrderModal').style.display='block';};
+  window.sendHeloCustomOrder=function(){
+    const name=document.getElementById('heloCustomName').value.trim(),phone=document.getElementById('heloCustomPhone').value.trim(),product=document.getElementById('heloCustomProduct').value.trim(),color=document.getElementById('heloCustomColor').value.trim(),notes=document.getElementById('heloCustomNotes').value.trim();
+    if(!name||!phone||!product){alert('نام، شماره تماس و مدل محصول را وارد کن.');return;}
+    const body='درخواست سفارش اختصاصی بافتنی هلو%0Aنام: '+encodeURIComponent(name)+'%0Aشماره: '+encodeURIComponent(phone)+'%0Aمحصول: '+encodeURIComponent(product)+'%0Aرنگ: '+encodeURIComponent(color||'انتخاب نشده')+'%0Aتوضیحات: '+encodeURIComponent(notes||'ندارد');
+    window.location.href='mailto:Parsaalighlichpour@gmail.com?subject='+encodeURIComponent('درخواست سفارش اختصاصی هلو')+'&body='+body;
+  };
+  window.openGiftPack=function(){
+    const box=document.getElementById('heloGiftPackChoices'),list=activeProducts();
+    if(!list.length){alert('فعلاً محصولی برای انتخاب وجود ندارد.');return;}
+    box.innerHTML=list.map(p=>'<label class="helo-pack-choice"><input type="checkbox" value="'+String(p.id).replace(/[^a-zA-Z0-9_-]/g,'')+'"><span><strong>'+String(p.name).replace(/[&<>"]/g,'')+'</strong><br><small>'+fa(p.price)+' تومان</small></span></label>').join('');
+    document.getElementById('heloGiftPackModal').style.display='block';
+  };
+  window.addSelectedGiftPack=function(){
+    const chosen=[...document.querySelectorAll('#heloGiftPackChoices input:checked')];
+    if(chosen.length<2){alert('برای ساخت پک، حداقل دو محصول انتخاب کن.');return;}
+    chosen.forEach(input=>window.addToCart(input.value));
+    document.getElementById('heloGiftPackModal').style.display='none';window.openCart();
+  };
+  window.addEventListener('helo-order-confirmed',event=>{
+    const total=Number(event.detail?.total||0),earned=Math.floor(total/10000);
+    if(earned>0)setPoints(points()+earned);
+  });
+  document.addEventListener('DOMContentLoaded',updateClubUI);
+  updateClubUI();
+})();
+</script>
 
 </body></html>`;
 const url=URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'}));
