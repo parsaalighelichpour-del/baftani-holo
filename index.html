@@ -2406,8 +2406,19 @@ function trackCurrentOrder(){
 }
 function openSupport(){location.href='tel:09915023632'}
 async function createInvoice(){
-const user=readJSON('heloUser',null);
-if(!user){alert('ابتدا وارد حساب شو.');openAccount();return}
+let user=readJSON('heloUser',null);
+// مهمان هم می‌تواند بدون ساخت حساب سفارش بدهد؛ فقط نام و شماره برای پیگیری لازم است.
+if(!user||!String(user.name||'').trim()||!String(user.phone||'').trim()){
+ const guestName=prompt('برای ثبت سفارش مهمان، نام و نام خانوادگی را وارد کن:');
+ if(guestName===null)return;
+ const guestPhone=prompt('شماره موبایل برای پیگیری سفارش را وارد کن:');
+ if(guestPhone===null)return;
+ const cleanName=String(guestName).trim(),cleanPhone=String(guestPhone).trim();
+ if(cleanName.length<2||cleanPhone.replace(/[^0-9۰-۹٠-٩]/g,'').length<7){alert('نام یا شماره موبایل معتبر نیست. سفارش ثبت نشد.');return}
+ user={name:cleanName,phone:cleanPhone};
+ saveJSON('heloUser',user);
+ localStorage.setItem('heloGuestMode','1');
+}
 if(!cart.length){alert('سبد خرید خالی است.');return}
 const order={id:'HELO-'+Date.now().toString().slice(-8),date:new Date().toLocaleString('fa-IR'),name:user.name,phone:user.phone,items:cart.map(i=>({id:i.id,qty:i.qty})),total:finalTotal(),discount:effectiveDiscount(),discountCode:isHalloweenSaleActive()?'HALLOWEEN50':appliedCode};
 const cloudOrder=await window.HeloServer.saveOrder(order);
