@@ -19,7 +19,7 @@
     $('helo30ActionTitle').textContent=title;$('helo30ActionBody').innerHTML=body;m.style.display='block';
   };
   const points = () => window.HeloServer?.customerProfile ? Number(window.HeloServer.customerProfile.points||0) : Number(localStorage.getItem('heloClubPoints_'+(String(user()?.phone||'guest').replace(/\D/g,'').slice(-11)||'guest'))||0);
-  const addPoints = n => { const k='heloClubPoints_'+(String(user()?.phone||'guest').replace(/\D/g,'').slice(-11)||'guest');persist(k,String(points()+n));if(typeof updateClubUI==='function')updateClubUI(); };
+  const addPoints = n => { if(window.HeloServer?.customerProfile){console.warn('امتیاز فقط از مأموریت‌های امن سرور ثبت می‌شود.');return;} const k='heloClubPoints_'+(String(user()?.phone||'guest').replace(/\D/g,'').slice(-11)||'guest');persist(k,String(points()+n));if(typeof updateClubUI==='function')updateClubUI(); };
   const productById = id => list().find(p=>String(p.id)===String(id));
   const price = p => fa(p.price)+' تومان';
   const orderList = () => read('heloOrdersLocal',[]);
@@ -49,12 +49,12 @@
     ['💬','نظر مشتریان','دیدن و ثبت نظر در صفحه محصول','window.helo30Reviews()'],
     ['🖼️','گالری محصولات','دیدن تصاویر محصولات فروشگاه','window.helo30Gallery()'],
     ['💡','پیشنهاد هوشمند','پیشنهاد بر اساس علاقه‌مندی‌ها','window.helo30Recommend()'],
-    ['🔔','خبر محصول جدید','فعال‌سازی یادآوری در همین مرورگر','window.helo30NewAlerts()'],
+    ['🔔','خبر محصول جدید','فعال‌سازی اعلان در این دستگاه','window.helo30NewAlerts()'],
     ['⏳','تایمر تخفیف','دیدن زمان باقی‌مانده جشنواره فعال','window.helo30SaleTimer()'],
-    ['📦','موجود شد خبرم کن','ثبت درخواست محلی برای محصول ناموجود','window.helo30StockAlert()'],
-    ['📊','آمار فروش','گزارش سفارش‌های ذخیره‌شده روی همین دستگاه','window.helo30Stats()'],
+    ['📦','موجود شد خبرم کن','ذخیره درخواست برای محصول ناموجود','window.helo30StockAlert()'],
+    ['📊','آمار فروش','گزارش سفارش‌های حساب واردشده','window.helo30Stats()'],
     ['👑','باشگاه مشتریان','باز کردن باشگاه امتیاز هلو','window.openHeloWorld()'],
-    ['🔥','پرفروش‌ترین‌ها','محصولات پرتکرار در سفارش‌های محلی','window.helo30BestSellers()'],
+    ['🔥','پرفروش‌ترین‌ها','محصولات پرتکرار در سفارش‌های حساب','window.helo30BestSellers()'],
     ['🧶','سفارش اختصاصی','ثبت درخواست مدل و رنگ دلخواه','window.openCustomOrder()'],
     ['🎀','بسته‌بندی هدیه','انتخاب بسته‌بندی رایگان در سبد خرید','window.helo30GiftWrap()'],
     ['📦','پیگیری سفارش','پیگیری وضعیت سفارش‌های ثبت‌شده','window.openTracking()'],
@@ -84,7 +84,7 @@
   window.helo30Reviews=()=>{const ps=list();show('💬 نظر مشتریان','<p>نظرها در صفحه هر محصول قرار دارند.</p>'+ps.slice(0,12).map(p=>card(p,action('دیدن نظرها','openProduct('+JSON.stringify(p.id)+')','btn secondary'))).join(''));};
   window.helo30Gallery=()=>{const ps=list().filter(p=>p.images&&p.images.length||p.image).slice(0,12);show('🖼️ گالری محصولات',ps.length?'<div class="helo30-gallery">'+ps.map(p=>'<button onclick="openProduct('+JSON.stringify(p.id)+')"><img src="'+clean((p.images&&p.images[0])||p.image)+'" alt=""><strong>'+clean(p.name)+'</strong></button>').join('')+'</div>':'<p>هنوز تصویری برای گالری محصولات موجود نیست.</p>');};
   window.helo30Recommend=()=>{const fav=read('heloFavorites',[]).map(productById).filter(Boolean),cats=[...new Set(fav.map(p=>p.category))],ps=list().filter(p=>!fav.some(f=>String(f.id)===String(p.id))&&(!cats.length||cats.includes(p.category))).slice(0,8);show('💡 پیشنهاد هلو',ps.length?ps.map(p=>card(p,action('مشاهده','openProduct('+JSON.stringify(p.id)+')','btn secondary'))).join(''):'<p>برای پیشنهاد بهتر، چند محصول را به علاقه‌مندی‌ها اضافه کن.</p>');};
-  window.helo30NewAlerts=async()=>{if(!('Notification'in window)){alert('مرورگر این دستگاه اعلان را پشتیبانی نمی‌کند.');return;}if(Notification.permission==='granted'){persist(key+'newAlerts','1');new Notification('بافتنی هلو',{body:'یادآوری محصولات جدید در این مرورگر فعال شد.'});return;}const p=await Notification.requestPermission();if(p==='granted'){localStorage.setItem(key+'newAlerts','1');new Notification('بافتنی هلو',{body:'اعلان آزمایشی فعال شد.'});}else alert('اجازه اعلان داده نشد.');};
+  window.helo30NewAlerts=async()=>{if(!('Notification'in window)){alert('مرورگر این دستگاه اعلان را پشتیبانی نمی‌کند.');return;}if(Notification.permission==='granted'){persist(key+'newAlerts','1');new Notification('بافتنی هلو',{body:'یادآوری محصولات جدید در این مرورگر فعال شد.'});return;}const p=await Notification.requestPermission();if(p==='granted'){persist(key+'newAlerts','1');new Notification('بافتنی هلو',{body:'اعلان آزمایشی فعال شد.'});}else alert('اجازه اعلان داده نشد.');};
   window.helo30SaleTimer=()=>{const end=Date.parse('2026-11-13T17:32:00+03:30'),left=end-Date.now();show('⏳ تایمر جشنواره',left>0?'<div class="helo30-prize">'+Math.floor(left/86400000)+' روز</div><p>تا پایان زمان اعلام‌شده جشنواره هالووین باقی مانده است.</p>':'<p>زمان اعلام‌شده جشنواره هالووین به پایان رسیده است.</p>');};
   window.helo30StockAlert=()=>{const ps=list().filter(p=>p.stock_enabled&&Number(p.stock)<=0);show('📦 موجود شد خبرم کن',ps.length?ps.map(p=>card(p,action('ثبت درخواست','window.helo30RequestStock('+JSON.stringify(p.id)+')','btn secondary'))).join(''):'<p>در حال حاضر محصول ناموجودی ثبت نشده.</p>');};
   window.helo30RequestStock=id=>{const p=productById(id),u=user();if(!u){alert('برای ثبت درخواست، ابتدا وارد حساب شو.');return;}const a=read(key+'stockRequests',[]);if(!a.some(x=>String(x.id)===String(id)&&x.phone===u.phone)){a.push({id,phone:u.phone,date:Date.now()});write(key+'stockRequests',a);}alert('درخواست روی همین دستگاه ثبت شد؛ هنوز اعلان خودکار هنگام شارژ فعال نیست.');};
