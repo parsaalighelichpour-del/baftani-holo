@@ -3012,7 +3012,26 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
     return Array.isArray(data)?data:[];
   }
   async function getProductReviews(productId) {
-    const {data,error}=await db.from("product_reviews").select("id,product_id,customer_name,review_text,rating,created_at").eq("product_id",String(productId)).order("created_at",{ascending:false}).limit(100);
+    const pid=String(productId),marker="heloReviewsMigrated_"+pid;
+    if(localStorage.getItem(marker)!=="1"){
+      let legacyComments=[],legacyRatings=[];
+      try{legacyComments=JSON.parse(localStorage.getItem("heloComments_"+pid)||"[]");}catch(_){}
+      try{legacyRatings=JSON.parse(localStorage.getItem("heloRatings_"+pid)||"[]");}catch(_){}
+      const rows=[];
+      if(Array.isArray(legacyComments))for(const c of legacyComments.slice(-100)){
+        const name=String(c?.name||"مشتری هلو").trim().slice(0,80),review=String(c?.text||"").trim().slice(0,1000);
+        if(name&&review)rows.push({product_id:pid,customer_name:name,review_text:review});
+      }
+      if(Array.isArray(legacyRatings))for(const rating of legacyRatings.slice(-500)){
+        const score=Number(rating);if(Number.isInteger(score)&&score>=1&&score<=5)rows.push({product_id:pid,customer_name:"مشتری هلو",rating:score});
+      }
+      if(rows.length){
+        const {error:migrationError}=await db.from("product_reviews").insert(rows);
+        if(migrationError){console.warn("انتقال نظرهای قبلی انجام نشد:",migrationError.message);throw migrationError;}
+      }
+      localStorage.setItem(marker,"1");
+    }
+    const {data,error}=await db.from("product_reviews").select("id,product_id,customer_name,review_text,rating,created_at").eq("product_id",pid).order("created_at",{ascending:false}).limit(100);
     if(error)throw error;
     return Array.isArray(data)?data:[];
   }
@@ -3203,7 +3222,7 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
   <h2>🌍 دنیای هلو</h2>
   <p>به باشگاه مشتریان هلو خوش آمدی!</p>
   <div class="helo-club-panel">
-    <div><span class="muted">امتیازهای این مرورگر</span><strong id="heloClubModalPoints">۰</strong></div>
+    <div><span class="muted">امتیاز حساب هلو</span><strong id="heloClubModalPoints">۰</strong></div>
     <div><span class="muted">نشان مشتری</span><strong id="heloClubLevel">تازه‌وارد هلو 🍑</strong></div>
   </div>
   <div class="notice">امتیاز مأموریت‌ها برای حساب واردشده در پایگاه داده ذخیره می‌شود و با ورود به همان حساب در دستگاه‌های دیگر هم نمایش داده می‌شود. خریدها تا زمان اتصال امن به سفارش تأییدشده، امتیاز خرید نمی‌گیرند.</div>
