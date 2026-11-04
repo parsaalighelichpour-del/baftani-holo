@@ -1978,9 +1978,15 @@ main.container>.halloween-sale .halloween-cta{
 .admin-eta-editor{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 </style>
 <style id="helo-feature-banner-style">
-.helo-feature-banner{position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:18px;margin:22px 0;padding:clamp(18px,4vw,30px);border:1px solid #d8a8ff;border-radius:22px;background:radial-gradient(circle at 85% 15%,#f8d8ff 0,transparent 32%),linear-gradient(120deg,#4b147d,#8b35c7 55%,#c15bdc);color:#fff;box-shadow:0 14px 32px #6b21a833}
-.helo-banner-copy{position:relative;z-index:1;max-width:680px}.helo-banner-copy>span{display:inline-block;padding:5px 11px;border:1px solid #ffffff70;border-radius:30px;background:#ffffff20;font-size:12px;font-weight:800}.helo-banner-copy h2{margin:10px 0;color:#fff;font-size:clamp(21px,4vw,31px);line-height:1.5}.helo-banner-copy p{margin:5px 0 15px;color:#f7eaff;line-height:1.9}.helo-banner-copy button{border:0;border-radius:12px;padding:11px 17px;background:#fff;color:#641b9e;font-weight:900;cursor:pointer}.helo-banner-art{font-size:clamp(35px,7vw,65px);white-space:nowrap;filter:drop-shadow(0 5px 9px #29004455)}.helo-banner-sparkle{font-size:54px;opacity:.7}.helo-world-main-cta{margin-top:10px;min-width:min(100%,250px);box-shadow:0 7px 18px #6b21a822}
-@media(max-width:600px){.helo-feature-banner{gap:8px;padding:17px}.helo-banner-art{font-size:34px}.helo-banner-sparkle{display:none}.helo-banner-copy h2{font-size:21px}}
+main.container>.helo-feature-banner{position:relative!important;isolation:isolate!important;overflow:hidden!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:22px!important;min-height:205px!important;margin:22px 0!important;padding:clamp(18px,4vw,30px)!important;border:1px solid #e9b8ff!important;border-radius:24px!important;background:radial-gradient(circle at 18% 15%,#e9b8ff 0,transparent 30%),linear-gradient(120deg,#351052,#7625a8 55%,#bd55d7)!important;color:#fff!important;box-shadow:0 14px 32px #6b21a855!important;visibility:visible!important;opacity:1!important}
+.helo-feature-banner .helo-banner-visual{display:block!important;flex:0 0 190px!important;width:190px!important;max-width:34%!important;height:auto!important;position:relative!important;z-index:1!important}
+.helo-feature-banner .helo-banner-copy{display:block!important;position:relative!important;z-index:2!important;flex:1 1 360px!important;max-width:680px!important;color:#fff!important}
+.helo-feature-banner .helo-banner-copy>span{display:inline-block!important;padding:5px 11px!important;border:1px solid #ffffff80!important;border-radius:30px!important;background:#ffffff20!important;color:#fff!important;font-size:12px!important;font-weight:800!important}
+.helo-feature-banner .helo-banner-copy h2{display:block!important;margin:10px 0!important;color:#fff!important;font-size:clamp(21px,4vw,31px)!important;line-height:1.5!important}
+.helo-feature-banner .helo-banner-copy p{display:block!important;margin:5px 0 15px!important;color:#f7eaff!important;line-height:1.9!important}
+.helo-feature-banner .helo-banner-copy button{display:inline-flex!important;align-items:center!important;gap:8px!important;border:0!important;border-radius:12px!important;padding:12px 18px!important;background:#fff!important;color:#641b9e!important;font-weight:900!important;cursor:pointer!important;min-height:46px!important}
+.helo-feature-banner .helo-banner-sparkle{display:block!important;flex:0 0 auto!important;font-size:42px!important;opacity:.8!important}
+@media(max-width:600px){main.container>.helo-feature-banner{gap:10px!important;min-height:0!important;padding:16px!important}.helo-feature-banner .helo-banner-visual{flex-basis:105px!important;width:105px!important;max-width:32%!important}.helo-feature-banner .helo-banner-copy{flex-basis:0!important;min-width:0!important}.helo-feature-banner .helo-banner-copy h2{font-size:18px!important}.helo-feature-banner .helo-banner-copy p{font-size:12px!important}.helo-feature-banner .helo-banner-copy button{font-size:11px!important;padding:10px!important}.helo-feature-banner .helo-banner-sparkle{display:none!important}}
 </style>
 </head>
 <body>
@@ -2009,7 +2015,20 @@ main.container>.halloween-sale .halloween-cta{
 
 </section>
 
-<section class="helo-feature-banner" aria-label="بنر ویژه فروشگاه هلو"><div class="helo-banner-art" aria-hidden="true">🍑 ✨ 🧶 💜</div><div class="helo-banner-copy"><span>دنیای رنگارنگ بافتنی هلو</span><h2>یه هدیه خاص، بافته‌شده با عشق! 🎁</h2><p>پک هدیه بساز، سفارش اختصاصی ثبت کن و دنیای هلو رو کشف کن.</p><button type="button" onclick="window.openHeloWorld()">ورود به بخش ویژه فروشگاه <span aria-hidden="true">←</span></button></div><div class="helo-banner-sparkle" aria-hidden="true">💜</div></section>
+<section class="helo-feature-banner" aria-label="بنر ویژه فروشگاه هلو">
+<svg class="helo-banner-visual" viewBox="0 0 220 170" role="img" aria-label="تصویر تزئینی کاموای صورتی و هلو بافته‌شده" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="heloYarn" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd4f2"/><stop offset="1" stop-color="#e879c5"/></linearGradient><linearGradient id="heloPeach" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe29b"/><stop offset="1" stop-color="#ff8bba"/></linearGradient></defs>
+<ellipse cx="108" cy="145" rx="86" ry="12" fill="#230b36" opacity=".25"/>
+<circle cx="75" cy="91" r="43" fill="url(#heloYarn)" stroke="#ffe8fa" stroke-width="4"/>
+<path d="M40 76c18 17 49 17 69 0M35 91c22 18 58 18 80 0M42 107c18 15 47 15 66 0M57 55c-9 24-9 48 0 72M76 49c-8 27-8 57 0 84M96 57c-8 24-8 46 0 68" fill="none" stroke="#b83d99" stroke-width="3" opacity=".65" stroke-linecap="round"/>
+<path d="M130 100c-5-24 7-49 28-51 22-2 34 18 28 40-4 18-18 35-31 35-12 0-22-10-25-24Z" fill="url(#heloPeach)" stroke="#fff0d8" stroke-width="3"/>
+<path d="M158 49c-3-17 8-26 22-29-1 14-7 24-22 29Z" fill="#8fe0a2" stroke="#d8ffd9" stroke-width="2"/>
+<path d="M160 50c-9-13-21-13-30-8 8 10 18 13 30 8Z" fill="#b5f0b6" stroke="#d8ffd9" stroke-width="2"/>
+<path d="M151 62c9 17 9 38 0 53" fill="none" stroke="#f77aa9" stroke-width="3" stroke-linecap="round"/>
+<path d="M111 35l5-12 5 12 12 5-12 5-5 12-5-12-12-5zM193 105l3-8 3 8 8 3-8 3-3 8-3-8-8-3z" fill="#ffe99b"/>
+<path d="M24 35l3-8 3 8 8 3-8 3-3 8-3-8-8-3z" fill="#fff"/>
+</svg>
+<div class="helo-banner-copy"><span>دنیای رنگارنگ بافتنی هلو</span><h2>یه هدیه خاص، بافته‌شده با عشق! 🎁</h2><p>پک هدیه بساز، سفارش اختصاصی ثبت کن و دنیای هلو رو کشف کن.</p><button type="button" onclick="window.openHeloWorld ? window.openHeloWorld() : document.getElementById('helo-world').scrollIntoView({behavior:'smooth'})">ورود به بخش ویژه فروشگاه <span aria-hidden="true">←</span></button></div><div class="helo-banner-sparkle" aria-hidden="true">💜</div></section>
 
 <section class="halloween-sale" aria-label="جشنواره تخفیف هالووین">
   <div class="halloween-sale-art" aria-hidden="true">🎃 🦇 🧶 🍑</div>
