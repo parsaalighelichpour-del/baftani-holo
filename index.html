@@ -3058,6 +3058,17 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
     const {data,error}=await customerDb.from("customer_profiles").upsert({id:customerSession.user.id,full_name:customerProfile.full_name||"",phone:customerProfile.phone||"",cart,favorites,updated_at:new Date().toISOString()},{onConflict:"id"}).select().single();
     if(error){console.error("همگام‌سازی حساب مشتری ناموفق بود:",error.message);return false}customerProfile=data;return true;
   }
+  async function claimCustomerMission(kind){
+    if(!customerSession?.user)throw new Error("برای ذخیره امتیاز در همه دستگاه‌ها، اول وارد حساب مشتری شو.");
+    const rpcName=kind==="daily"?"claim_helo_daily_points":"claim_helo_profile_points";
+    const {data,error}=await customerDb.rpc(rpcName);
+    if(error)throw error;
+    if(data===null||data===undefined)return {claimed:false,points:Number(customerProfile?.points||0)};
+    customerProfile={...customerProfile,points:Number(data)};
+    if(kind==="daily")customerProfile.daily_mission_date=new Date().toISOString().slice(0,10);
+    if(kind==="profile")customerProfile.profile_mission_claimed=true;
+    return {claimed:true,points:Number(data)};
+  }
   async function initCustomerAuth(){
     const {data,error}=await customerDb.auth.getSession();if(error)throw error;customerSession=data.session;
     if(customerSession?.user){customerEmail=customerSession.user.email||"";await loadCustomerProfile()}updateUserUI();return !!customerSession;
@@ -3068,7 +3079,7 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
   window.HeloServer = {
     get customerProfile(){return customerProfile;},
     get customerEmail(){return customerEmail;},
-    signUpCustomer, signInCustomer, saveCustomerData, initCustomerAuth, signOutCustomer,
+    signUpCustomer, signInCustomer, saveCustomerData, claimCustomerMission, initCustomerAuth, signOutCustomer,
     getProducts: getServerProducts, saveProduct: saveServerProduct,
     saveOrder: saveServerOrder, trackOrdersByPhone, getOrders, updateOrderStatus, updateOrderEta, uploadImage: uploadProductImage,
     signInAdminPassword, signOut: async function(){const {error}=await db.auth.signOut();if(error)console.error("خروج ناموفق بود:",error.message)}
@@ -3139,7 +3150,7 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
     <div><span class="muted">امتیازهای این مرورگر</span><strong id="heloClubModalPoints">۰</strong></div>
     <div><span class="muted">نشان مشتری</span><strong id="heloClubLevel">تازه‌وارد هلو 🍑</strong></div>
   </div>
-  <div class="notice">برای هر ۱۰٬۰۰۰ تومان خرید تأییدشده، ۱ امتیاز ثبت می‌شود. امتیازها فعلاً روی همین مرورگر ذخیره می‌شوند و هنوز قابل تبدیل به تخفیف نیستند.</div>
+  <div class="notice">امتیاز مأموریت‌ها برای حساب واردشده در پایگاه داده ذخیره می‌شود و با ورود به همان حساب در دستگاه‌های دیگر هم نمایش داده می‌شود. خریدها تا زمان اتصال امن به سفارش تأییدشده، امتیاز خرید نمی‌گیرند.</div>
   <h3>🎯 مأموریت روزانه</h3>
   <div class="helo-mission"><div><strong>بازدید روزانه</strong><p class="muted">هر روز یک‌بار وارد دنیای هلو شو و ۲ امتیاز بگیر.</p></div><button class="btn small" id="heloDailyMissionBtn" onclick="claimHeloDailyPoints()">دریافت ۲ امتیاز</button></div>
   <div class="helo-mission"><div><strong>تکمیل حساب</strong><p class="muted">نام و شماره را در بخش حساب من ثبت کن تا ۵ امتیاز بگیری.</p></div><button class="btn small secondary" onclick="claimHeloProfilePoints()">دریافت ۵ امتیاز</button></div>
@@ -3183,7 +3194,8 @@ body.dark-mode .helo-world-section,body.dark-mode .helo-world-card{background:#2
   const user = () => read('heloUser', null);
   const phoneKey = () => String(user()?.phone || 'guest').replace(/[^0-9]/g,'').slice(-11) || 'guest';
   const pointsKey = () => 'heloClubPoints_'+phoneKey();
-  const points = () => Number(localStorage.getItem(pointsKey())||0);
+  const profile = () => window.HeloServer?.customerProfile || null;
+  const points = () => profile() ? Number(profile().points||0) : Number(localStorage.getItem(pointsKey())||0);
   const setPoints = n => { localStorage.setItem(pointsKey(),String(Math.max(0,Math.floor(n)))); updateClubUI(); };
   const dayKey = () => new Date().toISOString().slice(0,10);
   let dailyProductId = null;
@@ -3193,7 +3205,10 @@ body.dark-mode .helo-world-section,body.dark-mode .helo-world-card{background:#2
     const n=points(), level=n>=100?'طرفدار طلایی هلو 🏅':n>=30?'دوست هلو 💜':'تازه‌وارد هلو 🍑';
     const a=document.getElementById('heloClubPoints'),b=document.getElementById('heloClubModalPoints'),c=document.getElementById('heloClubLevel');
     if(a)a.textContent=fa(n)+' امتیاز';if(b)b.textContent=fa(n);if(c)c.textContent=level;
-    const btn=document.getElementById('heloDailyMissionBtn');if(btn){const done=localStorage.getItem('heloDailyMission_'+phoneKey())===dayKey();btn.disabled=done;btn.textContent=done?'امروز دریافت شد':'دریافت ۲ امتیاز';}
+    const p=profile();
+    const btn=document.getElementById('heloDailyMissionBtn');if(btn){const done=p?String(p.daily_mission_date||'')===dayKey():localStorage.getItem('heloDailyMission_'+phoneKey())===dayKey();btn.disabled=done;btn.textContent=done?'امروز دریافت شد':'دریافت ۲ امتیاز';}
+    const profileBtn=document.querySelector('.helo-mission button[onclick="claimHeloProfilePoints()"]');
+    if(profileBtn&&p?.profile_mission_claimed){profileBtn.disabled=true;profileBtn.textContent='قبلاً دریافت شد';}
   }
   window.openHeloWorld=function(){updateClubUI();renderDailyProduct();document.getElementById('heloWorldModal').style.display='block';};
   function renderDailyProduct(){
@@ -3203,8 +3218,34 @@ body.dark-mode .helo-world-section,body.dark-mode .helo-world-card{background:#2
     if(text)text.textContent=p.name+' · '+fa(p.price)+' تومان';
   }
   window.addDailyProductToCart=function(){renderDailyProduct();if(dailyProductId==null){alert('محصول فعالی پیدا نشد.');return;}window.addToCart(dailyProductId);};
-  window.claimHeloDailyPoints=function(){const key='heloDailyMission_'+phoneKey();if(localStorage.getItem(key)===dayKey()){alert('امتیاز امروز را قبلاً گرفتی.');return;}localStorage.setItem(key,dayKey());setPoints(points()+2);alert('۲ امتیاز به باشگاه هلو اضافه شد ⭐');};
-  window.claimHeloProfilePoints=function(){const u=user();if(!u||!u.name||!u.phone){alert('اول از بخش حساب من نام و شماره‌ات را ثبت کن.');return;}const key='heloProfileMission_'+phoneKey();if(localStorage.getItem(key)==='1'){alert('این مأموریت را قبلاً انجام دادی.');return;}localStorage.setItem(key,'1');setPoints(points()+5);alert('۵ امتیاز تکمیل حساب دریافت کردی 🍑');};
+  window.claimHeloDailyPoints=async function(){
+    try{
+      if(window.HeloServer?.customerProfile){
+        const result=await window.HeloServer.claimCustomerMission('daily');
+        if(!result.claimed){alert('امتیاز امروز را قبلاً گرفتی.');return;}
+        updateClubUI();alert('۲ امتیاز در حساب هلو ذخیره شد و روی دستگاه‌های دیگر هم می‌آید ⭐');return;
+      }
+      const key='heloDailyMission_'+phoneKey();
+      if(localStorage.getItem(key)===dayKey()){alert('امتیاز امروز را قبلاً گرفتی.');return;}
+      localStorage.setItem(key,dayKey());setPoints(points()+2);
+      alert('برای همگام‌سازی این امتیاز در دستگاه‌های دیگر، اول وارد حساب مشتری شو. فعلاً روی همین دستگاه ذخیره شد ⭐');
+    }catch(e){alert(e.message||'ذخیره امتیاز انجام نشد.');}
+  };
+  window.claimHeloProfilePoints=async function(){
+    const u=user();
+    if(!u||!u.name||!u.phone){alert('اول نام و شماره را در حساب من ثبت کن.');return;}
+    try{
+      if(window.HeloServer?.customerProfile){
+        const result=await window.HeloServer.claimCustomerMission('profile');
+        if(!result.claimed){alert('این مأموریت قبلاً انجام شده یا اطلاعات حساب کامل نیست.');return;}
+        updateClubUI();alert('۵ امتیاز تکمیل حساب در پایگاه داده ذخیره شد 🍑');return;
+      }
+      const key='heloProfileMission_'+phoneKey();
+      if(localStorage.getItem(key)==='1'){alert('این مأموریت را قبلاً انجام دادی.');return;}
+      localStorage.setItem(key,'1');setPoints(points()+5);
+      alert('برای همگام‌سازی امتیاز، اول وارد حساب مشتری شو. فعلاً روی همین دستگاه ذخیره شد 🍑');
+    }catch(e){alert(e.message||'ذخیره امتیاز انجام نشد.');}
+  };
   window.openCustomOrder=function(){const u=user();document.getElementById('heloCustomName').value=u?.name||'';document.getElementById('heloCustomPhone').value=u?.phone||'';document.getElementById('heloCustomOrderModal').style.display='block';};
   window.sendHeloCustomOrder=function(){
     const name=document.getElementById('heloCustomName').value.trim(),phone=document.getElementById('heloCustomPhone').value.trim(),product=document.getElementById('heloCustomProduct').value.trim(),color=document.getElementById('heloCustomColor').value.trim(),notes=document.getElementById('heloCustomNotes').value.trim();
@@ -3224,10 +3265,7 @@ body.dark-mode .helo-world-section,body.dark-mode .helo-world-card{background:#2
     chosen.forEach(input=>window.addToCart(input.value));
     document.getElementById('heloGiftPackModal').style.display='none';window.openCart();
   };
-  window.addEventListener('helo-order-confirmed',event=>{
-    const total=Number(event.detail?.total||0),earned=Math.floor(total/10000);
-    if(earned>0)setPoints(points()+earned);
-  });
+  // Purchase points are intentionally not awarded in the browser; they must be granted from a verified completed order on the server.
   document.addEventListener('DOMContentLoaded',updateClubUI);
   updateClubUI();
 })();
