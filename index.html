@@ -2277,10 +2277,10 @@ const defaults=[
 let products=readJSON('heloProductsV2',null);
 if(!Array.isArray(products)||!products.length){products=defaults;saveJSON('heloProductsV2',products)}
 let cart=readJSON('heloCart',[]),favorites=readJSON('heloFavorites',[]),category='همه',currentProduct=null,appliedDiscount=0,appliedCode='',adminUnlocked=false,ordersAfterLogin=false;
-function saveCart(){saveJSON('heloCart',cart);updateCartCount()}
+function saveCart(){saveJSON('heloCart',cart);updateCartCount();if(window.HeloServer?.saveCustomerData)window.HeloServer.saveCustomerData()}
 function updateCartCount(){$('cartCount').textContent=formatPrice(cart.reduce((s,i)=>s+i.qty,0))}
 function isFavorite(id){return favorites.includes(id)}
-function toggleFavorite(id){favorites=isFavorite(id)?favorites.filter(x=>x!==id):[...favorites,id];saveJSON('heloFavorites',favorites);renderProducts()}
+function toggleFavorite(id){favorites=isFavorite(id)?favorites.filter(x=>x!==id):[...favorites,id];saveJSON('heloFavorites',favorites);renderProducts();if(window.HeloServer?.saveCustomerData)window.HeloServer.saveCustomerData()}
 function setCategory(c,el){category=c;document.querySelectorAll('.cat').forEach(b=>b.classList.remove('active'));if(el)el.classList.add('active');renderProducts()}
 const HALLOWEEN_PROMO_START=Date.parse('2026-11-03T17:32:00+03:30');
 const HALLOWEEN_PROMO_END=Date.parse('2026-11-13T17:32:00+03:30');
@@ -2311,9 +2311,30 @@ function changeQty(id,d){const item=cart.find(x=>String(x.id)===String(id));if(!
 function removeFromCart(id){cart=cart.filter(x=>x.id!==id);saveCart();renderCart()}
 function applyDiscount(){if(isHalloweenSaleActive()){appliedDiscount=50;appliedCode='HALLOWEEN50';alert('🎃 تخفیف ۵۰٪ هالووین به‌صورت خودکار روی همه محصولات اعمال شده است!');renderCart();return}const code=$('discountCode').value.trim().toUpperCase();if(code==='HELO10'||code==='HELO20'){appliedDiscount=Number(code.slice(4));appliedCode=code;alert('🎁 تخفیف '+appliedDiscount+'٪ اعمال شد')}else{appliedDiscount=0;appliedCode='';alert('❌ کد تخفیف معتبر نیست')}renderCart()}
 function openAccount(){updateUserUI();$('accountModal').style.display='block'}
-function updateUserUI(){const box=$('accountContent');const user=readJSON('heloUser',null);if(user){box.innerHTML=`<h3>سلام ${esc(user.name)} 👋</h3><p>📱 شماره: ${esc(user.phone)}</p><button class="btn danger" onclick="logout()">🚪 خروج از حساب</button>`}else{box.innerHTML=`<label class="field-label" for="loginName">نام و نام خانوادگی</label><input id="loginName" class="field" placeholder="نام شما" value="پارسا قلیچ پور" autocomplete="name"><label class="field-label" for="loginPhone">شماره موبایل</label><input id="loginPhone" class="field" placeholder="شماره موبایل" value="۰۹۹۱۵۰۲۳۶۳۲" inputmode="tel" autocomplete="tel"><p class="muted">حساب این نسخه روی همین مرورگر ذخیره می‌شود؛ ورود امن چندکاربره به سرور نیاز دارد.</p><button class="btn" onclick="login()">✅ ورود / ثبت‌نام</button>`}}
-function login(){const name=$('loginName').value.trim(),phone=$('loginPhone').value.trim();if(!name||!phone){alert('نام و شماره موبایل را وارد کن.');return}saveJSON('heloUser',{name,phone});updateUserUI();updateVipWelcome(!!adminUnlocked);alert('✅ حساب محلی ساخته شد!')}
-function logout(){localStorage.removeItem('heloUser');updateUserUI();updateVipWelcome(!!adminUnlocked);alert('از حساب خارج شدی.')}
+function updateUserUI(){
+ const box=$('accountContent');if(!box)return;
+ const user=window.HeloServer&&window.HeloServer.customerProfile;
+ if(user){
+  box.innerHTML=`<h3>سلام ${esc(user.full_name||'دوست هلو')} 👋</h3><p>📧 ${esc(window.HeloServer.customerEmail||'')}</p><p>📱 ${esc(user.phone||'ثبت نشده')}</p><p class="muted">سبد خرید و علاقه‌مندی‌ها با حساب تو همگام می‌شوند.</p><button class="btn danger" onclick="logout()">🚪 خروج از حساب</button>`;
+ }else{
+  box.innerHTML=`<p class="muted">با ایمیل و رمز عبور وارد شو یا حساب جدید بساز. پیامک یا کد ایمیلی ارسال نمی‌شود.</p><label class="field-label" for="customerName">نام و نام خانوادگی (برای ثبت‌نام)</label><input id="customerName" class="field" placeholder="نام شما" autocomplete="name"><label class="field-label" for="customerPhone">شماره موبایل (اختیاری)</label><input id="customerPhone" class="field" placeholder="شماره موبایل" inputmode="tel" autocomplete="tel"><label class="field-label" for="customerEmail">ایمیل</label><input id="customerEmail" class="field" type="email" placeholder="name@example.com" autocomplete="email" dir="ltr"><label class="field-label" for="customerPassword">رمز عبور</label><input id="customerPassword" class="field" type="password" placeholder="حداقل ۸ کاراکتر" autocomplete="current-password" dir="ltr"><div class="tools-row"><button class="btn" onclick="customerSignUp()">ثبت‌نام</button><button class="btn secondary" onclick="customerSignIn()">ورود</button></div><p id="customerAuthMessage" class="muted" aria-live="polite"></p>`;
+ }
+}
+async function customerSignUp(){
+ const name=$('customerName').value.trim(),phone=$('customerPhone').value.trim(),email=$('customerEmail').value.trim(),password=$('customerPassword').value,msg=$('customerAuthMessage');
+ if(!name||!email||password.length<8){msg.textContent='نام، ایمیل و رمز حداقل ۸ کاراکتری را وارد کن.';return}
+ try{msg.textContent='در حال ساخت حساب…';const r=await window.HeloServer.signUpCustomer(email,password,name,phone);
+  if(r.needsEmailConfirmation){msg.textContent='تنظیم تأیید ایمیل Supabase هنوز روشن است؛ باید خاموش شود تا ورود بدون ایمیل فعال شود.';return}
+  updateUserUI();updateVipWelcome(!!adminUnlocked);msg.textContent='حساب ساخته شد و همگام‌سازی فعال است.';
+ }catch(e){msg.textContent=e.message||'ثبت‌نام انجام نشد.'}
+}
+async function customerSignIn(){
+ const email=$('customerEmail').value.trim(),password=$('customerPassword').value,msg=$('customerAuthMessage');
+ if(!email||!password){msg.textContent='ایمیل و رمز عبور را وارد کن.';return}
+ try{msg.textContent='در حال ورود…';await window.HeloServer.signInCustomer(email,password);updateUserUI();updateVipWelcome(!!adminUnlocked);msg.textContent='وارد شدی؛ اطلاعاتت همگام شد.'}
+ catch(e){msg.textContent=e.message||'ورود انجام نشد.'}
+}
+async function logout(){try{await window.HeloServer.signOutCustomer()}catch(e){console.error(e)}updateUserUI();updateVipWelcome(!!adminUnlocked);alert('از حساب خارج شدی.')}
 function openTracking(){if(trackingEtaInterval)clearInterval(trackingEtaInterval);$('trackingModal').style.display='block';$('trackingResults').innerHTML=''}
 let trackingEtaInterval=null;
 function startTrackingEtaClock(){
@@ -2884,8 +2905,13 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
   // Do not persist the admin authentication session in this public website.
   // A fresh password is required again after reloading the page.
   const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
-    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
+    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false, storageKey: "helo-admin-auth" }
   });
+  // Customer authentication uses a separate persistent session from the admin login.
+  const customerDb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false, storageKey: "helo-customer-auth" }
+  });
+  let customerSession=null, customerProfile=null, customerEmail="";
 
   function localProduct(row) {
     const idNum = Number(row.id);
@@ -3003,11 +3029,52 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
     if ($('adminModal').style.display === 'block') { renderAdminProducts(); await renderAdminOrders(); }
     return true;
   }
+  async function loadCustomerProfile(){
+    if(!customerSession?.user)return null;
+    const {data,error}=await customerDb.from("customer_profiles").select("*").eq("id",customerSession.user.id).maybeSingle();
+    if(error)throw error;
+    if(data){
+      customerProfile=data;cart=Array.isArray(data.cart)?data.cart:[];favorites=Array.isArray(data.favorites)?data.favorites:[];
+      saveJSON("heloCart",cart);saveJSON("heloFavorites",favorites);updateCartCount();renderProducts();return data;
+    }
+    const initial={id:customerSession.user.id,full_name:String(customerSession.user.user_metadata?.full_name||""),phone:String(customerSession.user.user_metadata?.phone||""),cart,favorites,updated_at:new Date().toISOString()};
+    const {data:created,error:createError}=await customerDb.from("customer_profiles").insert(initial).select().single();
+    if(createError)throw createError;customerProfile=created;return created;
+  }
+  async function signUpCustomer(email,password,name,phone){
+    const {data,error}=await customerDb.auth.signUp({email,password,options:{data:{full_name:name,phone}}});
+    if(error)throw error;if(!data.session)return {needsEmailConfirmation:true};
+    customerSession=data.session;customerEmail=data.user?.email||email;
+    const {data:profile,error:profileError}=await customerDb.from("customer_profiles").upsert({id:data.user.id,full_name:name,phone,cart,favorites,updated_at:new Date().toISOString()},{onConflict:"id"}).select().single();
+    if(profileError)throw profileError;customerProfile=profile;saveJSON("heloUser",{name,phone,email:customerEmail});return {needsEmailConfirmation:false};
+  }
+  async function signInCustomer(email,password){
+    const {data,error}=await customerDb.auth.signInWithPassword({email,password});if(error)throw error;
+    customerSession=data.session;customerEmail=data.user?.email||email;await loadCustomerProfile();
+    saveJSON("heloUser",{name:customerProfile?.full_name||"",phone:customerProfile?.phone||"",email:customerEmail});return customerProfile;
+  }
+  async function saveCustomerData(){
+    if(!customerSession?.user||!customerProfile)return false;
+    const {data,error}=await customerDb.from("customer_profiles").upsert({id:customerSession.user.id,full_name:customerProfile.full_name||"",phone:customerProfile.phone||"",cart,favorites,updated_at:new Date().toISOString()},{onConflict:"id"}).select().single();
+    if(error){console.error("همگام‌سازی حساب مشتری ناموفق بود:",error.message);return false}customerProfile=data;return true;
+  }
+  async function initCustomerAuth(){
+    const {data,error}=await customerDb.auth.getSession();if(error)throw error;customerSession=data.session;
+    if(customerSession?.user){customerEmail=customerSession.user.email||"";await loadCustomerProfile()}updateUserUI();return !!customerSession;
+  }
+  async function signOutCustomer(){
+    const {error}=await customerDb.auth.signOut();if(error)throw error;customerSession=null;customerProfile=null;customerEmail="";localStorage.removeItem("heloUser");
+  }
   window.HeloServer = {
+    get customerProfile(){return customerProfile;},
+    get customerEmail(){return customerEmail;},
+    signUpCustomer, signInCustomer, saveCustomerData, initCustomerAuth, signOutCustomer,
     getProducts: getServerProducts, saveProduct: saveServerProduct,
     saveOrder: saveServerOrder, trackOrdersByPhone, getOrders, updateOrderStatus, updateOrderEta, uploadImage: uploadProductImage,
     signInAdminPassword, signOut: async function(){const {error}=await db.auth.signOut();if(error)console.error("خروج ناموفق بود:",error.message)}
   };
+  initCustomerAuth().catch(e=>console.error("بازیابی حساب مشتری ناموفق بود:",e.message));
+  customerDb.auth.onAuthStateChange((_event,session)=>{customerSession=session;if(!session){customerProfile=null;customerEmail="";updateUserUI()}});
   db.auth.getSession().then(({data}) => checkAdminSession(data.session));
   db.auth.onAuthStateChange((_event, session) => { if (session) checkAdminSession(session); else adminUnlocked = false; });
   async function refreshVisibleProducts() {
