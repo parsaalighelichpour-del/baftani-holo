@@ -2311,11 +2311,21 @@ function changeQty(id,d){const item=cart.find(x=>String(x.id)===String(id));if(!
 function removeFromCart(id){cart=cart.filter(x=>x.id!==id);saveCart();renderCart()}
 function applyDiscount(){if(isHalloweenSaleActive()){appliedDiscount=50;appliedCode='HALLOWEEN50';alert('🎃 تخفیف ۵۰٪ هالووین به‌صورت خودکار روی همه محصولات اعمال شده است!');renderCart();return}const code=$('discountCode').value.trim().toUpperCase();if(code==='HELO10'||code==='HELO20'){appliedDiscount=Number(code.slice(4));appliedCode=code;alert('🎁 تخفیف '+appliedDiscount+'٪ اعمال شد')}else{appliedDiscount=0;appliedCode='';alert('❌ کد تخفیف معتبر نیست')}renderCart()}
 function openAccount(){updateUserUI();$('accountModal').style.display='block'}
+async function renderMyOrders(){
+ const box=$('myOrdersList');if(!box)return;
+ box.innerHTML='<div class="notice">در حال دریافت سفارش‌ها…</div>';
+ try{
+  const orders=await window.HeloServer.getMyOrders();
+  if(!orders.length){box.innerHTML='<div class="empty">هنوز سفارشی با این حساب ثبت نشده است.</div>';return}
+  const statusNames={new:'ثبت‌شده',preparing:'در حال آماده‌سازی',shipped:'ارسال‌شده',completed:'تکمیل‌شده',cancelled:'لغوشده'};
+  box.innerHTML=orders.map(o=>`<div class="comment-box"><strong>${esc(o.order_code||'سفارش')}</strong><div>${esc(new Date(o.created_at).toLocaleString('fa-IR'))}</div><div>${(o.items||[]).map(i=>esc(i.name)+' × '+formatPrice(i.qty)).join('، ')}</div><div>مبلغ: ${formatPrice(o.total)} تومان</div><div>وضعیت: ${statusNames[o.status]||esc(o.status)}</div>${o.status==='completed'?'<div>⭐ امتیاز خرید در حساب ثبت شده است.</div>':''}</div>`).join('');
+ }catch(e){box.innerHTML='<div class="notice">دریافت سفارش‌ها انجام نشد: '+esc(e.message||'خطای اتصال')+'</div>'}
+}
 function updateUserUI(){
  const box=$('accountContent');if(!box)return;
  const user=window.HeloServer&&window.HeloServer.customerProfile;
  if(user){
-  box.innerHTML=`<h3>سلام ${esc(user.full_name||'دوست هلو')} 👋</h3><p>📧 ${esc(window.HeloServer.customerEmail||'')}</p><p>📱 ${esc(user.phone||'ثبت نشده')}</p><p class="muted">سبد خرید و علاقه‌مندی‌ها با حساب تو همگام می‌شوند.</p><button class="btn danger" onclick="logout()">🚪 خروج از حساب</button>`;
+  box.innerHTML=`<h3>سلام ${esc(user.full_name||'دوست هلو')} 👋</h3><p>📧 ${esc(window.HeloServer.customerEmail||'')}</p><p>📱 ${esc(user.phone||'ثبت نشده')}</p><p class="muted">سبد خرید، علاقه‌مندی‌ها، تنظیمات، امتیازها و سفارش‌های جدید با حساب تو همگام می‌شوند.</p><button class="btn secondary" onclick="renderMyOrders()">🧾 مشاهده سفارش‌های من</button><div id="myOrdersList"></div><button class="btn danger" onclick="logout()">🚪 خروج از حساب</button>`;
  }else{
   box.innerHTML=`<p class="muted">با ایمیل و رمز عبور وارد شو یا حساب جدید بساز. پیامک یا کد ایمیلی ارسال نمی‌شود.</p><label class="field-label" for="customerName">نام و نام خانوادگی (برای ثبت‌نام)</label><input id="customerName" class="field" placeholder="نام شما" autocomplete="name"><label class="field-label" for="customerPhone">شماره موبایل (اختیاری)</label><input id="customerPhone" class="field" placeholder="شماره موبایل" inputmode="tel" autocomplete="tel"><label class="field-label" for="customerEmail">ایمیل</label><input id="customerEmail" class="field" type="email" placeholder="name@example.com" autocomplete="email" dir="ltr"><label class="field-label" for="customerPassword">رمز عبور</label><input id="customerPassword" class="field" type="password" placeholder="حداقل ۸ کاراکتر" autocomplete="current-password" dir="ltr"><div class="tools-row"><button class="btn" onclick="customerSignUp()">ثبت‌نام</button><button class="btn secondary" onclick="customerSignIn()">ورود</button></div><p id="customerAuthMessage" class="muted" aria-live="polite"></p>`;
  }
@@ -2668,12 +2678,36 @@ body.dark-mode .helo30-feature small,body.dark-mode .helo30-item small{color:#d6
 const url=URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'}));
 const a=document.createElement('a');a.href=url;a.download='فاکتور-بافتنی-هلو.html';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)
 }
-function renderComments(id){const comments=readJSON('heloComments_'+id,[]);$('commentsList').innerHTML=comments.length?comments.map(c=>`<div class="comment-box"><div class="comment-name">👤 ${esc(c.name)}</div><div>${esc(c.text)}</div></div>`).join(''):'<div class="empty">هنوز نظری ثبت نشده؛ اولین نفر باش! 💙</div>'}
-function addComment(){if(!currentProduct)return;const name=$('commentName').value.trim(),text=$('commentText').value.trim();if(!name||!text){alert('نام و متن نظر را وارد کن.');return}const key='heloComments_'+currentProduct.id,comments=readJSON(key,[]);comments.push({name,text,date:Date.now()});saveJSON(key,comments.slice(-100));$('commentName').value='';$('commentText').value='';renderComments(currentProduct.id);alert('نظر ثبت شد 💙')}
-function getRatings(id){return readJSON('heloRatings_'+id,[]).filter(n=>Number.isFinite(n)&&n>=1&&n<=5)}
-function renderRating(id){const ratings=getRatings(id),avg=ratings.length?ratings.reduce((a,b)=>a+b,0)/ratings.length:0;$('ratingBox').innerHTML=`<strong>⭐ امتیاز محصول: ${ratings.length?avg.toFixed(1):'هنوز ثبت نشده'} از ۵</strong><div>${[1,2,3,4,5].map(n=>`<button class="star ${n<=Math.round(avg)?'selected':''}" aria-label="امتیاز ${n}" onclick="rateProduct(${id},${n})">★</button>`).join('')}</div>`}
-function rateProduct(id,n){const key='heloRatings_'+id,ratings=getRatings(id);ratings.push(n);saveJSON(key,ratings.slice(-500));renderRating(id);alert('امتیازت ثبت شد ⭐')}
-function toggleDarkMode(){document.body.classList.toggle('dark-mode');localStorage.setItem('heloDark',document.body.classList.contains('dark-mode')?'1':'0')}
+async function renderComments(id){
+ const box=$('commentsList');box.innerHTML='<div class="empty">در حال دریافت نظرها…</div>';
+ try{
+  const comments=window.HeloServer?await window.HeloServer.getProductReviews(id):readJSON('heloComments_'+id,[]);
+  box.innerHTML=comments.length?comments.map(c=>`<div class="comment-box"><div class="comment-name">👤 ${esc(c.customer_name||c.name||'مشتری هلو')}</div>${c.rating?'<div>⭐ '+esc(c.rating)+' از ۵</div>':''}<div>${esc(c.review_text||c.text||'')}</div></div>`).join(''):'<div class="empty">هنوز نظری ثبت نشده؛ اولین نفر باش! 💙</div>';
+ }catch(e){box.innerHTML='<div class="empty">دریافت نظرها انجام نشد؛ اتصال را بررسی کن.</div>';console.error(e)}
+}
+async function addComment(){
+ if(!currentProduct)return;
+ const name=$('commentName').value.trim(),text=$('commentText').value.trim();
+ if(!name||!text){alert('نام و متن نظر را وارد کن.');return}
+ try{
+  await window.HeloServer.addProductReview(currentProduct.id,name,text,null);
+  $('commentName').value='';$('commentText').value='';await renderComments(currentProduct.id);alert('نظر در پایگاه داده ثبت شد 💙');
+ }catch(e){alert(e.message||'ثبت نظر انجام نشد.')}
+}
+async function getRatings(id){
+ try{const reviews=await window.HeloServer.getProductReviews(id);return reviews.map(r=>Number(r.rating)).filter(n=>Number.isInteger(n)&&n>=1&&n<=5)}
+ catch(e){console.error(e);return []}
+}
+async function renderRating(id){
+ const ratings=await getRatings(id),avg=ratings.length?ratings.reduce((a,b)=>a+b,0)/ratings.length:0;
+ $('ratingBox').innerHTML=`<strong>⭐ امتیاز محصول: ${ratings.length?avg.toFixed(1):'هنوز ثبت نشده'} از ۵</strong><div>${[1,2,3,4,5].map(n=>`<button class="star ${n<=Math.round(avg)?'selected':''}" aria-label="امتیاز ${n}" onclick="rateProduct(${id},${n})">★</button>`).join('')}</div>`;
+}
+async function rateProduct(id,n){
+ const name=readJSON('heloUser',{})?.name||'مشتری هلو';
+ try{await window.HeloServer.addProductReview(id,name,'',n);await renderRating(id);await renderComments(id);alert('امتیازت در پایگاه داده ثبت شد ⭐')}
+ catch(e){alert(e.message||'ثبت امتیاز انجام نشد.')}
+}
+function toggleDarkMode(){document.body.classList.toggle('dark-mode');localStorage.setItem('heloDark',document.body.classList.contains('dark-mode')?'1':'0');if(window.HeloServer?.saveCustomerData)window.HeloServer.saveCustomerData()}
 function initTheme(){if(localStorage.getItem('heloDark')==='1')document.body.classList.add('dark-mode')}
 function closeModal(id){$(id).style.display='none'}
 window.addEventListener('click',e=>{if(e.target.classList.contains('modal'))e.target.style.display='none'});
@@ -2971,6 +3005,26 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
     if (error) { console.error("دریافت سفارش‌ها ناموفق بود:", error.message); throw error; }
     return Array.isArray(data) ? data : [];
   }
+  async function getMyOrders() {
+    if(!customerSession?.user)throw new Error("برای دیدن سفارش‌های حساب، وارد شو.");
+    const {data,error}=await customerDb.rpc("my_store_orders");
+    if(error)throw error;
+    return Array.isArray(data)?data:[];
+  }
+  async function getProductReviews(productId) {
+    const {data,error}=await db.from("product_reviews").select("id,product_id,customer_name,review_text,rating,created_at").eq("product_id",String(productId)).order("created_at",{ascending:false}).limit(100);
+    if(error)throw error;
+    return Array.isArray(data)?data:[];
+  }
+  async function addProductReview(productId,name,reviewText,rating) {
+    const safeName=String(name||"مهمان").trim().slice(0,80);
+    const safeText=String(reviewText||"").trim().slice(0,1000);
+    const score=rating==null?null:Number(rating);
+    if(!safeName||(!safeText&&(score==null||score<1||score>5))||(score!=null&&(!Number.isInteger(score)||score<1||score>5)))throw new Error("نام، متن نظر یا امتیاز معتبر وارد کن.");
+    const {data,error}=await db.from("product_reviews").insert({product_id:String(productId),customer_name:safeName,review_text:safeText||null,rating:score}).select("id,product_id,customer_name,review_text,rating,created_at").single();
+    if(error)throw error;
+    return data;
+  }
   async function updateOrderStatus(id, status) {
     const allowed = ['new','preparing','shipped','completed','cancelled'];
     if (!allowed.includes(status)) return false;
@@ -3035,9 +3089,11 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
     if(error)throw error;
     if(data){
       customerProfile=data;cart=Array.isArray(data.cart)?data.cart:[];favorites=Array.isArray(data.favorites)?data.favorites:[];
-      saveJSON("heloCart",cart);saveJSON("heloFavorites",favorites);updateCartCount();renderProducts();return data;
+      saveJSON("heloCart",cart);saveJSON("heloFavorites",favorites);
+      document.body.classList.toggle("dark-mode",data.dark_mode===true);localStorage.setItem("heloDark",data.dark_mode===true?"1":"0");
+      updateCartCount();renderProducts();return data;
     }
-    const initial={id:customerSession.user.id,full_name:String(customerSession.user.user_metadata?.full_name||""),phone:String(customerSession.user.user_metadata?.phone||""),cart,favorites,updated_at:new Date().toISOString()};
+    const initial={id:customerSession.user.id,full_name:String(customerSession.user.user_metadata?.full_name||""),phone:String(customerSession.user.user_metadata?.phone||""),cart,favorites,dark_mode:localStorage.getItem("heloDark")==="1",updated_at:new Date().toISOString()};
     const {data:created,error:createError}=await customerDb.from("customer_profiles").insert(initial).select().single();
     if(createError)throw createError;customerProfile=created;return created;
   }
@@ -3055,7 +3111,7 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
   }
   async function saveCustomerData(){
     if(!customerSession?.user||!customerProfile)return false;
-    const {data,error}=await customerDb.from("customer_profiles").upsert({id:customerSession.user.id,full_name:customerProfile.full_name||"",phone:customerProfile.phone||"",cart,favorites,updated_at:new Date().toISOString()},{onConflict:"id"}).select().single();
+    const {data,error}=await customerDb.from("customer_profiles").upsert({id:customerSession.user.id,full_name:customerProfile.full_name||"",phone:customerProfile.phone||"",cart,favorites,dark_mode:document.body.classList.contains("dark-mode"),updated_at:new Date().toISOString()},{onConflict:"id"}).select().single();
     if(error){console.error("همگام‌سازی حساب مشتری ناموفق بود:",error.message);return false}customerProfile=data;return true;
   }
   async function claimCustomerMission(kind){
@@ -3081,7 +3137,7 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
     get customerEmail(){return customerEmail;},
     signUpCustomer, signInCustomer, saveCustomerData, claimCustomerMission, initCustomerAuth, signOutCustomer,
     getProducts: getServerProducts, saveProduct: saveServerProduct,
-    saveOrder: saveServerOrder, trackOrdersByPhone, getOrders, updateOrderStatus, updateOrderEta, uploadImage: uploadProductImage,
+    saveOrder: saveServerOrder, trackOrdersByPhone, getOrders, getMyOrders, getProductReviews, addProductReview, updateOrderStatus, updateOrderEta, uploadImage: uploadProductImage,
     signInAdminPassword, signOut: async function(){const {error}=await db.auth.signOut();if(error)console.error("خروج ناموفق بود:",error.message)}
   };
   initCustomerAuth().catch(e=>console.error("بازیابی حساب مشتری ناموفق بود:",e.message));
