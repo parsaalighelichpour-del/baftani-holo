@@ -2329,14 +2329,25 @@ function updateUserUI(){
  const box=$('accountContent');if(!box)return;
  const user=window.HeloServer&&window.HeloServer.customerProfile;
  if(user){
-  box.innerHTML=`<h3>سلام ${esc(user.full_name||'دوست هلو')} 👋</h3><p>📧 ${esc(window.HeloServer.customerEmail||'')}</p><p>📱 ${esc(user.phone||'ثبت نشده')}</p><p class="muted">سبد خرید، علاقه‌مندی‌ها، تنظیمات، امتیازها و سفارش‌های جدید با حساب تو همگام می‌شوند.</p><button class="btn secondary" onclick="renderMyOrders()">🧾 مشاهده سفارش‌های من</button><div id="myOrdersList"></div><button class="btn danger" onclick="logout()">🚪 خروج از حساب</button>`;
+  box.innerHTML='<h3>سلام '+esc(user.full_name||'دوست هلو')+' 👋</h3><p>📧 '+esc(window.HeloServer.customerEmail||'')+'</p><p>📱 '+esc(user.phone||'ثبت نشده')+'</p>'+(user.phone?'':'<label class="field-label" for="customerPhoneUpdate">برای ثبت سفارش، شماره موبایل را وارد کن</label><input id="customerPhoneUpdate" class="field" placeholder="شماره موبایل" inputmode="tel"><button class="btn" onclick="saveCustomerPhone()">ذخیره شماره موبایل</button>')+'<p class="muted">سفارش‌ها و اطلاعاتت به همین حساب متصل می‌شوند.</p><button class="btn secondary" onclick="renderMyOrders()">🧾 مشاهده سفارش‌های من</button><div id="myOrdersList"></div><button class="btn danger" onclick="logout()">🚪 خروج از حساب</button>';
  }else{
-  box.innerHTML=`<p class="muted">می‌توانی بدون ساخت حساب، مثل قبل به‌صورت مهمان خرید کنی. ساخت حساب فقط برای همگام‌سازی اطلاعات بین دستگاه‌ها اختیاری است.</p><button class="btn" style="width:100%;margin:8px 0 14px" onclick="continueAsGuest()">👤 ادامه به‌عنوان مهمان</button><details class="account-register"><summary style="cursor:pointer;font-weight:700;margin:10px 0">ورود یا ثبت‌نام اختیاری برای همگام‌سازی</summary><label class="field-label" for="customerName">نام و نام خانوادگی (برای ثبت‌نام)</label><input id="customerName" class="field" placeholder="نام شما" autocomplete="name"><label class="field-label" for="customerPhone">شماره موبایل (اختیاری)</label><input id="customerPhone" class="field" placeholder="شماره موبایل" inputmode="tel" autocomplete="tel"><label class="field-label" for="customerEmail">ایمیل</label><input id="customerEmail" class="field" type="email" placeholder="name@example.com" autocomplete="email" dir="ltr"><label class="field-label" for="customerPassword">رمز عبور</label><input id="customerPassword" class="field" type="password" placeholder="حداقل ۸ کاراکتر" autocomplete="current-password" dir="ltr"><div class="tools-row"><button class="btn" onclick="customerSignUp()">ثبت‌نام</button><button class="btn secondary" onclick="customerSignIn()">ورود</button></div><p id="customerAuthMessage" class="muted" aria-live="polite"></p></details>`;
+  box.innerHTML='<p class="notice">برای ثبت سفارش، ساخت حساب یا ورود الزامی است. اطلاعات سفارش‌ها به حساب تو متصل می‌شود.</p><h3>ساخت حساب جدید</h3><label class="field-label" for="customerName">نام و نام خانوادگی</label><input id="customerName" class="field" placeholder="نام شما" autocomplete="name"><label class="field-label" for="customerPhone">شماره موبایل</label><input id="customerPhone" class="field" placeholder="شماره موبایل" inputmode="tel" autocomplete="tel"><label class="field-label" for="customerEmail">ایمیل</label><input id="customerEmail" class="field" type="email" placeholder="name@example.com" autocomplete="email" dir="ltr"><label class="field-label" for="customerPassword">رمز عبور</label><input id="customerPassword" class="field" type="password" placeholder="حداقل ۸ کاراکتر" autocomplete="new-password" dir="ltr"><div class="tools-row"><button class="btn" onclick="customerSignUp()">ساخت حساب</button><button class="btn secondary" onclick="customerSignIn()">ورود به حساب</button></div><p id="customerAuthMessage" class="muted" aria-live="polite"></p>';
  }
+}
+async function saveCustomerPhone(){
+ const phone=$('customerPhoneUpdate')?.value.trim()||'';
+ if(phone.replace(/[^0-9۰-۹٠-٩]/g,'').length<7){alert('شماره موبایل معتبر وارد کن.');return}
+ const profile=window.HeloServer?.customerProfile;
+ if(!profile){alert('اول وارد حساب شو.');return}
+ profile.phone=phone;
+ const saved=await window.HeloServer.saveCustomerData();
+ if(!saved){alert('ذخیره شماره انجام نشد؛ اتصال اینترنت را بررسی کن.');return}
+ saveJSON('heloUser',{name:profile.full_name||'',phone,email:window.HeloServer.customerEmail||''});
+ updateUserUI();alert('شماره موبایل ذخیره شد. حالا می‌توانی سفارش بدهی.');
 }
 async function customerSignUp(){
  const name=$('customerName').value.trim(),phone=$('customerPhone').value.trim(),email=$('customerEmail').value.trim(),password=$('customerPassword').value,msg=$('customerAuthMessage');
- if(!name||!email||password.length<8){msg.textContent='نام، ایمیل و رمز حداقل ۸ کاراکتری را وارد کن.';return}
+ if(!name||phone.replace(/[^0-9۰-۹٠-٩]/g,'').length<7||!email||password.length<8){msg.textContent='نام، شماره موبایل معتبر، ایمیل و رمز حداقل ۸ کاراکتری را وارد کن.';return}
  try{msg.textContent='در حال ساخت حساب…';const r=await window.HeloServer.signUpCustomer(email,password,name,phone);
   if(r.needsEmailConfirmation){msg.textContent='تنظیم تأیید ایمیل Supabase هنوز روشن است؛ باید خاموش شود تا ورود بدون ایمیل فعال شود.';return}
   updateUserUI();updateVipWelcome(!!adminUnlocked);msg.textContent='حساب ساخته شد و همگام‌سازی فعال است.';
@@ -2406,39 +2417,26 @@ function trackCurrentOrder(){
 }
 function openSupport(){location.href='tel:09915023632'}
 async function createInvoice(){
-let user=readJSON('heloUser',null);
-// مهمان هم می‌تواند بدون ساخت حساب سفارش بدهد؛ فقط نام و شماره برای پیگیری لازم است.
-if(!user||!String(user.name||'').trim()||!String(user.phone||'').trim()){
- const guestName=prompt('برای ثبت سفارش مهمان، نام و نام خانوادگی را وارد کن:');
- if(guestName===null)return;
- const guestPhone=prompt('شماره موبایل برای پیگیری سفارش را وارد کن:');
- if(guestPhone===null)return;
- const cleanName=String(guestName).trim(),cleanPhone=String(guestPhone).trim();
- if(cleanName.length<2||cleanPhone.replace(/[^0-9۰-۹٠-٩]/g,'').length<7){alert('نام یا شماره موبایل معتبر نیست. سفارش ثبت نشد.');return}
- user={name:cleanName,phone:cleanPhone};
- saveJSON('heloUser',user);
- localStorage.setItem('heloGuestMode','1');
-}
-if(!cart.length){alert('سبد خرید خالی است.');return}
-const order={id:'HELO-'+Date.now().toString().slice(-8),date:new Date().toLocaleString('fa-IR'),name:user.name,phone:user.phone,items:cart.map(i=>({id:i.id,qty:i.qty})),total:finalTotal(),discount:effectiveDiscount(),discountCode:isHalloweenSaleActive()?'HALLOWEEN50':appliedCode};
-const cloudOrder=await window.HeloServer.saveOrder(order);
-if(!cloudOrder){alert('❌ سفارش ثبت نشد. موجودی محصول یا اتصال اینترنت را بررسی کن؛ هیچ سفارش تأییدنشده‌ای ساخته نشد.');return}
-order.id=cloudOrder.order_code||order.id;
-order.total=Number(cloudOrder.total??order.total);
-order.items=cloudOrder.items||order.items;
-let orders=readJSON('heloOrdersLocal',[]);orders.unshift(order);saveJSON('heloOrdersLocal',orders.slice(0,50));
-$('invoiceCustomer').innerHTML=`<div class="invoice-line"><span>شماره سفارش</span><strong>${esc(order.id)}</strong></div><div class="invoice-line"><span>مشتری</span><strong>${esc(user.name)}</strong></div><div class="invoice-line"><span>شماره</span><strong>${esc(user.phone)}</strong></div><div class="invoice-line"><span>تاریخ</span><strong>${esc(order.date)}</strong></div>`;
-$('invoiceProducts').innerHTML=cart.map(i=>{const p=products.find(x=>x.id===i.id);return p?`<div class="invoice-line"><span>${esc(p.name)} × ${formatPrice(i.qty)}</span><strong>${formatPrice(p.price*i.qty)} تومان</strong></div>`:''}).join('')+(discountAmount()?`<div class="invoice-line"><span>تخفیف ${effectiveDiscount()}٪</span><strong>− ${formatPrice(discountAmount())} تومان</strong></div>`:'');
-if($('heloGiftWrap')&&$('heloGiftWrap').checked)$('invoiceProducts').innerHTML+='<div class="invoice-line"><span>بسته‌بندی هدیه</span><strong>رایگان 🎀</strong></div>';
-$('invoiceTotal').textContent=formatPrice(order.total)+' تومان';startOrderEta(order.id,user.phone);
-$('emailName').value=user.name;$('emailPhone').value=user.phone;
-$('emailProducts').value=cart.map(i=>{const p=products.find(x=>x.id===i.id);return p?`${p.name} × ${i.qty} = ${formatPrice(p.price*i.qty)} تومان`:''}).join('\n')+`\nشماره سفارش: ${order.id}`;
-if($('heloGiftWrap')&&$('heloGiftWrap').checked)$('emailProducts').value+='\nبسته‌بندی هدیه: بله (رایگان)';
-window.dispatchEvent(new CustomEvent('helo-order-confirmed',{detail:{total:order.total}}));
-$('emailTotal').value=formatPrice(order.total)+' تومان';
-try{$('orderForm').submit()}catch(e){console.warn(e)}
-cart=[];appliedDiscount=0;appliedCode='';$('discountCode').value='';if($('heloGiftWrap'))$('heloGiftWrap').checked=false;saveCart();renderCart();
-closeModal('cartModal');$('invoiceModal').style.display='block';
+ const profile=window.HeloServer?.customerProfile;
+ if(!profile){alert('برای ثبت سفارش باید اول حساب بسازی یا وارد حساب شوی.');openAccount();return}
+ if(!String(profile.full_name||'').trim()||String(profile.phone||'').replace(/[^0-9۰-۹٠-٩]/g,'').length<7){alert('برای ثبت سفارش، نام و شماره موبایل معتبر را در حساب تکمیل کن.');openAccount();return}
+ const user={name:profile.full_name,phone:profile.phone};
+ if(!cart.length){alert('سبد خرید خالی است.');return}
+ const order={id:'HELO-'+Date.now().toString().slice(-8),date:new Date().toLocaleString('fa-IR'),name:user.name,phone:user.phone,items:cart.map(i=>({id:i.id,qty:i.qty})),total:finalTotal(),discount:effectiveDiscount(),discountCode:isHalloweenSaleActive()?'HALLOWEEN50':appliedCode};
+ const cloudOrder=await window.HeloServer.saveOrder(order);
+ if(!cloudOrder){alert('❌ سفارش ثبت نشد. موجودی محصول یا اتصال اینترنت را بررسی کن؛ هیچ سفارش تأییدنشده‌ای ساخته نشد.');return}
+ order.id=cloudOrder.order_code||order.id;order.total=Number(cloudOrder.total??order.total);order.items=cloudOrder.items||order.items;
+ let orders=readJSON('heloOrdersLocal',[]);orders.unshift(order);saveJSON('heloOrdersLocal',orders.slice(0,50));
+ $('invoiceCustomer').innerHTML='<div class="invoice-line"><span>شماره سفارش</span><strong>'+esc(order.id)+'</strong></div><div class="invoice-line"><span>مشتری</span><strong>'+esc(user.name)+'</strong></div><div class="invoice-line"><span>شماره</span><strong>'+esc(user.phone)+'</strong></div><div class="invoice-line"><span>تاریخ</span><strong>'+esc(order.date)+'</strong></div>';
+ $('invoiceProducts').innerHTML=cart.map(i=>{const p=products.find(x=>x.id===i.id);return p?'<div class="invoice-line"><span>'+esc(p.name)+' × '+formatPrice(i.qty)+'</span><strong>'+formatPrice(p.price*i.qty)+' تومان</strong></div>':''}).join('')+(discountAmount()?'<div class="invoice-line"><span>تخفیف '+effectiveDiscount()+'٪</span><strong>− '+formatPrice(discountAmount())+' تومان</strong></div>':'');
+ if($('heloGiftWrap')&&$('heloGiftWrap').checked)$('invoiceProducts').innerHTML+='<div class="invoice-line"><span>بسته‌بندی هدیه</span><strong>رایگان 🎀</strong></div>';
+ $('invoiceTotal').textContent=formatPrice(order.total)+' تومان';startOrderEta(order.id,user.phone);
+ $('emailName').value=user.name;$('emailPhone').value=user.phone;
+ $('emailProducts').value=cart.map(i=>{const p=products.find(x=>x.id===i.id);return p?p.name+' × '+i.qty+' = '+formatPrice(p.price*i.qty)+' تومان':''}).join('\n')+'\nشماره سفارش: '+order.id;
+ if($('heloGiftWrap')&&$('heloGiftWrap').checked)$('emailProducts').value+='\nبسته‌بندی هدیه: بله (رایگان)';
+ window.dispatchEvent(new CustomEvent('helo-order-confirmed',{detail:{total:order.total}}));$('emailTotal').value=formatPrice(order.total)+' تومان';
+ try{$('orderForm').submit()}catch(e){console.warn(e)}
+ cart=[];appliedDiscount=0;appliedCode='';$('discountCode').value='';if($('heloGiftWrap'))$('heloGiftWrap').checked=false;saveCart();renderCart();closeModal('cartModal');$('invoiceModal').style.display='block';
 }
 function downloadInvoice(){
 const area=$('invoiceArea');
@@ -3012,7 +3010,8 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
   }
   async function saveServerOrder(order) {
     try {
-      const orderClient = customerSession?.user ? customerDb : db;
+      if (!customerSession?.user || !customerProfile) throw new Error("برای ثبت سفارش باید وارد حساب مشتری شوی.");
+      const orderClient = customerDb;
       const { data, error } = await orderClient.rpc("place_store_order", {
         p_customer_name: String(order.name || '').slice(0,100),
         p_phone: String(order.phone || '').slice(0,30),
