@@ -2157,11 +2157,9 @@ main.container>.helo-feature-banner{position:relative!important;isolation:isolat
 
 <div class="modal" id="trackingModal"><div class="modal-content">
 <button class="close" onclick="closeModal('trackingModal')">×</button><h2>📦 پیگیری سفارش</h2>
-<p>برای امنیت سفارش، شماره موبایل و کد همان سفارش را وارد کن.</p>
+<p>شماره موبایلی را وارد کن که هنگام ثبت سفارش نوشته بودی.</p>
 <label class="field-label" for="trackingPhone">شماره موبایل ثبت‌شده</label>
 <input id="trackingPhone" class="field" placeholder="شماره موبایل" inputmode="tel" autocomplete="tel">
-<label class="field-label" for="trackingOrderCode">کد سفارش</label>
-<input id="trackingOrderCode" class="field" placeholder="مثلاً HELO-AB12CD34" autocomplete="off" maxlength="20">
 <button class="btn" id="trackOrdersButton" onclick="trackOrders()">🔎 جست‌وجوی سفارش</button>
 <div id="trackingResults" aria-live="polite"></div>
 </div></div>
@@ -2377,20 +2375,18 @@ function startTrackingEtaClock(){
  tick();trackingEtaInterval=setInterval(tick,1000);
 }
 async function trackOrders(){
- const phone=$('trackingPhone').value.trim(),orderCode=$('trackingOrderCode').value.trim(),result=$('trackingResults'),button=$('trackOrdersButton');
- if(!phone||!orderCode){result.innerHTML='<div class="notice">شماره موبایل و کد سفارش را وارد کن.</div>';return}
+ const phone=$('trackingPhone').value.trim(),result=$('trackingResults'),button=$('trackOrdersButton');
+ if(!phone){result.innerHTML='<div class="notice">شماره موبایل را وارد کن.</div>';return}
  if(trackingEtaInterval)clearInterval(trackingEtaInterval);
  button.disabled=true;button.textContent='در حال جست‌وجو…';result.innerHTML='<div class="muted">در حال اتصال به پایگاه داده…</div>';
  try{
-  const orders=await window.HeloServer.trackOrderByCode(phone,orderCode);
-  if(!orders.length){result.innerHTML='<div class="empty">سفارشی با این شماره و کد سفارش پیدا نشد.</div>';return}
+  const orders=await window.HeloServer.trackOrdersByPhone(phone);
+  if(!orders.length){result.innerHTML='<div class="empty">سفارشی با این شماره موبایل پیدا نشد.</div>';return}
   const labels={new:'ثبت‌شده',preparing:'در حال آماده‌سازی',shipped:'ارسال‌شده',completed:'تکمیل‌شده',cancelled:'لغوشده'};
   result.innerHTML=orders.map(o=>{
-   const date=o.created_at?new Date(o.created_at).toLocaleString('fa-IR'):'—',mins=Math.min(10080,Math.max(1,Number(o.prep_minutes)||120)),start=Date.parse(o.prep_started_at||o.created_at||Date.now()),deadline=(Number.isFinite(start)?start:Date.now())+mins*60000;
-   const items=Array.isArray(o.items)?o.items.map(it=>'<div class="invoice-line"><span>'+esc(it.name||it.id||'محصول')+' × '+formatPrice(it.qty)+'</span><strong>'+formatPrice((Number(it.price)||0)*(Number(it.qty)||0))+' تومان</strong></div>').join(''):'';
-   return '<div class="admin-product"><h3>سفارش '+esc(o.order_code||'')+'</h3><p>وضعیت: <strong>'+esc(labels[o.status]||'در انتظار بررسی')+'</strong></p><p>تاریخ ثبت: '+esc(date)+'</p><div class="tracking-eta-card"><strong>⏳ زمان باقی‌مانده آماده‌سازی</strong><div class="order-eta-clock" data-eta-deadline="'+deadline+'">۰۰:۰۰:۰۰</div><div data-eta-late style="display:none"><p>زمان تخمینی تمام شده؛ برای پیگیری با ما تماس بگیر.</p><a class="btn secondary" href="https://ble.ir/Parsa_Gh93">کانال بله</a> <a class="btn secondary" href="tel:09915023632">تماس با پشتیبانی</a></div></div><h4>محصولات</h4>'+items+'<div class="summary-total"><span>مبلغ سفارش</span><strong>'+formatPrice(o.total)+' تومان</strong></div></div>';
+   const date=o.created_at?new Date(o.created_at).toLocaleString('fa-IR'):'—';
+   return '<div class="admin-product"><h3>سفارش '+esc(o.order_code||'')+'</h3><p>وضعیت: <strong>'+esc(labels[o.status]||'در انتظار بررسی')+'</strong></p><p>تاریخ ثبت: '+esc(date)+'</p></div>';
   }).join('');
-  startTrackingEtaClock();
  }catch(e){console.error(e);result.innerHTML='<div class="notice">اتصال به پایگاه داده انجام نشد. دوباره تلاش کن.</div>'}
  finally{button.disabled=false;button.textContent='🔎 جست‌وجوی سفارش'}
 }
@@ -3024,13 +3020,12 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
       return data;
     } catch (e) { console.error("ثبت سفارش ناموفق بود:", e.message); alert("ثبت سفارش انجام نشد: " + (e.message || "خطای سرور")); return null; }
   }
-  async function trackOrderByCode(phone, orderCode) {
-    const { data, error } = await db.rpc("track_store_order", {
-      p_order_code: String(orderCode || '').trim().slice(0,20),
+  async function trackOrdersByPhone(phone) {
+    const { data, error } = await db.rpc("track_store_orders_by_phone", {
       p_phone: String(phone || '').trim().slice(0,30)
     });
     if (error) { console.error("پیگیری سفارش ناموفق بود:", error.message); throw error; }
-    return data && typeof data === "object" ? [data] : [];
+    return Array.isArray(data) ? data : [];
   }
   async function getOrders() {
     const { data, error } = await db.rpc("admin_list_store_orders");
@@ -3239,7 +3234,7 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
     get customerEmail(){return customerEmail;},
     signUpCustomer, signInCustomer, saveCustomerData, saveCustomerPreference, claimCustomerMission, initCustomerAuth, signOutCustomer,
     getProducts: getServerProducts, saveProduct: saveServerProduct,
-    saveOrder: saveServerOrder, trackOrderByCode, getOrders, getMyOrders, getProductReviews, addProductReview, saveCustomOrder, getCustomOrders, updateCustomOrderStatus, updateOrderStatus, updateOrderEta, uploadImage: uploadProductImage,
+    saveOrder: saveServerOrder, trackOrdersByPhone, getOrders, getMyOrders, getProductReviews, addProductReview, saveCustomOrder, getCustomOrders, updateCustomOrderStatus, updateOrderStatus, updateOrderEta, uploadImage: uploadProductImage,
     signInAdminPassword, signOut: async function(){const {error}=await db.auth.signOut();if(error)console.error("خروج ناموفق بود:",error.message)}
   };
   initCustomerAuth().catch(e=>console.error("بازیابی حساب مشتری ناموفق بود:",e.message));
