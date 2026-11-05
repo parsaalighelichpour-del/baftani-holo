@@ -3239,7 +3239,7 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
     get customerEmail(){return customerEmail;},
     signUpCustomer, signInCustomer, saveCustomerData, saveCustomerPreference, claimCustomerMission, initCustomerAuth, signOutCustomer,
     getProducts: getServerProducts, saveProduct: saveServerProduct,
-    saveOrder: saveServerOrder, trackOrdersByPhone, getOrders, getMyOrders, getProductReviews, addProductReview, saveCustomOrder, getCustomOrders, updateCustomOrderStatus, updateOrderStatus, updateOrderEta, uploadImage: uploadProductImage,
+    saveOrder: saveServerOrder, trackOrderByCode, getOrders, getMyOrders, getProductReviews, addProductReview, saveCustomOrder, getCustomOrders, updateCustomOrderStatus, updateOrderStatus, updateOrderEta, uploadImage: uploadProductImage,
     signInAdminPassword, signOut: async function(){const {error}=await db.auth.signOut();if(error)console.error("خروج ناموفق بود:",error.message)}
   };
   initCustomerAuth().catch(e=>console.error("بازیابی حساب مشتری ناموفق بود:",e.message));
