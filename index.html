@@ -2349,7 +2349,7 @@ async function customerSignUp(){
   updateUserUI();updateVipWelcome(!!adminUnlocked);msg.textContent='حساب ساخته شد و همگام‌سازی فعال است.';
  }catch(e){msg.textContent=e.message||'ثبت‌نام انجام نشد.'}
 }
-async function customerSignIn(){
+async async function customerSignIn(){
  const email=$('customerEmail').value.trim(),password=$('customerPassword').value,msg=$('customerAuthMessage');
  if(!email||!password){msg.textContent='ایمیل و رمز عبور را وارد کن.';return}
  try{msg.textContent='در حال ورود…';await window.HeloServer.signInCustomer(email,password);updateUserUI();updateVipWelcome(!!adminUnlocked);msg.textContent='وارد شدی؛ اطلاعاتت همگام شد.'}
