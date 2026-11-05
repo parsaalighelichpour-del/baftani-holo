@@ -2374,20 +2374,53 @@ function startTrackingEtaClock(){
  });
  tick();trackingEtaInterval=setInterval(tick,1000);
 }
+function normalizeHeloPhone(value){
+ return String(value||'').replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/\\D/g,'');
+}
+function renderFullTrackedOrders(orders){
+ const labels={new:'ثبت‌شده',preparing:'در حال آماده‌سازی',shipped:'ارسال‌شده',completed:'تکمیل‌شده',cancelled:'لغوشده'};
+ const cards=orders.map((o,i)=>{
+  const date=o.created_at?new Date(o.created_at).toLocaleString('fa-IR'):'—';
+  const updated=o.updated_at?new Date(o.updated_at).toLocaleString('fa-IR'):'—';
+  const items=Array.isArray(o.items)?o.items.map(item=>{
+   const name=item.name||item.title||('محصول '+String(item.id||''));
+   const qty=Math.max(1,Number(item.qty||item.quantity||1));
+   const lineTotal=Number(item.price||0)*qty;
+   return '<div class="invoice-line"><span>'+esc(name)+' × '+formatPrice(qty)+'</span><strong>'+(lineTotal?formatPrice(lineTotal)+' تومان':'—')+'</strong></div>';
+  }).join(''):'';
+  const discount=Number(o.discount_percent||0);
+  const eta=o.prep_minutes?'<p>⏳ زمان آماده‌سازی ثبت‌شده: '+formatPrice(o.prep_minutes)+' دقیقه</p>':'';
+  return '<div class="admin-product"><h3>🧾 سفارش '+(i+1)+'</h3><p>کد سفارش: <strong>'+esc(o.order_code||'—')+'</strong></p><p>وضعیت: <strong>'+esc(labels[o.status]||'در انتظار بررسی')+'</strong></p><p>تاریخ ثبت: '+esc(date)+'</p><p>آخرین به‌روزرسانی: '+esc(updated)+'</p><h4>محصولات سفارش</h4>'+(items||'<p>جزئیات محصولات در دسترس نیست.</p>')+'<p>تخفیف: '+formatPrice(discount)+'٪</p><p><strong>مبلغ نهایی: '+formatPrice(o.total||0)+' تومان</strong></p>'+eta+'</div>';
+ }).join('');
+ $('trackingResults').innerHTML=cards;
+}
 async function trackOrders(){
  const phone=$('trackingPhone').value.trim(),result=$('trackingResults'),button=$('trackOrdersButton');
  if(!phone){result.innerHTML='<div class="notice">شماره موبایل را وارد کن.</div>';return}
+ if(normalizeHeloPhone(phone).length<10){result.innerHTML='<div class="notice">شماره موبایل معتبر وارد کن.</div>';return}
  if(trackingEtaInterval)clearInterval(trackingEtaInterval);
  button.disabled=true;button.textContent='در حال جست‌وجو…';result.innerHTML='<div class="muted">در حال اتصال به پایگاه داده…</div>';
  try{
+  const profile=window.HeloServer?.customerProfile;
+  if(profile){
+   const savedPhone=normalizeHeloPhone(profile.phone);
+   if(savedPhone!==normalizeHeloPhone(phone)){
+    result.innerHTML='<div class="notice">این شماره با شماره ثبت‌شده در حساب فعلی یکسان نیست. با حساب مالک سفارش وارد شو یا شماره ذخیره‌شده در حسابت را بررسی کن.</div>';
+    return;
+   }
+   const orders=await window.HeloServer.getMyOrders();
+   if(!orders.length){result.innerHTML='<div class="empty">سفارشی به این حساب متصل نیست.</div>';return}
+   renderFullTrackedOrders(orders);
+   return;
+  }
   const orders=await window.HeloServer.trackOrdersByPhone(phone);
   if(!orders.length){result.innerHTML='<div class="empty">سفارشی با این شماره موبایل پیدا نشد.</div>';return}
   const labels={new:'ثبت‌شده',preparing:'در حال آماده‌سازی',shipped:'ارسال‌شده',completed:'تکمیل‌شده',cancelled:'لغوشده'};
   result.innerHTML=orders.map((o,i)=>{
    const date=o.created_at?new Date(o.created_at).toLocaleString('fa-IR'):'—';
    return '<div class="admin-product"><h3>سفارش '+(i+1)+'</h3><p>وضعیت: <strong>'+esc(labels[o.status]||'در انتظار بررسی')+'</strong></p><p>تاریخ ثبت: '+esc(date)+'</p></div>';
-  }).join('');
- }catch(e){console.error(e);result.innerHTML='<div class="notice">اتصال به پایگاه داده انجام نشد. دوباره تلاش کن.</div>'}
+  }).join('')+'<div class="notice">برای دیدن کد سفارش، محصولات، تعداد، تخفیف و مبلغ، باید با حسابی که سفارش را ثبت کرده وارد شوی. <button class="btn" onclick="openAccount()">🔐 ورود به حساب مالک سفارش</button></div>';
+ }catch(e){console.error(e);result.innerHTML='<div class="notice">دریافت اطلاعات سفارش انجام نشد. دوباره تلاش کن.</div>'}
  finally{button.disabled=false;button.textContent='🔎 جست‌وجوی سفارش'}
 }
 let orderEtaInterval=null;
