@@ -2383,9 +2383,9 @@ async function trackOrders(){
   const orders=await window.HeloServer.trackOrdersByPhone(phone);
   if(!orders.length){result.innerHTML='<div class="empty">سفارشی با این شماره موبایل پیدا نشد.</div>';return}
   const labels={new:'ثبت‌شده',preparing:'در حال آماده‌سازی',shipped:'ارسال‌شده',completed:'تکمیل‌شده',cancelled:'لغوشده'};
-  result.innerHTML=orders.map(o=>{
+  result.innerHTML=orders.map((o,i)=>{
    const date=o.created_at?new Date(o.created_at).toLocaleString('fa-IR'):'—';
-   return '<div class="admin-product"><h3>سفارش '+esc(o.order_code||'')+'</h3><p>وضعیت: <strong>'+esc(labels[o.status]||'در انتظار بررسی')+'</strong></p><p>تاریخ ثبت: '+esc(date)+'</p></div>';
+   return '<div class="admin-product"><h3>سفارش '+(i+1)+'</h3><p>وضعیت: <strong>'+esc(labels[o.status]||'در انتظار بررسی')+'</strong></p><p>تاریخ ثبت: '+esc(date)+'</p></div>';
   }).join('');
  }catch(e){console.error(e);result.innerHTML='<div class="notice">اتصال به پایگاه داده انجام نشد. دوباره تلاش کن.</div>'}
  finally{button.disabled=false;button.textContent='🔎 جست‌وجوی سفارش'}
