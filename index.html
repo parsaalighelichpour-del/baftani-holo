@@ -3384,7 +3384,7 @@ body.dark-mode .helo-world-section,body.dark-mode .helo-world-card{background:#2
   const profile = () => window.HeloServer?.customerProfile || null;
   const authenticated = () => !!window.HeloServer?.customerAuthenticated && !!profile();
   const points = () => Number(profile()?.points||0);
-  const dayKey = () => new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tehran',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+  const dayKey = () => { const p=Object.fromEntries(new Intl.DateTimeFormat('en',{timeZone:'Asia/Tehran',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date()).map(x=>[x.type,x.value]));return p.year+'-'+p.month+'-'+p.day; };
   const weekKey = () => { const d=new Date(dayKey()+'T00:00:00Z');d.setUTCDate(d.getUTCDate()-((d.getUTCDay()+6)%7));return d.toISOString().slice(0,10); };
   let dailyProductId = null;
 
