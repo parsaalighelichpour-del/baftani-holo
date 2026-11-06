@@ -27,7 +27,7 @@
   const action = (label,fn,cls='btn') => '<button type="button" class="'+cls+'" onclick="'+fn+'">'+label+'</button>';
   const addNav = () => {
     const nav=document.querySelector('.nav'); if(!nav||$('helo30NavButton'))return;
-    const b=document.createElement('button');b.id='helo30NavButton';b.type='button';b.className='nav-btn';b.textContent='✨ امکانات هلو';b.onclick=()=>window.openHeloFeatures();nav.appendChild(b);
+    const b=document.createElement('button');b.id='helo30NavButton';b.type='button';b.className='nav-btn';b.textContent='قابلیت‌های جدید هلو';b.onclick=()=>window.openHeloFeatures();nav.appendChild(b);
   };
   const features = [
     ['❤️','لیست علاقه‌مندی‌ها','ذخیره و دیدن محصولات قلب‌خورده','window.helo30Wishlist()'],
