@@ -128,3 +128,73 @@ body.dark-mode .helo-mission,body.dark-mode .helo-club-panel>div{background:#153
   .nav-btn,.btn{border-radius:12px!important}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* Temporary Purple Holo theme */
+:root{
+ --blue:#9b5cff!important;--deep:#6424b8!important;--navy:#24113f!important;
+ --pale:#f5edff!important;--ink:#321b4e!important;--paper:rgba(255,255,255,.9)!important;
+ --muted:#765b91!important;--line:rgba(173,125,238,.36)!important;
+ --shadow:0 16px 42px rgba(68,25,119,.16)!important;
+}
+body{
+ color:#321b4e!important;
+ background:
+  radial-gradient(ellipse at 8% 5%,rgba(210,170,255,.27),transparent 34%),
+  radial-gradient(ellipse at 92% 20%,rgba(160,115,255,.2),transparent 32%),
+  linear-gradient(145deg,#24113f 0%,#51217f 48%,#281343 100%)!important;
+}
+header{
+ background:linear-gradient(120deg,rgba(74,30,124,.96),rgba(151,83,225,.94) 55%,rgba(100,42,177,.97))!important;
+}
+header:before{content:"نسخه ۳.۰ • PURPLE HOLO"!important}
+.nav-btn,.btn{
+ background:linear-gradient(135deg,#a66bfa,#6824b8)!important;
+ box-shadow:0 7px 18px rgba(83,32,145,.22),inset 0 1px rgba(255,255,255,.25)!important;
+}
+.nav-btn{background:rgba(255,255,255,.14)!important}
+.hero,.tools,.card,.modal-content,.helo-world-section,.helo-world-card,.holo-profile,.helo-feature-banner{
+ background:linear-gradient(145deg,rgba(255,255,255,.95),rgba(245,235,255,.84))!important;
+}
+.hero h2,.section-head h2,.card h3,.modal-content h2,.modal-content h3,
+.helo-world-heading h2,.helo-world-card h3,.helo-club-panel strong{color:#6424b8!important}
+.hero-art{background:linear-gradient(145deg,#f0e2ff,#d6b8ff)!important}
+.pill,.cat,.btn.secondary{color:#6424b8!important;background:rgba(239,224,255,.9)!important;border-color:rgba(153,99,220,.32)!important}
+.cat.active,.cat:hover{background:linear-gradient(135deg,#a66bfa,#6424b8)!important;color:#fff!important}
+.search:focus,.field:focus{border-color:#9b5cff!important;box-shadow:0 0 0 4px rgba(155,92,255,.14)!important}
+.badge{background:linear-gradient(135deg,#a66bfa,#6424b8)!important}
+.price,.close,.summary-total{color:#6424b8!important}
+.cart-item,.invoice-line,.rating-box,.comment-box,.admin-product,.summary-total,
+.helo-club-panel>div,.helo-mission,.helo-gift-option{
+ background:rgba(239,224,255,.82)!important;border-color:rgba(153,99,220,.28)!important;
+}
+.footer{background:linear-gradient(120deg,#211039,#51217f)!important}
+.helo-world-section{background:linear-gradient(135deg,rgba(244,232,255,.97),rgba(220,190,255,.9))!important;border-color:rgba(153,99,220,.42)!important}
+.helo-world-kicker{background:#ead8ff!important;color:#6424b8!important}
+.halloween-sale{background:linear-gradient(125deg,#32134f,#6424b8 55%,#a66bfa)!important}
+.halloween-discount{background:linear-gradient(135deg,#a66bfa,#6424b8)!important}
+.halloween-cta{color:#6424b8!important}
+.helo30-feature{border-color:rgba(153,99,220,.3)!important}
+.helo30-feature strong{color:#6424b8!important}
+.helo30-prize{background:linear-gradient(135deg,#ead8ff,#d0afff)!important;color:#6424b8!important}
+#helo30NavButton{
+ order:-1!important;
+ background:linear-gradient(135deg,#f2e5ff,#d8baff)!important;
+ color:#55208f!important;border:2px solid rgba(255,255,255,.82)!important;
+ box-shadow:0 8px 22px rgba(42,12,76,.25),inset 0 1px #fff!important;
+ font-weight:900!important;padding:12px 18px!important;
+}
+#helo30NavButton:before{content:"✨ "!important}
+body.dark-mode{
+ --paper:#25163a!important;--ink:#f6edff!important;--muted:#d2bce9!important;--line:rgba(190,143,255,.3)!important;
+ background:linear-gradient(145deg,#160c25,#30164b,#160c25)!important;color:#f6edff!important;
+}
+body.dark-mode .hero,body.dark-mode .tools,body.dark-mode .card,body.dark-mode .modal-content,
+body.dark-mode .helo-world-section,body.dark-mode .helo-world-card,body.dark-mode .holo-profile,
+body.dark-mode .helo-feature-banner{background:rgba(39,22,59,.96)!important;color:#f6edff!important;border-color:rgba(190,143,255,.24)!important}
+body.dark-mode .hero h2,body.dark-mode .card h3,body.dark-mode .modal-content h2,
+body.dark-mode .modal-content h3,body.dark-mode .helo-world-card h3{color:#d9b8ff!important}
+body.dark-mode .hero p,body.dark-mode .helo-world-card p{color:#e0cff2!important}
+body.dark-mode .field,body.dark-mode .search{background:#2c1942!important;color:#fff!important}
+body.dark-mode .cart-item,body.dark-mode .invoice-line,body.dark-mode .summary-total,
+body.dark-mode .rating-box,body.dark-mode .comment-box,body.dark-mode .admin-product,
+body.dark-mode .helo-mission,body.dark-mode .helo-club-panel>div{background:#38204f!important;color:#f6edff!important}
