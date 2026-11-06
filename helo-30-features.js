@@ -61,7 +61,7 @@
     ['⚡','حراج فلش','ساخت تایمر نمایشی ۶۰ دقیقه‌ای','window.helo30Flash()'],
     ['💎','VIP هلو','مشاهده وضعیت مشتری ویژه بر اساس امتیاز','window.helo30VIP()']
   ];
-  window.openHeloFeatures=()=>{show('✨ امکانات فروشگاه هلو','<p class="helo30-note">۳۰ قابلیت فروشگاه در یک‌جا 🍑</p><div class="helo30-grid">'+features.map((f,i)=>'<button class="helo30-feature" onclick="'+f[3]+'"><span>'+f[0]+'</span><strong>'+fa(i+1)+'. '+f[1]+'</strong><small>'+f[2]+'</small></button>').join('')+'</div><p class="helo30-note">سبد، علاقه‌مندی‌ها، امتیازها، سفارش‌های جدید، نظرها و تنظیمات ذخیره‌شده برای حساب واردشده با پایگاه داده همگام می‌شوند؛ اعلان‌ها و بعضی ابزارهای نمایشی وابسته به همین دستگاه‌اند.</p>');};
+  window.openHeloFeatures=()=>{show('✨ امکانات فروشگاه هلو','<p class="helo30-note">'+fa(features.length)+' قابلیت فروشگاه در یک‌جا 🍑</p><div class="helo30-grid">'+features.map((f,i)=>'<button class="helo30-feature" onclick="'+f[3]+'"><span>'+f[0]+'</span><strong>'+fa(i+1)+'. '+f[1]+'</strong><small>'+f[2]+'</small></button>').join('')+'</div><p class="helo30-note">کیف پول، تراکنش امتیاز، کد دعوت، جایزه و سفارش‌ها برای حساب واردشده روی سرور ذخیره می‌شوند. بعضی ابزارهای نمایشی مثل اعلان مرورگر فقط روی همین دستگاه فعال‌اند.</p>');};
   window.helo30Wishlist=()=>{const fav=read('heloFavorites',[]),ps=fav.map(productById).filter(Boolean);show('❤️ علاقه‌مندی‌های من',ps.length?ps.map(p=>card(p,action('مشاهده','openProduct('+JSON.stringify(p.id)+')','btn secondary'))).join(''):'<p>هنوز محصولی ذخیره نکردی. روی قلب محصولات بزن ❤️</p>');};
   window.helo30Compare=()=>{const ps=list();show('⚖️ مقایسه محصولات','<p>حداکثر ۳ محصول انتخاب کن.</p><div class="helo30-picks">'+ps.map(p=>'<label><input type="checkbox" class="helo30-compare-check" value="'+clean(p.id)+'" '+(compare.includes(String(p.id))?'checked':'')+'> '+clean(p.name)+'</label>').join('')+'</div>'+action('مقایسه انتخاب‌ها','window.helo30ShowCompare()'));};
   window.helo30ShowCompare=()=>{compare=[...document.querySelectorAll('.helo30-compare-check:checked')].map(x=>x.value).slice(0,3);write(key+'compare',compare);if(compare.length<2){alert('حداقل دو محصول انتخاب کن.');return;}const ps=compare.map(productById).filter(Boolean);show('نتیجه مقایسه','<div class="helo30-compare-grid">'+ps.map(p=>'<div><strong>'+clean(p.name)+'</strong><p>قیمت: '+price(p)+'</p><p>دسته: '+clean(p.category||'—')+'</p><p>'+clean(p.description||'توضیحی ثبت نشده')+'</p></div>').join('')+'</div>');};
@@ -100,7 +100,21 @@
   window.helo30Flash=()=>{if(flashEnd<Date.now()){flashEnd=Date.now()+60*60*1000;persist(key+'flashEnd',String(flashEnd));}const mins=Math.max(0,Math.ceil((flashEnd-Date.now())/60000));show('⚡ حراج فلش','<div class="helo30-prize">'+fa(mins)+' دقیقه</div><p>تایمر نمایشی ۶۰ دقیقه‌ای؛ قیمت محصولات تا زمان تعریف تخفیف از سوی مدیر تغییر نمی‌کند.</p>');};
   window.helo30VIP=()=>{const n=points(),tier=n>=100?'طلایی · VIP 👑':n>=50?'نقره‌ای 🥈':n>=20?'برنزی 🥉':'تازه‌وارد 🍑';show('💎 سطح باشگاه هلو','<div class="helo30-prize">'+tier+'</div><p>امتیاز فعلی: '+fa(n)+'</p><p>سطح VIP طلایی از ۱۰۰ امتیاز فعال می‌شود. مزیت قابل استفاده آن: دریافت کد تخفیف واقعی ۱۰٪ با تبدیل ۱۰۰ امتیاز؛ کد یک‌بارمصرف و ۱۴ روزه است.</p>'+action('رفتن به جعبه جایزه','window.helo30Wheel()'));};
   const originalApply=window.applyDiscount;
-  if(typeof originalApply==='function')window.applyDiscount=function(){const field=$('discountCode'),code=field?.value.trim().toUpperCase(),c=rewardCodes()[code];if(c&&c.expires>Date.now()){appliedDiscount=c.discount;appliedCode=code;alert('🎉 کد جایزه '+c.discount+'٪ اعمال شد!');if(typeof renderCart==='function')renderCart();return;}return originalApply.apply(this,arguments);};
+  if(typeof originalApply==='function')window.applyDiscount=async function(){
+    const field=$('discountCode'),code=field?.value.trim().toUpperCase();
+    if(code&&code.startsWith('HELO-')){
+      try{
+        const wallet=await window.HeloServer.getClubWallet();
+        const coupon=(wallet.coupons||[]).find(x=>x.code===code&&!x.used_at&&new Date(x.expires_at)>new Date());
+        if(!coupon)throw new Error('این کد برای حساب تو معتبر نیست، استفاده شده یا منقضی شده است.');
+        appliedDiscount=Number(coupon.discount_percent);appliedCode=code;
+        alert('🎉 کد جایزه '+fa(coupon.discount_percent)+'٪ اعمال شد!');
+        if(typeof renderCart==='function')renderCart();
+        return;
+      }catch(e){alert(e.message||'برای بررسی کد جایزه وارد حساب شو.');return;}
+    }
+    return originalApply.apply(this,arguments);
+  };
   const originalOpen=window.openProduct;
   if(typeof originalOpen==='function')window.openProduct=function(id){recent=[String(id),...recent.filter(x=>String(x)!==String(id))].slice(0,12);write(key+'recent',recent);return originalOpen.apply(this,arguments);};
   document.addEventListener('DOMContentLoaded',()=>{addNav();});
