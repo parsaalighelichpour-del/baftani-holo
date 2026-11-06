@@ -198,3 +198,41 @@ body.dark-mode .field,body.dark-mode .search{background:#2c1942!important;color:
 body.dark-mode .cart-item,body.dark-mode .invoice-line,body.dark-mode .summary-total,
 body.dark-mode .rating-box,body.dark-mode .comment-box,body.dark-mode .admin-product,
 body.dark-mode .helo-mission,body.dark-mode .helo-club-panel>div{background:#38204f!important;color:#f6edff!important}
+
+
+/* Purple Holo — colorful readable typography polish */
+:root{
+ --ink:#32134f!important;--muted:#68458a!important;
+ --line:rgba(177,112,242,.42)!important;
+}
+body{color:#f8efff!important}
+header h1,header p{color:#fff!important}
+.section-head{color:#fff!important;text-shadow:0 2px 12px rgba(30,8,55,.35)!important}
+.section-head span{color:#f1d5ff!important}
+.hero h2,.section-head h2,.helo-world-heading h2{
+ background:linear-gradient(90deg,#6925b2,#a13fe0,#d34fba);
+ -webkit-background-clip:text;background-clip:text;color:transparent!important;
+}
+.hero p,.helo-world-heading p,.helo-world-card p{color:#56336f!important}
+.card h3,.modal-content h2,.modal-content h3,.helo-world-card h3{
+ color:#6424a8!important;text-shadow:0 1px 0 rgba(255,255,255,.65)!important;
+}
+.card p,.card .description,.product-description{color:#59406e!important}
+.price{color:#8a32cb!important;text-shadow:0 1px 0 rgba(255,255,255,.65)!important}
+.badge{color:#fff!important;background:linear-gradient(110deg,#922ee0,#d34eaa,#f08b4b)!important}
+.pill,.cat,.helo-world-kicker{color:#65249b!important}
+.nav-btn,.btn{color:#fff!important}
+input,textarea,select,.field,.search{color:#39204f!important}
+label,.form-label{color:#63358a!important;font-weight:800!important}
+.footer{color:#f8eaff!important}
+.footer a{color:#ffd6ff!important}
+.halloween-sale-copy h2{color:#fff!important;text-shadow:0 2px 12px rgba(35,8,58,.35)!important}
+.halloween-sale-copy p,.halloween-dates{color:#ffeaff!important}
+.helo30-feature{color:#51306b!important}
+.helo30-feature strong{color:#8b32c8!important}
+#helo30NavButton{color:#55208f!important}
+body.dark-mode .hero p,body.dark-mode .helo-world-card p,
+body.dark-mode .card p,body.dark-mode .card .description{color:#e6d4f7!important}
+body.dark-mode .card h3,body.dark-mode .modal-content h2,
+body.dark-mode .modal-content h3{color:#e2baff!important}
+body.dark-mode .price{color:#f0bdff!important}
