@@ -1,0 +1,130 @@
+/* Baftani Holo 3.0 — Blue Glass visual layer
+   Additive presentation only: preserves existing storefront logic and data. */
+:root{
+  --blue:#1687f8!important;--deep:#0756b4!important;--navy:#071a35!important;
+  --pale:#eaf5ff!important;--ink:#12304e!important;--paper:rgba(255,255,255,.88)!important;
+  --muted:#607b98!important;--line:rgba(99,174,255,.35)!important;
+  --shadow:0 16px 42px rgba(3,54,112,.15)!important;
+  --holo-glass:rgba(255,255,255,.72);
+}
+html{scroll-behavior:smooth}
+body{
+  color:#12304e!important;
+  background:
+    radial-gradient(ellipse at 8% 5%,rgba(91,183,255,.24),transparent 34%),
+    radial-gradient(ellipse at 92% 20%,rgba(91,116,255,.18),transparent 32%),
+    linear-gradient(145deg,#071a35 0%,#0a3970 48%,#071a35 100%)!important;
+  background-attachment:fixed!important;
+}
+header{
+  position:relative!important;isolation:isolate;overflow:hidden;
+  background:linear-gradient(120deg,rgba(8,73,151,.94),rgba(17,139,244,.9) 55%,rgba(22,87,190,.96))!important;
+  border:1px solid rgba(255,255,255,.28)!important;border-bottom:1px solid rgba(255,255,255,.34)!important;
+  border-radius:0 0 28px 28px!important;
+  box-shadow:0 16px 40px rgba(0,14,48,.28),inset 0 1px rgba(255,255,255,.25)!important;
+  backdrop-filter:blur(18px);
+}
+header:before{
+  content:"نسخه ۳.۰  •  BLUE GLASS";
+  display:inline-flex;align-items:center;justify-content:center;
+  margin:0 auto 12px;padding:6px 13px;border:1px solid rgba(255,255,255,.38);
+  border-radius:999px;background:rgba(255,255,255,.14);
+  color:#fff;font:700 11px Tahoma,Arial,sans-serif;letter-spacing:.4px;
+}
+header:after{background:linear-gradient(90deg,transparent,#d9efff,transparent)!important}
+header h1{color:#fff!important;text-shadow:0 3px 18px rgba(0,22,70,.32)}
+header p{color:#e5f4ff!important}
+.nav{gap:9px!important}
+.nav-btn,.btn{
+  color:#fff!important;border:1px solid rgba(255,255,255,.32)!important;
+  border-radius:14px!important;
+  background:linear-gradient(135deg,#279cff,#0758bc)!important;
+  box-shadow:0 7px 18px rgba(0,74,157,.2),inset 0 1px rgba(255,255,255,.25)!important;
+  transition:transform .2s ease,box-shadow .2s ease,filter .2s ease!important;
+}
+.nav-btn{background:rgba(255,255,255,.13)!important;backdrop-filter:blur(12px)}
+.nav-btn:hover,.btn:hover{transform:translateY(-3px)!important;filter:brightness(1.06)}
+.container{max-width:1240px!important}
+.hero,.tools,.card,.modal-content,.helo-world-section,.helo-world-card,
+.holo-profile,.helo-feature-banner,.halloween-sale{
+  border:1px solid rgba(255,255,255,.55)!important;
+  border-radius:24px!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.94),rgba(229,244,255,.78))!important;
+  box-shadow:0 18px 44px rgba(0,25,72,.17),inset 0 1px rgba(255,255,255,.85)!important;
+  backdrop-filter:blur(18px);
+}
+.hero{border-top:1px solid rgba(255,255,255,.65)!important;padding:clamp(22px,4vw,42px)!important}
+.hero h2,.section-head h2,.card h3,.modal-content h2,.modal-content h3,
+.helo-world-heading h2,.helo-world-card h3{color:#0756b4!important}
+.hero p,.helo-world-heading p,.helo-world-card p{color:#496987!important}
+.hero-art{border:1px solid rgba(255,255,255,.7)!important;border-radius:22px!important;background:linear-gradient(145deg,#dff2ff,#a8d8ff)!important}
+.pill,.cat,.btn.secondary{
+  color:#0756b4!important;background:rgba(216,239,255,.85)!important;
+  border:1px solid rgba(70,156,235,.3)!important;border-radius:999px!important;
+}
+.cat.active,.cat:hover{background:linear-gradient(135deg,#219cff,#0756b4)!important;color:white!important}
+.section-head{color:#eaf5ff!important;border-color:rgba(190,226,255,.3)!important}
+.section-head span{color:#c6e4ff!important}
+.tools{background:rgba(255,255,255,.84)!important}
+.search,.field{
+  background:rgba(255,255,255,.9)!important;color:#12304e!important;
+  border:1px solid rgba(69,153,231,.4)!important;border-radius:14px!important;
+}
+.search:focus,.field:focus{outline:none!important;border-color:#1687f8!important;box-shadow:0 0 0 4px rgba(22,135,248,.12)!important}
+.products{gap:17px!important}
+.card{border-radius:20px!important;overflow:hidden}
+.card:hover{transform:translateY(-5px)!important;box-shadow:0 22px 42px rgba(0,52,120,.2)!important}
+.product-image{border-radius:15px!important;background:#e5f3ff!important}
+.badge{background:linear-gradient(135deg,#1687f8,#0756b4)!important;border-radius:999px!important}
+.heart{border-radius:50%!important;box-shadow:0 5px 15px rgba(0,48,100,.15)!important}
+.price{color:#0756b4!important}
+.modal{background:rgba(3,18,43,.62)!important;backdrop-filter:blur(9px)!important}
+.modal-content{background:linear-gradient(145deg,#fff,rgba(231,245,255,.97))!important;border-radius:24px!important}
+.close{color:#0756b4!important}
+.cart-item,.invoice-line,.rating-box,.comment-box,.admin-product,
+.summary-total,.helo-club-panel>div,.helo-mission,.helo-gift-option{
+  background:rgba(222,241,255,.78)!important;border:1px solid rgba(76,157,229,.25)!important;border-radius:15px!important;
+}
+.summary-total{color:#0756b4!important}
+.footer{background:linear-gradient(120deg,#06152d,#0a3970)!important;border-top:1px solid rgba(255,255,255,.25)!important;color:#eaf5ff!important}
+.helo-world-section{background:linear-gradient(135deg,rgba(221,241,255,.96),rgba(183,220,255,.88))!important;border-color:rgba(83,165,239,.42)!important}
+.helo-world-card{background:rgba(255,255,255,.84)!important;border-color:rgba(83,165,239,.3)!important}
+.helo-world-kicker{background:#d8edff!important;color:#0756b4!important}
+.helo-world-card h3,.helo-club-panel strong{color:#0756b4!important}
+.helo-mission{background:rgba(235,247,255,.9)!important}
+.halloween-sale{
+  background:linear-gradient(125deg,#062a5b,#0756b4 55%,#1687f8)!important;
+  color:#fff!important;border-color:rgba(255,255,255,.35)!important;
+}
+.halloween-sale-copy h2,.halloween-sale-copy p,.halloween-kicker{color:#fff!important}
+.halloween-kicker{border-color:rgba(255,255,255,.5)!important;background:rgba(255,255,255,.12)!important}
+.halloween-discount{background:linear-gradient(135deg,#1687f8,#064b9e)!important;border-color:#c8e8ff!important}
+.halloween-cta{background:linear-gradient(135deg,#e8f6ff,#fff)!important;color:#0756b4!important;border-radius:14px!important;box-shadow:0 8px 20px rgba(0,20,70,.2)!important}
+.halloween-dates{color:#d9efff!important}
+.helo30-feature{border:1px solid rgba(72,153,226,.28)!important;border-radius:16px!important;background:rgba(255,255,255,.88)!important;color:#12304e!important;box-shadow:0 8px 20px rgba(0,60,120,.09)!important}
+.helo30-feature strong{color:#0756b4!important}
+.helo30-prize{background:linear-gradient(135deg,#d8edff,#a9d8ff)!important;color:#0756b4!important;border-radius:18px!important}
+body.dark-mode{
+  --paper:#102a46!important;--ink:#edf7ff!important;--muted:#b9d5ed!important;--line:rgba(130,195,255,.3)!important;
+  color:#edf7ff!important;background:linear-gradient(145deg,#061426,#0b2c50,#061426)!important;
+}
+body.dark-mode .hero,body.dark-mode .tools,body.dark-mode .card,body.dark-mode .modal-content,
+body.dark-mode .helo-world-section,body.dark-mode .helo-world-card,body.dark-mode .holo-profile,
+body.dark-mode .helo-feature-banner{background:rgba(12,39,67,.94)!important;color:#edf7ff!important;border-color:rgba(135,195,255,.24)!important}
+body.dark-mode .hero h2,body.dark-mode .card h3,body.dark-mode .modal-content h2,
+body.dark-mode .modal-content h3,body.dark-mode .helo-world-card h3{color:#8dccff!important}
+body.dark-mode .hero p,body.dark-mode .helo-world-card p{color:#c3def4!important}
+body.dark-mode .field,body.dark-mode .search{background:#102b48!important;color:#fff!important}
+body.dark-mode .cart-item,body.dark-mode .invoice-line,body.dark-mode .summary-total,
+body.dark-mode .rating-box,body.dark-mode .comment-box,body.dark-mode .admin-product,
+body.dark-mode .helo-mission,body.dark-mode .helo-club-panel>div{background:#153653!important;color:#edf7ff!important}
+@media(max-width:800px){.products{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}}
+@media(max-width:470px){
+  header{border-radius:0 0 20px 20px!important}
+  .container{padding:0 10px!important}
+  .hero,.tools,.card,.modal-content{border-radius:17px!important}
+  .products{gap:9px!important}
+  .product-image{border-radius:12px!important}
+  .nav-btn,.btn{border-radius:12px!important}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
