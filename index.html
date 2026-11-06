@@ -3239,16 +3239,47 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
     if(!customerSession?.user)await initCustomerAuth();
     if(!customerSession?.user)throw new Error("برای دریافت و ذخیره امتیاز، ابتدا وارد حساب مشتری شو.");
     if(!customerProfile)await loadCustomerProfile();
-    const rpcName=kind==="daily"?"claim_helo_daily_points":kind==="weekly"?"claim_helo_weekly_points":kind==="profile"?"claim_helo_profile_points":null;
-    if(!rpcName)throw new Error("نوع مأموریت معتبر نیست.");
-    const {data,error}=await customerDb.rpc(rpcName);
+    const {data,error}=await customerDb.rpc("claim_club_mission",{p_kind:kind});
     if(error)throw error;
-    if(data===null||data===undefined){
-      await loadCustomerProfile();
-      return {claimed:false,points:Number(customerProfile?.points||0)};
-    }
     await loadCustomerProfile();
-    return {claimed:true,points:Number(data)};
+    return data||{claimed:false,points:Number(customerProfile?.points||0)};
+  }
+  async function getClubWallet(){
+    if(!customerSession?.user)await initCustomerAuth();
+    if(!customerSession?.user)throw new Error("برای دیدن کیف پول وارد حساب شو.");
+    const {data,error}=await customerDb.rpc("get_my_club_wallet");
+    if(error)throw error;
+    return data||{};
+  }
+  async function applyReferralCode(code){
+    if(!customerSession?.user)await initCustomerAuth();
+    if(!customerSession?.user)throw new Error("برای ثبت دعوت وارد حساب شو.");
+    const {data,error}=await customerDb.rpc("apply_referral_code",{p_code:String(code||"").trim().toUpperCase()});
+    if(error)throw error;
+    await loadCustomerProfile();
+    return data;
+  }
+  async function redeemClubReward(){
+    if(!customerSession?.user)await initCustomerAuth();
+    if(!customerSession?.user)throw new Error("برای دریافت کد جایزه وارد حساب شو.");
+    const {data,error}=await customerDb.rpc("redeem_club_reward");
+    if(error)throw error;
+    await loadCustomerProfile();
+    return data;
+  }
+  async function saveBirthday(date){
+    if(!customerSession?.user)await initCustomerAuth();
+    if(!customerSession?.user)throw new Error("برای ذخیره تاریخ تولد وارد حساب شو.");
+    if(!/^\\d{4}-\\d{2}-\\d{2}$/.test(String(date)))throw new Error("تاریخ انتخاب‌شده معتبر نیست.");
+    const {data,error}=await customerDb.from("customer_profiles").update({birthday:date,updated_at:new Date().toISOString()}).eq("id",customerSession.user.id).select().single();
+    if(error)throw error;
+    customerProfile=data;return true;
+  }
+  async function getAdminSalesSummary(){
+    if(!adminUnlocked)throw new Error("دسترسی مدیر لازم است.");
+    const {data,error}=await db.rpc("admin_sales_summary");
+    if(error)throw error;
+    return data||{};
   }
   async function saveCustomerPreference(key,value){
     if(!customerSession?.user)return false;
@@ -3269,7 +3300,7 @@ renderProducts();updateCartCount();updateUserUI();initTheme();
     get customerProfile(){return customerProfile;},
     get customerEmail(){return customerEmail;},
     get customerAuthenticated(){return !!customerSession?.user;},
-    signUpCustomer, signInCustomer, saveCustomerData, saveCustomerPreference, claimCustomerMission, initCustomerAuth, signOutCustomer,
+    signUpCustomer, signInCustomer, saveCustomerData, saveCustomerPreference, claimCustomerMission, getClubWallet, applyReferralCode, redeemClubReward, saveBirthday, getAdminSalesSummary, initCustomerAuth, signOutCustomer,
     getProducts: getServerProducts, saveProduct: saveServerProduct,
     saveOrder: saveServerOrder, trackOrdersByPhone, getOrders, getMyOrders, getProductReviews, addProductReview, saveCustomOrder, getCustomOrders, updateCustomOrderStatus, updateOrderStatus, updateOrderEta, uploadImage: uploadProductImage,
     signInAdminPassword, signOut: async function(){const {error}=await db.auth.signOut();if(error)console.error("خروج ناموفق بود:",error.message)}
