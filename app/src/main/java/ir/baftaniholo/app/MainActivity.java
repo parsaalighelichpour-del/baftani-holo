@@ -13,6 +13,7 @@ import android.view.KeyEvent;
 
 public class MainActivity extends Activity {
     private WebView webView;
+    private boolean firstResume = true;
     private static final String STORE_URL = "https://parsaalighelichpour-del.github.io/baftani-holo/";
 
     @Override
@@ -54,6 +55,26 @@ public class MainActivity extends Activity {
         });
         if (savedInstanceState == null) webView.loadUrl(STORE_URL);
         else webView.restoreState(savedInstanceState);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // The app is a live client of the hosted store. Refresh the current store page
+        // whenever the user returns so website deployments and server-side features appear
+        // without rebuilding or reinstalling the APK.
+        if (firstResume) {
+            firstResume = false;
+            return;
+        }
+        if (webView != null) {
+            String currentUrl = webView.getUrl();
+            if (currentUrl != null && currentUrl.startsWith(STORE_URL)) {
+                webView.reload();
+            } else {
+                webView.loadUrl(STORE_URL);
+            }
+        }
     }
 
     @Override
