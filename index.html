@@ -2720,25 +2720,7 @@ body.dark-mode .helo30-feature small,body.dark-mode .helo30-item small{color:#d6
 </style>
 <script src="helo-30-features.js"><\/script>
 
-<script id="helo-admin-customers-ui">
-(() => {
-  let adminCustomerRows = [];
-  window.renderAdminCustomers = async function() {
-    const list = document.getElementById("adminCustomerList");
-    const count = document.getElementById("adminCustomerCount");
-    if (!window.HeloServer || typeof window.HeloServer.getAdminCustomers !== "function") { if (list) list.innerHTML = '<div class="notice">اتصال فهرست کاربران آماده نیست؛ صفحه را تازه کن.</div>'; return; }
-    if (list) list.innerHTML = '<div class="notice">در حال دریافت کاربران از پایگاه داده…</div>';
-    try { adminCustomerRows = await window.HeloServer.getAdminCustomers(); if (count) count.textContent = "تعداد کاربران ثبت‌نام‌شده: " + adminCustomerRows.length.toLocaleString("fa-IR"); window.filterAdminCustomers(); }
-    catch (error) { console.error("دریافت کاربران ناموفق بود:", error); if (list) list.innerHTML = '<div class="notice">دریافت کاربران ناموفق بود؛ اتصال را بررسی کن.</div>'; if (count) count.textContent = "فهرست کاربران بارگذاری نشد."; }
-  };
-  window.filterAdminCustomers = function() {
-    const list = document.getElementById("adminCustomerList"); const q = (document.getElementById("adminCustomerSearch")?.value || "").trim().toLocaleLowerCase("fa"); if (!list) return;
-    const rows = adminCustomerRows.filter(u => [u.full_name,u.phone].some(v => String(v || "").toLocaleLowerCase("fa").includes(q)));
-    if (!rows.length) { list.innerHTML = '<div class="empty">' + (adminCustomerRows.length ? "کاربری با این مشخصات پیدا نشد." : "هنوز پروفایل مشتری ثبت نشده است.") + "</div>"; return; }
-    list.innerHTML = rows.map(u => { const name = esc(u.full_name || "بدون نام"); const phone = esc(u.phone || "ثبت نشده"); const date = u.created_at ? new Date(u.created_at).toLocaleString("fa-IR",{year:"numeric",month:"long",day:"numeric",hour:"2-digit",minute:"2-digit"}) : "نامشخص"; return '<div class="admin-product"><strong>👤 ' + name + '</strong><div class="muted">📱 شماره موبایل: ' + phone + '</div><div class="muted">🗓️ تاریخ ثبت‌نام: ' + esc(date) + '</div></div>'; }).join("");
-  };
-})();
-</script>
+
 </body></html>`;
 const url=URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'}));
 const a=document.createElement('a');a.href=url;a.download='فاکتور-بافتنی-هلو.html';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)
@@ -3750,5 +3732,24 @@ html body.dark-mode input::placeholder,html body.dark-mode textarea::placeholder
   html body .btn,html body .nav-btn{transition:transform .18s ease,filter .18s ease,box-shadow .18s ease!important}
   html body .btn:hover,html body .nav-btn:hover{transform:translateY(-2px)!important;filter:brightness(1.08)!important}
 }
-</style></body>
+</style><script id="helo-admin-customers-ui">
+(() => {
+  let adminCustomerRows = [];
+  window.renderAdminCustomers = async function() {
+    const list = document.getElementById("adminCustomerList");
+    const count = document.getElementById("adminCustomerCount");
+    if (!window.HeloServer || typeof window.HeloServer.getAdminCustomers !== "function") { if (list) list.innerHTML = '<div class="notice">اتصال فهرست کاربران آماده نیست؛ صفحه را تازه کن.</div>'; return; }
+    if (list) list.innerHTML = '<div class="notice">در حال دریافت کاربران از پایگاه داده…</div>';
+    try { adminCustomerRows = await window.HeloServer.getAdminCustomers(); if (count) count.textContent = "تعداد کاربران ثبت‌نام‌شده: " + adminCustomerRows.length.toLocaleString("fa-IR"); window.filterAdminCustomers(); }
+    catch (error) { console.error("دریافت کاربران ناموفق بود:", error); if (list) list.innerHTML = '<div class="notice">دریافت کاربران ناموفق بود؛ اتصال را بررسی کن.</div>'; if (count) count.textContent = "فهرست کاربران بارگذاری نشد."; }
+  };
+  window.filterAdminCustomers = function() {
+    const list = document.getElementById("adminCustomerList"); const q = (document.getElementById("adminCustomerSearch")?.value || "").trim().toLocaleLowerCase("fa"); if (!list) return;
+    const rows = adminCustomerRows.filter(u => [u.full_name,u.phone].some(v => String(v || "").toLocaleLowerCase("fa").includes(q)));
+    if (!rows.length) { list.innerHTML = '<div class="empty">' + (adminCustomerRows.length ? "کاربری با این مشخصات پیدا نشد." : "هنوز پروفایل مشتری ثبت نشده است.") + "</div>"; return; }
+    list.innerHTML = rows.map(u => { const name = esc(u.full_name || "بدون نام"); const phone = esc(u.phone || "ثبت نشده"); const date = u.created_at ? new Date(u.created_at).toLocaleString("fa-IR",{year:"numeric",month:"long",day:"numeric",hour:"2-digit",minute:"2-digit"}) : "نامشخص"; return '<div class="admin-product"><strong>👤 ' + name + '</strong><div class="muted">📱 شماره موبایل: ' + phone + '</div><div class="muted">🗓️ تاریخ ثبت‌نام: ' + esc(date) + '</div></div>'; }).join("");
+  };
+})();
+</script>
+</body>
 </html>
