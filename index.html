@@ -2309,7 +2309,7 @@ function renderCart(){
 const items=cart.map(i=>({...i,product:products.find(p=>p.id===i.id)})).filter(i=>i.product);
 $('cartItems').innerHTML=items.length?items.map(i=>`<div class="cart-item"><div><strong>${esc(i.product.name)}</strong><div>${displaySalePrice(i.product.price,i.product)}</div><div class="tools-row"><button class="qty-btn" onclick="changeQty(${i.id},-1)">−</button><span>${formatPrice(i.qty)}</span><button class="qty-btn" onclick="changeQty(${i.id},1)">+</button></div></div><button class="remove-btn" onclick="removeFromCart(${i.id})">حذف</button></div>`).join(''):'<div class="empty">سبد خریدت خالیه 🛒</div>';
 const subtotal=items.reduce((s,i)=>s+i.product.price*i.qty,0);
-$('cartSummary').innerHTML=`<div class="summary-line"><span>جمع محصولات</span><strong>${formatPrice(subtotal)} تومان</strong></div>${discountAmount()?`<div class="summary-line"><span>تخفیف ${effectiveDiscount()}٪</span><strong>− ${formatPrice(discountAmount())} تومان</strong></div>`:''}`;
+$('cartSummary').innerHTML=`<div class="summary-line"><span>جمع محصولات</span><strong>${formatPrice(subtotal)} تومان</strong></div>${discountAmount()?`<div class="summary-line"><span>${isBlackFridayActive()?'تخفیف بلک فرایدی (۵۰ تا ۹۲٪)':'تخفیف '+effectiveDiscount()+'٪'}</span><strong>− ${formatPrice(discountAmount())} تومان</strong></div>`:''}`;
 $('cartTotal').textContent=formatPrice(finalTotal())+' تومان';
 }
 function discountAmount(){return Math.round(cart.reduce((sum,i)=>{const p=products.find(x=>String(x.id)===String(i.id));if(!p)return sum;const pct=isBlackFridayActive()?blackFridayDiscount(p):effectiveDiscount();return sum+Number(p.price||0)*i.qty*pct/100},0))}
